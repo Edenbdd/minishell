@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/28 19:57:11 by smolines         ###   ########.fr       */
+/*   Updated: 2024/11/28 22:23:25 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ t_manager	*parsing(t_manager *manager,char *line)
 			i = handle_quote(line, i, flag, &word);
 			printf("after handle quote i is %d and word is [%s]\n", i, word);
 		}
+		// Attention lancer la fonction handle quote en boucle pour trouver les boucles imbriquees ?
 		else
 		{
 			//word = regular_word(&line[i])
