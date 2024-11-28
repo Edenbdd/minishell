@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/28 15:44:32 by smolines         ###   ########.fr       */
+/*   Updated: 2024/11/28 18:47:36 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,13 @@ typedef enum e_token_type
 typedef struct s_token t_token;
 typedef struct s_redirs t_redirs;
 typedef struct s_cmd t_cmd;
+typedef struct s_env t_env;
+typedef struct s_export t_export;
 
 struct s_token
 {
 	char	*value;
-	char	type;
+	int		type;
 	int		flag; //use as a bool i.e. 0 or 1
 	t_token	*next;
 	t_token	*prev;
@@ -73,6 +75,23 @@ struct s_redirs
 	int		pfd[2];
 };
 
+struct s_env
+{
+	char	*field;
+	char	*content;
+	t_env	*next;
+	t_env	*prev;
+};
+
+struct s_export
+{
+	char	*field;
+	char	*content;
+	t_export	*next;
+	t_export	*prev;
+};
+
+
 //Moniter/Control/Manager
 typedef struct s_manager
 {
@@ -83,6 +102,12 @@ typedef struct s_manager
 	t_cmd		*cmd_last;
 	int			size_cmd;
 	t_redirs	*redirs;
+	t_env		*env_first;
+	t_env		*env_last;
+	int			size_env;
+	t_export	*export_first;
+	t_export	*export_last;
+	int			size_export;
 } t_manager;
 
 
