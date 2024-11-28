@@ -45,7 +45,7 @@ SRCS = ft_atoi.c\
       ft_toupper.c\
 	  get_next_line_utils.c\
 	  get_next_line.c\
-      ft_lstadd_back.c\
+      #ft_lstadd_back.c\
       ft_lstadd_front.c\
       ft_lst_clear.c\
       ft_lstdelone.c\
@@ -53,7 +53,7 @@ SRCS = ft_atoi.c\
       ft_lstlast.c\
       ft_lstnew.c\
       ft_lstsize.c\
-
+#
 
 OBJS = $(SRCS:.c=.o)
 

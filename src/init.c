@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:13:00 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/28 18:44:37 by smolines         ###   ########.fr       */
+/*   Updated: 2024/11/28 21:54:19 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ t_manager	*init_manager(t_manager *manager)
 	manager->export_first = NULL;
 	manager->export_last = NULL;
 	manager->size_export = -1;
+	return (manager);
 }
 
 //t_token		*init_token(t_token *token)
