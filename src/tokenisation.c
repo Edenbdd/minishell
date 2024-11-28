@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/28 13:53:02 by smolines         ###   ########.fr       */
+/*   Updated: 2024/11/28 14:51:08 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 
 int	main(int argc, char **argv, char **env)
 {
-	char	*line;
-
+	char		*line;
+	t_manager	manager;
+	
 	(void)argc;
 	(void)argv;
 	(void)env;
@@ -34,6 +35,7 @@ int	main(int argc, char **argv, char **env)
 			add_history(line);
 		if (!ft_strncmp(line, "exit", ft_strlen(line) - 1))
 			break;
+		parsing(&manager, line);
 	}
 	return (0);
 }

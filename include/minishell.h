@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/28 13:47:21 by smolines         ###   ########.fr       */
+/*   Updated: 2024/11/28 15:44:32 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,20 @@
 # include <errno.h> 
 # include <readline/readline.h>
 # include <readline/history.h>
+
+// Token type enumeration
+typedef enum e_token_type
+{
+    CMD_ARG,      // For commands and arguments
+	SIMPLE_QUOTE, //For ''
+	DOUBLE_QUOTE, // For ""
+    PIPE,      // For '|'
+    REDIR_IN,  // For '<'
+    REDIR_OUT, // For '>'
+    REDIR_APPEND, // For '>>'
+    REDIR_HEREDOC, // For '<<'
+    ENV_VAR, // For environment variables start with $
+}   t_token_type;
 
 typedef struct s_token t_token;
 typedef struct s_redirs t_redirs;
@@ -71,5 +85,9 @@ typedef struct s_manager
 	t_redirs	*redirs;
 } t_manager;
 
+
+
+//parsing
+t_manager	*parsing(t_manager *manager,char *line);
 
 #endif

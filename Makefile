@@ -6,7 +6,7 @@
 #    By: smolines <smolines@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/15 09:42:50 by smolines          #+#    #+#              #
-#    Updated: 2024/11/28 13:52:02 by smolines         ###   ########.fr        #
+#    Updated: 2024/11/28 14:45:49 by smolines         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,7 +72,9 @@ OBJ_PATH		= obj/
 RM 				= rm -rf
 
 # Tous les fichiers sources (ajuster si nécessaire)
-SRCS 			= tokenisation.c\
+SRCS 			= 	tokenisation.c\
+					parsing.c\
+					
 
 SRCS_ALL 		= $(addprefix $(SRC_PATH), $(SRCS))
 
