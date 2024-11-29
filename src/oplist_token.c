@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 22:30:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/29 12:00:18 by smolines         ###   ########.fr       */
+/*   Updated: 2024/11/29 12:57:50 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	*token_add_new(t_token *new_token, t_token **token)
 }
 
 //creer un nouveau token
-t_token	*token_new(char *word, int flag)
+t_token	*token_new(char *word, int type)
 {
 	t_token	*new_token;
 
@@ -34,7 +34,7 @@ t_token	*token_new(char *word, int flag)
 	if (new_token == NULL)
 		return (NULL);
 	new_token->value = ft_strdup(word);
-	new_token->type = flag;
+	new_token->type = type;
 	new_token->flag = 0;
 	new_token->next = NULL;
 	new_token->prev = NULL;

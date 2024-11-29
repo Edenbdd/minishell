@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 12:00:56 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/29 12:00:57 by smolines         ###   ########.fr       */
+/*   Updated: 2024/11/29 12:10:44 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void	free_token(t_token **token)
 	while (*token)
 	{
 		tmp = (*token)->next;
-		free((*token)->value);
+		if ((*token)->value)
+			free((*token)->value);
 		free(*token);
 		*token = tmp;
 	}
