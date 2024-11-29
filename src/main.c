@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/29 13:25:15 by smolines         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:56:03 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@ int	main(int argc, char **argv, char **env)
 {
 	char		*line;
 	t_manager	manager;
+	t_env		*first_env;
 	
 	(void)argc;
 	(void)argv;
-	(void)env;
-
+	first_env = handle_env(env);
+	env_display(first_env);
+	return (0);
 //loop readline basic
 	while (1)
 	{

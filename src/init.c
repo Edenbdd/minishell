@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:13:00 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/29 13:18:42 by smolines         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:02:29 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ t_manager	*init_manager(t_manager *manager)
 	manager->size_export = -1;
 	return (manager);
 }
-
 //t_token		*init_token(t_token *token)
 //{
 //	token->value = NULL;

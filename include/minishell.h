@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/29 12:01:29 by smolines         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:00:59 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,6 @@ t_manager	*parsing(t_manager *manager,char *line);
 //init
 t_manager	*init_manager(t_manager *manager);
 
-
 //Operations sur liste token
 void	*token_add_new(t_token *new_token, t_token **token);
 t_token	*token_new(char *word, int flag);
@@ -131,5 +130,14 @@ void	free_token(t_token **token);
 
 //display
 void	token_display(t_token *token);
+
+//operations sur l environnement
+char		*get_name(char *str);
+char		*get_content(char *str);
+t_env		*handle_env(char **env);
+t_env		*env_new(char *str);
+void		env_add_back(t_env *first_env, char *str);
+t_env		*env_last(t_env *env);
+void		env_display(t_env *env);
 
 #endif
