@@ -6,18 +6,19 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/29 12:58:19 by smolines         ###   ########.fr       */
+/*   Updated: 2024/11/29 13:33:44 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 
-int is_operators(char c, char d)
+int	is_operators(char c, char d)
 {
 //gestion des erreur || && ;
-	//if ((c == '|' && d == '|') || (c == '&' && d == '&') || (c == ';'))
-	//	return (-1)
+	//if ((c == '|' && d == '|') || (c == '&' && d == '&')
+	//	|| (c == ';') || (c == '#'))
+	//		error (1);
 	if (c == '<' && d == '<')
 		return (REDIR_HEREDOC);
 	if (c == '>' && d == '>')
@@ -37,10 +38,10 @@ int is_operators(char c, char d)
 	return (CMD_ARG); // is 0
 }
 
-int handle_quote(char *line, int i, int type, char **word)
+int	handle_quote(char *line, int i, int type, char **word)
 {
-	int j;
-	char separator;
+	int		j;
+	char	separator;
 
 	if (type == 1)
 		separator = '\'';
@@ -63,9 +64,9 @@ int handle_quote(char *line, int i, int type, char **word)
 	return (i + 1);
 }
 
-int regular_word(char *line, int i, char **word)
+int	regular_word(char *line, int i, char **word)
 {
-	int j;
+	int	j;
 
 	j = 0;
 	while (line[i + j] && !ft_is_space(line[i]) && !is_operators(line[i], line[i + 1]))
@@ -84,11 +85,11 @@ int regular_word(char *line, int i, char **word)
 	return (i);
 }
 
-t_manager *parsing(t_manager *manager, char *line)
+t_manager	*parsing(t_manager *manager, char *line)
 {
-	int i;
-	char *word;
-	int type;
+	int		i;
+	char	*word;
+	int		type;
 
 	i = 0;
 	word = NULL;

@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:13:00 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/28 21:54:19 by smolines         ###   ########.fr       */
+/*   Updated: 2024/11/29 13:18:42 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,3 @@ t_manager	*init_manager(t_manager *manager)
 //	redirs->pfd[0] = -1;
 //	redirs->pfd[1] = -1;
 //}
-

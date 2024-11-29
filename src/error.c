@@ -1,31 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/29 12:00:56 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/29 13:18:16 by smolines         ###   ########.fr       */
+/*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
+/*   Updated: 2024/11/29 13:31:33 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 
-void	free_token(t_token **token)
+void parsing_error(t_manager *manager, int code)
 {
-	t_token	*tmp;
-
-	if (!token || !(*token))
-		return ;
-	while (*token)
+	if (code == 1)
 	{
-		tmp = (*token)->next;
-		if ((*token)->value)
-			free((*token)->value);
-		free(*token);
-		*token = tmp;
+	printf("minishell doesn't support his operator\n");
+	if (manager->token_first)
+		free_token((*manager)->token_first)
+	exit (-1);
 	}
-	*token = NULL;
 }

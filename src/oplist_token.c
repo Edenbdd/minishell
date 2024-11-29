@@ -6,15 +6,12 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 22:30:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/29 12:57:50 by smolines         ###   ########.fr       */
+/*   Updated: 2024/11/29 13:18:07 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
-
-//operations sur la liste token
-
 
 //ajouter le nouveau token a la liste token
 void	*token_add_new(t_token *new_token, t_token **token)
@@ -54,7 +51,7 @@ void	token_add_back(t_token **token, t_token *new_token)
 		lastposition->next = new_token;
 	}
 	if (!(*token))
-		*token = new_token;		
+		*token = new_token;	
 }
 
 // trouver le dernier element de la liste token
@@ -77,5 +74,3 @@ void	token_display(t_token *token)
 		token = token->next;
 	}
 }
-
-
