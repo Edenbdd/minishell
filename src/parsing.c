@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/29 13:33:44 by smolines         ###   ########.fr       */
+/*   Updated: 2024/11/29 15:07:28 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int	is_operators(char c, char d)
 {
-//gestion des erreur || && ;
+//gestion des erreur || && ; ->faire qq de plus generique ?
 	//if ((c == '|' && d == '|') || (c == '&' && d == '&')
 	//	|| (c == ';') || (c == '#'))
 	//		error (1);
