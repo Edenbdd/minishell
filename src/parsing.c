@@ -6,34 +6,37 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/29 13:33:44 by smolines         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:49:55 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 
-int	is_operators(char c, char d)
+
+int	is_operators(t_manager *manager, char *line, int i)
 {
-//gestion des erreur || && ;
-	//if ((c == '|' && d == '|') || (c == '&' && d == '&')
-	//	|| (c == ';') || (c == '#'))
-	//		error (1);
-	if (c == '<' && d == '<')
+	if ((line[i] == '|' && line[i + 1] == '|') 
+		|| (line[i] == '&' && line[i + 1] == '&')
+		|| (line[i] == ';') || (line[i] == '#') || (line[i] == '\\')
+		|| (line[i] == '<' && line[i + 1] == '<' && line[i + 2] == '<')
+		|| (line[i] == '>' && line[i + 1] == '>' && line[i + 2] == '>'))
+			parsing_error(manager, 1);
+	if (line[i] == '<' && line[i + 1] == '<')
 		return (REDIR_HEREDOC);
-	if (c == '>' && d == '>')
+	if (line[i] == '>' && line[i + 1] == '>')
 		return (REDIR_APPEND);
-	if (c == '<')
+	if (line[i] == '<')
 		return (REDIR_IN);
-	if (c == '>')
+	if (line[i] == '>')
 		return (REDIR_OUT);
-	if (c == '"')
+	if (line[i] == '"')
 		return (DOUBLE_QUOTE);
-	if (c == '\'')
+	if (line[i] == '\'')
 		return (SIMPLE_QUOTE);
-	if (c == '|')
+	if (line[i] == '|')
 		return (PIPE);
-	if (c == '$')
+	if (line[i] == '$')
 		return (ENV_VAR);
 	return (CMD_ARG); // is 0
 }
@@ -64,18 +67,18 @@ int	handle_quote(char *line, int i, int type, char **word)
 	return (i + 1);
 }
 
-int	regular_word(char *line, int i, char **word)
+int	regular_word(t_manager *manager, char *line, int i, char **word)
 {
 	int	j;
 
 	j = 0;
-	while (line[i + j] && !ft_is_space(line[i]) && !is_operators(line[i], line[i + 1]))
+	while (line[i + j] && !ft_is_space(line[i]) && !is_operators(manager, line, i))
 		j++;
 	*word = (char *)malloc(sizeof(char) * (j + 1));
 	if (!(*word))
 		return (-1);
 	j = 0;
-	while (line[i] && !ft_is_space(line[i]) && !is_operators(line[i], line[i + 1]))
+	while (line[i] && !ft_is_space(line[i]) && !is_operators(manager, line, i))
 	{
 		(*word)[j] = line[i];
 		j++;
@@ -98,9 +101,9 @@ t_manager	*parsing(t_manager *manager, char *line)
 		type = 0;
 		while (line[i] && ft_is_space(line[i]))
 			i++;
-		if (is_operators(line[i], line[i + 1]))
+		if (is_operators(manager, line, i))
 		{
-			type = is_operators(line[i], line[i + 1]);
+			type = is_operators(manager, line, i);
 			i++;
 		}
 		if (type == REDIR_APPEND || type == REDIR_HEREDOC)
@@ -108,7 +111,7 @@ t_manager	*parsing(t_manager *manager, char *line)
 		if (type == DOUBLE_QUOTE || type == SIMPLE_QUOTE)
 			i = handle_quote(line, i, type, &word);
 		else
-			i = regular_word(line, i, &word);
+			i = regular_word(manager, line, i, &word);
 		printf("word : [%s] of type [%d]\n", word, type);
 		token_add_back(&(manager->token_first), token_new(word, type));
 		free(word);

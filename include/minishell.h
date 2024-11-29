@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/29 12:01:29 by smolines         ###   ########.fr       */
+/*   Updated: 2024/11/29 15:56:07 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,9 @@ void	token_display(t_token *token);
 
 //free
 void	free_token(t_token **token);
+
+//error
+void parsing_error(t_manager *manager, int code);
 
 //display
 void	token_display(t_token *token);
