@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/28 18:47:36 by smolines         ###   ########.fr       */
+/*   Updated: 2024/11/29 12:01:29 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,5 +114,22 @@ typedef struct s_manager
 
 //parsing
 t_manager	*parsing(t_manager *manager,char *line);
+
+//init
+t_manager	*init_manager(t_manager *manager);
+
+
+//Operations sur liste token
+void	*token_add_new(t_token *new_token, t_token **token);
+t_token	*token_new(char *word, int flag);
+void	token_add_back(t_token **token, t_token *new_token);
+t_token	*token_last(t_token *token);
+void	token_display(t_token *token);
+
+//free
+void	free_token(t_token **token);
+
+//display
+void	token_display(t_token *token);
 
 #endif

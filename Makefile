@@ -6,7 +6,7 @@
 #    By: smolines <smolines@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/15 09:42:50 by smolines          #+#    #+#              #
-#    Updated: 2024/11/28 18:13:26 by smolines         ###   ########.fr        #
+#    Updated: 2024/11/29 10:03:40 by smolines         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,6 +75,7 @@ RM 				= rm -rf
 SRCS 			= 	tokenisation.c\
 					parsing.c\
 					init.c\
+					oplist_token.c\
 					
 
 SRCS_ALL 		= $(addprefix $(SRC_PATH), $(SRCS))

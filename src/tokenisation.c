@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/28 14:51:08 by smolines         ###   ########.fr       */
+/*   Updated: 2024/11/29 11:31:43 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,11 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	(void)env;
-	
+
 //loop readline basic
 	while (1)
 	{
+		init_manager(&manager);
 		line = readline("~$");
 		//ajouter protection + signaux plus tard
 		if (!line)

@@ -1,23 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/17 15:07:42 by aubertra          #+#    #+#             */
-/*   Updated: 2024/11/29 11:29:37 by smolines         ###   ########.fr       */
+/*   Created: 2024/11/29 12:00:56 by smolines          #+#    #+#             */
+/*   Updated: 2024/11/29 12:00:57 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
 #include "libft.h"
 
-size_t	ft_strlen(const char *str)
+void	free_token(t_token **token)
 {
-	int	i;
+	t_token	*tmp;
 
-	i = 0;
-	while (str && str[i])
-		i++;
-	return (i);
+	if (!token || !(*token))
+		return ;
+	while (*token)
+	{
+		tmp = (*token)->next;
+		free((*token)->value);
+		free(*token);
+		*token = tmp;
+	}
+	*token = NULL;
 }
