@@ -6,12 +6,14 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/02 13:27:04 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/02 16:46:22 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
+
+
 
 int	main(int argc, char **argv, char **env)
 {
@@ -22,6 +24,7 @@ int	main(int argc, char **argv, char **env)
 	(void)argv;
 	(void)env;
 
+	
 //loop readline basic
 	while (1)
 	{
@@ -32,6 +35,7 @@ int	main(int argc, char **argv, char **env)
 			exit (1);
 		else 
 			printf("You entered: %s\n", line);
+
 		if (*line) 
 			add_history(line);
 		if (!ft_strncmp(line, "exit", ft_strlen(line) - 1))

@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/02 15:19:55 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/02 17:17:46 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "libft.h"
 
 
-int	is_operators(t_manager *manager, char *line, int i)
+int check_operator_err(t_manager *manager, char *line, int i)
 {
 	if ((line[i] == '|' && line[i + 1] == '|') 
 		|| (line[i] == '&' && line[i + 1] == '&')
@@ -22,6 +22,12 @@ int	is_operators(t_manager *manager, char *line, int i)
 		|| (line[i] == '<' && line[i + 1] == '<' && line[i + 2] == '<')
 		|| (line[i] == '>' && line[i + 1] == '>' && line[i + 2] == '>'))
 			return (parsing_error(manager, 1));
+	return (0);
+}
+int	is_operators(t_manager *manager, char *line, int i)
+{
+	if (check_operator_err(manager, line, i) == -1)
+		return (-1);
 	if (line[i] == '<' && line[i + 1] == '<')
 		return (REDIR_HEREDOC);
 	if (line[i] == '>' && line[i + 1] == '>')
@@ -40,6 +46,9 @@ int	is_operators(t_manager *manager, char *line, int i)
 		return (ENV_VAR);
 	return (CMD_ARG); // is 0
 }
+
+// erreur dans fonction
+// arreter la fonction quand on ne trouve pas de fin de quote
 
 int	handle_quote(char *line, int i, int type, char **word)
 {
@@ -94,11 +103,36 @@ int	verif_operator(t_manager *manager, char *line, int i, int *type)
 	if 	(is_operators(manager, line, i) == -1)
 			return (-1);
 	else if (is_operators(manager, line, i))
-			{
-			*type = is_operators(manager, line, i);
-			i++;
-			}
+		{
+		*type = is_operators(manager, line, i);
+		i++;
+		}
 	return (i);
+}
+
+//compter les quotes hors other quotes
+int	count_quotes(t_manager *manager, char *line, char quote1, char quote2)
+{
+	int dquote;
+	int i;
+
+	dquote = 0;
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == quote1)
+			dquote++;
+		if (line[i] == quote2)
+			{
+				i++;
+				while (line[i] && line[i] != quote2)
+				i++;
+			}
+		i++;
+	}
+	if (dquote % 2 != 0)
+		return (parsing_error(manager, 2));
+	return (dquote);
 }
 
 
@@ -110,13 +144,17 @@ t_manager	*parsing(t_manager *manager, char *line)
 
 	i = 0;
 	word = NULL;
+	if ((count_quotes(manager, line, 34, 39) == -1) || (count_quotes(manager, line, 39, 34) % 2 == -1))
+		return (NULL);
 	while (line[i])
 	{
 		type = 0;
 		while (line[i] && ft_is_space(line[i]))
 			i++;
 		i = verif_operator(manager, line, i, &type);
-			if (type == REDIR_APPEND || type == REDIR_HEREDOC)
+		if (i == -1)
+			return (NULL);
+		if (type == REDIR_APPEND || type == REDIR_HEREDOC)
 			i++;
 		if (type == DOUBLE_QUOTE || type == SIMPLE_QUOTE)
 			i = handle_quote(line, i, type, &word);
