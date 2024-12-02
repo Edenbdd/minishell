@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/29 13:25:15 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/02 13:27:04 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,11 @@ int	main(int argc, char **argv, char **env)
 			add_history(line);
 		if (!ft_strncmp(line, "exit", ft_strlen(line) - 1))
 			break;
-		parsing(&manager, line);
+		if (parsing(&manager, line) == NULL)
+		{
+			printf("exit status : [%d]\n", manager.exit_status);
+			continue ;
+		}
 	}
 	return (0);
 }

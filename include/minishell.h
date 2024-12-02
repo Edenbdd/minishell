@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/29 15:56:07 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/02 11:28:12 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ typedef struct s_manager
 	t_export	*export_first;
 	t_export	*export_last;
 	int			size_export;
+	int 		exit_status;
 } t_manager;
 
 
@@ -130,7 +131,7 @@ void	token_display(t_token *token);
 void	free_token(t_token **token);
 
 //error
-void parsing_error(t_manager *manager, int code);
+int parsing_error(t_manager *manager, int code);
 
 //display
 void	token_display(t_token *token);

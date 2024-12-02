@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/29 16:49:55 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/02 15:19:55 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	is_operators(t_manager *manager, char *line, int i)
 		|| (line[i] == ';') || (line[i] == '#') || (line[i] == '\\')
 		|| (line[i] == '<' && line[i + 1] == '<' && line[i + 2] == '<')
 		|| (line[i] == '>' && line[i + 1] == '>' && line[i + 2] == '>'))
-			parsing_error(manager, 1);
+			return (parsing_error(manager, 1));
 	if (line[i] == '<' && line[i + 1] == '<')
 		return (REDIR_HEREDOC);
 	if (line[i] == '>' && line[i + 1] == '>')
@@ -88,6 +88,20 @@ int	regular_word(t_manager *manager, char *line, int i, char **word)
 	return (i);
 }
 
+
+int	verif_operator(t_manager *manager, char *line, int i, int *type)
+{
+	if 	(is_operators(manager, line, i) == -1)
+			return (-1);
+	else if (is_operators(manager, line, i))
+			{
+			*type = is_operators(manager, line, i);
+			i++;
+			}
+	return (i);
+}
+
+
 t_manager	*parsing(t_manager *manager, char *line)
 {
 	int		i;
@@ -101,12 +115,8 @@ t_manager	*parsing(t_manager *manager, char *line)
 		type = 0;
 		while (line[i] && ft_is_space(line[i]))
 			i++;
-		if (is_operators(manager, line, i))
-		{
-			type = is_operators(manager, line, i);
-			i++;
-		}
-		if (type == REDIR_APPEND || type == REDIR_HEREDOC)
+		i = verif_operator(manager, line, i, &type);
+			if (type == REDIR_APPEND || type == REDIR_HEREDOC)
 			i++;
 		if (type == DOUBLE_QUOTE || type == SIMPLE_QUOTE)
 			i = handle_quote(line, i, type, &word);
