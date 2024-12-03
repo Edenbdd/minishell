@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/29 17:00:59 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/03 11:13:07 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ typedef struct s_manager
 
 
 //parsing
-t_manager	*parsing(t_manager *manager,char *line);
+void	parsing(t_manager *manager,char *line);
 
 //init
 t_manager	*init_manager(t_manager *manager);

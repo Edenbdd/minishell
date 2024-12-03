@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/29 15:07:28 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/03 09:16:19 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	regular_word(char *line, int i, char **word)
 	return (i);
 }
 
-t_manager	*parsing(t_manager *manager, char *line)
+void	parsing(t_manager *manager, char *line)
 {
 	int		i;
 	char	*word;
@@ -109,11 +109,7 @@ t_manager	*parsing(t_manager *manager, char *line)
 			i = handle_quote(line, i, type, &word);
 		else
 			i = regular_word(line, i, &word);
-		printf("word : [%s] of type [%d]\n", word, type);
 		token_add_back(&(manager->token_first), token_new(word, type));
 		free(word);
 	}
-	printf("display de la liste token\n");
-	token_display(manager->token_first);
-	return (manager);
 }
