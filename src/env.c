@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:36 by aubertra          #+#    #+#             */
-/*   Updated: 2024/11/29 17:01:56 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/03 09:10:32 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,22 +44,23 @@ char	*get_content(char *str)
 	char	*content;
 	int		i;
 
-	
 	len_content = 0;
 	i = 0;
 	while(str[i] && str[i] != '=')
 		i++;
+	i++;
 	while(str[i + len_content])
 		len_content++;
 	content = (char *)malloc(sizeof(char) * len_content + 1);
 	if (!content)
 		return(NULL);
-	while(i < len_content)
+	len_content = 0;
+	while(str[i + len_content])
 	{
-		content[i] = str[i];
-		i++;
+		content[len_content] = str[i + len_content];
+		len_content++;
 	}
-	content[i] = '\0';
+	content[len_content] = '\0';
 	return (content);
 }
 t_env	*handle_env(char **env)
