@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/03 16:40:22 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/03 17:58:50 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,7 @@ char	*get_toexpand(char *str, int i);
 char	*expand_exists(char *to_expand, t_env *s_env);
 char	*replace_expand(char *str, int pos, char *expansion);
 void	expand_dquote(t_token *current_token, t_env *s_env);
-
+char	*cut_expand(char *str, int pos);
 
 //exec
 void	expand(t_token *token, t_env *s_env);

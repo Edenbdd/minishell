@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:12:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/03 17:50:45 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/03 18:05:05 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,47 @@ char	*replace_expand(char *str, int pos, char *expansion)
 	return (result);	
 }
 
+char	*cut_expand(char *str, int pos)
+{
+	char	*result;
+	int		i;
+	int		j;
+	int		k;
+
+	i = 0;
+	j = 0;
+	while (str[j + i])
+	{	
+		if ((j + i) == pos)
+		{
+			while (str[i + j] && !ft_is_space(str[i + j]))
+				j++;
+		}
+		i++;
+	}
+	result = (char *)malloc(sizeof(char) * (i - j + 1));
+	if (!result)
+		return (NULL);
+	j = 0;
+	k = 0;
+	i = 0;
+	while (str[j])
+	{	
+		if (j == pos)
+		{
+			while (str[j] && !ft_is_space(str[j]))
+				j++;
+		}
+		result[i] = str[j];
+		i++;
+		j++;
+	}
+	result[j] = '\0';
+	printf("at the end result is [%s]\n", result);
+	return (result);	
+}
+
+
 void	expand_dquote(t_token *current_token, t_env *s_env)
 {
 	char	*str;
@@ -135,7 +176,7 @@ void	expand_dquote(t_token *current_token, t_env *s_env)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '$')
+		if (str[i] == '$' && !ft_is_space(str[i + 1]) && str[i + 1] != '\0')
 		{
 			i++;
 			to_expand = get_toexpand(str, i);
@@ -147,8 +188,8 @@ void	expand_dquote(t_token *current_token, t_env *s_env)
 				str = replace_expand(str, i - 1, expansion);
 				printf("AFTER REPLACEING str is [%s]\n", str);
 			}
-			//else
-			//	str = cut_expand(str, to_expand);
+			else
+				str = cut_expand(str, i - 1);
 		}
 		i++;
 	}
