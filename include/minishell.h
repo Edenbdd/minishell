@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/02 11:28:12 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/03 09:56:48 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,13 @@ typedef enum e_token_type
     REDIR_APPEND, // For '>>'
     REDIR_HEREDOC, // For '<<'
     ENV_VAR, // For environment variables start with $
+	ECHO,
+	CD,
+	PWD,
+	EXPORT,
+	UNSET,
+	ENV,
+	EXIT,
 }   t_token_type;
 
 typedef struct s_token t_token;
@@ -85,8 +92,8 @@ struct s_env
 
 struct s_export
 {
-	char	*field;
-	char	*content;
+	char		*field;
+	char		*content;
 	t_export	*next;
 	t_export	*prev;
 };
@@ -112,13 +119,19 @@ typedef struct s_manager
 } t_manager;
 
 
-
 //parsing
-t_manager	*parsing(t_manager *manager,char *line);
+int		parsing(t_manager *manager,char *line);
+int		verif_operator(t_manager *manager, char *line, int i, int *type);
+
+//parsing_utils
+int		check_operator_err(t_manager *manager, char *line, int i);
+int		is_operators(t_manager *manager, char *line, int i);
+int		handle_quote(char *line, int i, int type, char **word);
+int		regular_word(t_manager *manager, char *line, int i, char **word);
+int		count_quotes(t_manager *manager, char *line, char quote1, char quote2);
 
 //init
 t_manager	*init_manager(t_manager *manager);
-
 
 //Operations sur liste token
 void	*token_add_new(t_token *new_token, t_token **token);

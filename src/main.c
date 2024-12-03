@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/02 16:46:22 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/03 10:23:00 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	main(int argc, char **argv, char **env)
 			add_history(line);
 		if (!ft_strncmp(line, "exit", ft_strlen(line) - 1))
 			break;
-		if (parsing(&manager, line) == NULL)
+		if (parsing(&manager, line) == -1)
 		{
 			printf("exit status : [%d]\n", manager.exit_status);
 			continue ;
@@ -48,3 +48,5 @@ int	main(int argc, char **argv, char **env)
 	}
 	return (0);
 }
+
+//si ligne vide : exit status = 0 "command not found"
