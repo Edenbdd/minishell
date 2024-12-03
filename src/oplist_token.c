@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 22:30:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/29 13:18:07 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/03 10:50:12 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,9 @@ void	token_add_back(t_token **token, t_token *new_token)
 	{
 		lastposition = token_last(*token);
 		lastposition->next = new_token;
+		new_token->prev = lastposition;
 	}
-	if (!(*token))
+	else
 		*token = new_token;	
 }
 
@@ -71,6 +72,10 @@ void	token_display(t_token *token)
 	while (token)
 	{
 		printf("token value :[%s] -- type : [%d]\n", token->value, token->type);
+		//if (token->prev)
+		//	printf("        prev_value : [%s]\n", token->prev->value);
+		//else
+		//	printf("        prev_value : [NULL]\n");
 		token = token->next;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/03 09:57:33 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/03 10:32:16 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int	parsing(t_manager *manager, char *line)
 
 	i = 0;
 	word = NULL;
+	if (line[0] == '\0')
+		return (parsing_error(manager, 3));
 	if ((count_quotes(manager, line, 34, 39) == -1) || (count_quotes(manager, line, 39, 34) % 2 == -1))
 		return (-1);
 	while (line[i])
@@ -56,7 +58,5 @@ int	parsing(t_manager *manager, char *line)
 		token_add_back(&(manager->token_first), token_new(word, type));
 		free(word);
 	}
-	printf("display de la liste token\n");
-	token_display(manager->token_first);
 	return (0);
 }

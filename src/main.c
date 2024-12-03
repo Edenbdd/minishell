@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/03 10:23:00 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/03 10:50:35 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,15 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	(void)env;
-
-	
-//loop readline basic
 	while (1)
 	{
 		init_manager(&manager);
 		line = readline("~$");
 		//ajouter protection + signaux plus tard
 		if (!line)
-			exit (1);
+			continue;
 		else 
 			printf("You entered: %s\n", line);
-
 		if (*line) 
 			add_history(line);
 		if (!ft_strncmp(line, "exit", ft_strlen(line) - 1))
@@ -45,6 +41,8 @@ int	main(int argc, char **argv, char **env)
 			printf("exit status : [%d]\n", manager.exit_status);
 			continue ;
 		}
+		printf("display de la liste token\n");
+		token_display(manager.token_first);
 	}
 	return (0);
 }
