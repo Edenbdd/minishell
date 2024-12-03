@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   oplist_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 22:30:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/03 11:17:37 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/03 14:09:28 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,23 @@ void	*cmd_add_new(t_cmd *new_cmd, t_cmd **cmd)
 }
 
 //creer un nouveau cmd
-t_cmd	*cmd_new(char *word, int type)
+t_cmd	*cmd_new(t_token *current_token, int type)
 {
 	t_cmd	*new_cmd;
 
 	new_cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (new_cmd == NULL)
 		return (NULL);
-	cmd->path = find_path(current_token);
-	cmd->args = get_args(current_token);
+	new_cmd->path = find_path(current_token);
+	new_cmd->args = get_args(current_token);
 	new_cmd->pid = -1;
-	new_cmd->redirs = NULL;
+	//new_cmd->redirs = NULL;
+	new_cmd->infile = NULL;
+	new_cmd->in_fd = -1;
+	new_cmd->outfile = NULL;
+	new_cmd->out_fd = -1;	
+	new_cmd->pfd[0]	= -1;
+	new_cmd->pfd[1]	= -1;
 	new_cmd->next = NULL;
 	new_cmd->prev = NULL;
 	return (new_cmd);

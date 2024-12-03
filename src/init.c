@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:13:00 by smolines          #+#    #+#             */
-/*   Updated: 2024/11/29 16:02:29 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/03 14:36:05 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ t_manager	*init_manager(t_manager *manager)
 	manager->cmd_first = NULL;
 	manager->cmd_last = NULL;
 	manager->size_cmd = -1;
-	manager->redirs = NULL;
 	manager->env_first = NULL;
 	manager->env_last = NULL;
 	manager->size_env = -1;

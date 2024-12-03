@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 14:57:20 by aubertra          #+#    #+#             */
-/*   Updated: 2024/11/28 18:10:52 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/03 14:54:43 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ int			ft_ismaj(char c);
 int			ft_isascii(int c);
 int			ft_toupper(int c);
 int			ft_tolower(int c);
+int			ft_strcmp(char *s1, char *s2);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 int			ft_atoi(const char *str);
 int			ft_memcmp(const void *s1, const void *s2, size_t n);
-int			ft_strcmp(char *s1, char *s2);
 
 size_t		ft_strlcpy(char *dst, const char *src, size_t size);
 size_t		ft_strlcat(char *dst, const char *src, size_t size);
@@ -61,6 +61,7 @@ void		ft_putstr_fd(char *s, int fd);
 void		ft_putendl_fd(char *s, int fd);
 void		ft_putnbr_fd(int n, int fd);
 void		ft_striteri(char *s, void (*f)(unsigned int, char *));
+
 
 //listes chainees
 //int			ft_lstsize(t_list *lst);

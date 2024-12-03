@@ -6,7 +6,7 @@
 #    By: smolines <smolines@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/15 09:42:50 by smolines          #+#    #+#              #
-#    Updated: 2024/12/03 12:20:26 by smolines         ###   ########.fr        #
+#    Updated: 2024/12/03 15:01:36 by smolines         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,8 +29,13 @@ SRCS 			= 	main.c\
 					parsing_utils.c\
 					init.c\
 					oplist_token.c\
+					oplist_env.c\
 					free.c\
 					error.c\
+					env.c\
+					exec.c
+
+
 
 SRCS_ALL 		= $(addprefix $(SRC_PATH), $(SRCS))
 

@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/03 12:21:19 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/03 15:02:48 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,10 @@ int	main(int argc, char **argv, char **env)
 	t_manager	manager;
 	t_env		*first_env;
 	
+	
 	(void)argc;
 	(void)argv;
-	(void)env;
+	first_env = handle_env(env);
 	while (1)
 	{
 		init_manager(&manager);
@@ -44,6 +45,7 @@ int	main(int argc, char **argv, char **env)
 		}
 		printf("display de la liste token\n");
 		token_display(manager.token_first);
+		exec_cmd(&manager, first_env);
 	}
 	return (0);
 }

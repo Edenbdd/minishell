@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/03 12:19:49 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/03 15:02:09 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef enum e_token_type
 }   t_token_type;
 
 typedef struct s_token t_token;
-typedef struct s_redirs t_redirs;
+//typedef struct s_redirs t_redirs;
 typedef struct s_cmd t_cmd;
 typedef struct s_env t_env;
 typedef struct s_export t_export;
@@ -68,19 +68,24 @@ struct s_cmd
 	char		*path;
 	char		**args;
 	pid_t		pid;
-	t_redirs	*redir;
-	t_cmd		*next;
-	t_cmd		*prev;	
-};
-
-struct s_redirs
-{
+//	t_redirs	*redir;
 	char	*infile;
 	int		in_fd;
 	char	*outfile;
 	int		out_fd;
 	int		pfd[2];
+	t_cmd		*next;
+	t_cmd		*prev;	
 };
+
+//struct s_redirs
+//{
+//	char	*infile;
+//	int		in_fd;
+//	char	*outfile;
+//	int		out_fd;
+//	int		pfd[2];
+//};
 
 struct s_env
 {
@@ -108,7 +113,6 @@ typedef struct s_manager
 	t_cmd		*cmd_first;
 	t_cmd		*cmd_last;
 	int			size_cmd;
-	t_redirs	*redirs;
 	t_env		*env_first;
 	t_env		*env_last;
 	int			size_env;
@@ -149,7 +153,7 @@ int parsing_error(t_manager *manager, int code);
 //display
 void	token_display(t_token *token);
 
-//operations sur l environnement
+//operations sur l environnement : env et oplist_env
 char		*get_name(char *str);
 char		*get_content(char *str);
 t_env		*handle_env(char **env);
@@ -157,5 +161,23 @@ t_env		*env_new(char *str);
 void		env_add_back(t_env *first_env, char *str);
 t_env		*env_last(t_env *env);
 void		env_display(t_env *env);
+
+//cmd_path
+//char	*handle_cmd(char *cmd, char **env, t_err *err);
+//char	*join_path(char *path, char *cmd, t_err *err, char **paths);
+//char	*test_path(char **paths, char *cmd, t_err *err);
+//char	*absolute_path(char *cmd, t_err *err);
+
+//oplist_cmd
+//void	*cmd_add_new(t_cmd *new_cmd, t_cmd **cmd);
+//t_cmd	*cmd_new(t_token *current_token, int type);
+//void	cmd_add_back(t_cmd **cmd, t_cmd *new_cmd);
+//t_cmd	*cmd_last(t_cmd *cmd);
+//void	cmd_display(t_cmd *cmd);
+
+
+//exec
+void	expand(t_token *token, t_env *s_env);
+void	exec_cmd(t_manager *manager, t_env *s_env);
 
 #endif

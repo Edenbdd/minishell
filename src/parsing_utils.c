@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 09:47:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/03 10:49:35 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/03 14:33:13 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 //checker les operateurs non geres
 int check_operator_err(t_manager *manager, char *line, int i)
 {
+//si >>> et plus regarder les messages d'erreur specifiques. idem autres operateurs
 	if ((line[i] == '|' && line[i + 1] == '|') 
 		|| (line[i] == '&' && line[i + 1] == '&')
 		|| (line[i] == ';') || (line[i] == '#') || (line[i] == '\\')
