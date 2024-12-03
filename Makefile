@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+         #
+#    By: smolines <smolines@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/15 09:42:50 by smolines          #+#    #+#              #
-#    Updated: 2024/12/03 10:42:49 by aubertra         ###   ########.fr        #
+#    Updated: 2024/12/03 12:20:26 by smolines         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,16 +26,11 @@ RM 				= rm -rf
 # Tous les fichiers sources (ajuster si nécessaire)
 SRCS 			= 	main.c\
 					parsing.c\
+					parsing_utils.c\
 					init.c\
 					oplist_token.c\
 					free.c\
 					error.c\
-					env.c\
-					cmd_path.c\
-					oplist_env.c\
-					exec.c\
-					oplist_cmd.c\
-					
 
 SRCS_ALL 		= $(addprefix $(SRC_PATH), $(SRCS))
 
