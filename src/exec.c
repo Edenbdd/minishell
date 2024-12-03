@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/03 15:07:42 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/03 16:59:53 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,38 +15,37 @@
 #include "minishell.h"
 #include "libft.h"
 
-void	expand(t_token *token, t_env *s_env)
-{
-	t_env	*current;
-	
-	current = s_env;
-	while (current)
-	{
-		if (!ft_strcmp(token->value, current->field))
-		{
-			free(token->value);
-			token->value = ft_strdup(current->content);
-			break;
-		}
-		current = current->next;
-	}
-}
+
+
+
 
 void	exec_cmd(t_manager *manager, t_env *s_env)
 {
 
 	t_token	*current_token;
-	
+	printf("exec_cmd debut fonction\n");
 	current_token = manager->token_first;
 	while(current_token)
 	{
+		printf("exec_cmd debut 1er while\n");
+
 		while(current_token && current_token->type != PIPE) //parcourir les token
 		{
+			printf("exec_cmd debut 2eme while\n");
+
 			if (current_token->type == ENV_VAR)
 			{
+				printf("en var if\n");
 				expand(current_token, s_env);
 				printf("current token value : [%s]\n", current_token->value);
 			}
+			if (current_token->type == DOUBLE_QUOTE)
+			{
+				printf("dquote if\n");
+				expand_dquote(current_token, s_env);
+				printf("current token value : [%s]\n", current_token->value);
+			}
+			
 			current_token = current_token->next; //skip ce qui n est pas une commande
 		}
 		if (current_token && current_token->type == PIPE)

@@ -6,7 +6,7 @@
 #    By: smolines <smolines@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/15 09:42:50 by smolines          #+#    #+#              #
-#    Updated: 2024/12/03 15:01:36 by smolines         ###   ########.fr        #
+#    Updated: 2024/12/03 16:13:25 by smolines         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,8 @@ SRCS 			= 	main.c\
 					free.c\
 					error.c\
 					env.c\
-					exec.c
+					exec.c\
+					expand.c\
 
 
 

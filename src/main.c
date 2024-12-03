@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/03 15:02:48 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/03 17:20:25 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,18 @@ int	main(int argc, char **argv, char **env)
 		if (!line)
 			continue;
 		else 
-			printf("You entered: %s\n", line);
+//			printf("You entered: %s\n", line);
 		if (*line) 
 			add_history(line);
 		if (!ft_strncmp(line, "exit", ft_strlen(line) - 1))
 			break;
 		if (parsing(&manager, line) == -1)
 		{
-			printf("exit status : [%d]\n", manager.exit_status);
+//			printf("exit status : [%d]\n", manager.exit_status);
 			continue ;
 		}
-		printf("display de la liste token\n");
-		token_display(manager.token_first);
+		//printf("display de la liste token\n");
+		//token_display(manager.token_first);
 		exec_cmd(&manager, first_env);
 	}
 	return (0);

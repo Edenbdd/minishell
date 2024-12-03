@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/03 14:46:33 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/03 17:20:03 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	parsing(t_manager *manager, char *line)
 			i = handle_quote(line, i, type, &word);
 		else
 			i = regular_word(manager, line, i, &word);
-		printf("word : [%s] of type [%d]\n", word, type);
+//		printf("word : [%s] of type [%d]\n", word, type);
 		token_add_back(&(manager->token_first), token_new(word, type));
 		free(word);
 	}
