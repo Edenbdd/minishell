@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: smolines <smolines@student.42.fr>          +#+  +:+       +#+         #
+#    By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/15 09:42:50 by smolines          #+#    #+#              #
-#    Updated: 2024/12/03 16:13:25 by smolines         ###   ########.fr        #
+#    Updated: 2024/12/04 14:12:28 by aubertra         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ RM 				= rm -rf
 SRCS 			= 	main.c\
 					parsing.c\
 					parsing_utils.c\
+					parsing_utils2.c\
 					init.c\
 					oplist_token.c\
 					oplist_env.c\

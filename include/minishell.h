@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/03 17:58:50 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/04 14:21:00 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ struct s_cmd
 	pid_t		pid;
 //	t_redirs	*redir;
 	char	*infile;
+	char	*lim;
 	int		in_fd;
 	char	*outfile;
 	int		out_fd;
@@ -133,7 +134,8 @@ int		is_operators(t_manager *manager, char *line, int i);
 int		handle_quote(char *line, int i, int type, char **word);
 int		regular_word(t_manager *manager, char *line, int i, char **word);
 int		count_quotes(t_manager *manager, char *line, char quote1, char quote2);
-
+int		handle_redir(t_manager *manager, char *line, int i, char **word);
+int		handle_lim(t_manager *manager, char *line, int i, char **word);
 //init
 t_manager	*init_manager(t_manager *manager);
 

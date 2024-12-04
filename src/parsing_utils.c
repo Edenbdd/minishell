@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 09:47:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/03 14:33:13 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/04 14:39:30 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
+
+//Utils de parsing lies au operators, quotes et regular word (cmd/arg)
 
 //checker les operateurs non geres
 int check_operator_err(t_manager *manager, char *line, int i)
@@ -50,7 +52,7 @@ int	is_operators(t_manager *manager, char *line, int i)
 	return (CMD_ARG); // is 0
 }
 
-//recuperer un toker "entre quote"
+//recuperer un token "entre quote"
 int	handle_quote(char *line, int i, int type, char **word)
 {
 	int		j;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/03 17:20:03 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/04 14:51:54 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ int	verif_operator(t_manager *manager, char *line, int i, int *type)
 	if 	(is_operators(manager, line, i) == -1)
 			return (-1);
 	else if (is_operators(manager, line, i))
-		{
+	{
 		*type = is_operators(manager, line, i);
 		i++;
-		}
+	}
 	return (i);
 }
 
@@ -48,13 +48,21 @@ int	parsing(t_manager *manager, char *line)
 		i = verif_operator(manager, line, i, &type);
 		if (i == -1)
 			return (-1);
-		if (type == REDIR_APPEND || type == REDIR_HEREDOC)
-			i++;
 		if (type == DOUBLE_QUOTE || type == SIMPLE_QUOTE)
 			i = handle_quote(line, i, type, &word);
+		else if (type == REDIR_IN || type == REDIR_OUT 
+			|| type == REDIR_APPEND || type == REDIR_HEREDOC)
+		{
+			if (type == REDIR_APPEND || type == REDIR_HEREDOC)
+				i++;
+			if (type == REDIR_HEREDOC)
+				i = handle_lim(manager, line, i, &word);
+			else
+				i = handle_redir(manager, line, i, &word);
+		}
 		else
 			i = regular_word(manager, line, i, &word);
-//		printf("word : [%s] of type [%d]\n", word, type);
+		printf("after handle redir word is [%s]\n", word);
 		token_add_back(&(manager->token_first), token_new(word, type));
 		free(word);
 	}
