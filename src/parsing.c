@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/04 14:51:54 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/04 16:57:46 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ int	parsing(t_manager *manager, char *line)
 		}
 		else
 			i = regular_word(manager, line, i, &word);
-		printf("after handle redir word is [%s]\n", word);
 		token_add_back(&(manager->token_first), token_new(word, type));
 		free(word);
 	}

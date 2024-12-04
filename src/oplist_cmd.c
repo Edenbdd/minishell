@@ -3,35 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   oplist_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 22:30:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/03 14:09:28 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/04 17:04:05 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 
-//ajouter le nouveau cmd a la liste cmd
-void	*cmd_add_new(t_cmd *new_cmd, t_cmd **cmd)
-{
-	if (!new_cmd)
-		return (NULL);
-	cmd_add_back(&(*cmd), new_cmd);
-	return (new_cmd);
-}
+// //ajouter le nouveau cmd a la liste cmd
+// void	*cmd_add_new(t_cmd *new_cmd, t_cmd **cmd)
+// {
+// 	if (!new_cmd)
+// 		return (NULL);
+// 	cmd_add_back((*cmd), new_cmd);
+// 	return (new_cmd);
+// }
 
-//creer un nouveau cmd
-t_cmd	*cmd_new(t_token *current_token, int type)
+//creer un nouveau cmd avec tout set a NULL
+t_cmd	*cmd_new(void)
 {
 	t_cmd	*new_cmd;
 
 	new_cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (new_cmd == NULL)
 		return (NULL);
-	new_cmd->path = find_path(current_token);
-	new_cmd->args = get_args(current_token);
+	new_cmd->path = NULL;
+	new_cmd->args = NULL;
 	new_cmd->pid = -1;
 	//new_cmd->redirs = NULL;
 	new_cmd->infile = NULL;
@@ -46,26 +46,22 @@ t_cmd	*cmd_new(t_token *current_token, int type)
 }
 
 // ajouter un nouveau cmd a la fin de la liste cmd
-void	cmd_add_back(t_cmd **cmd, t_cmd *new_cmd)
+void	cmd_add_back(t_cmd *first_cmd, t_cmd *new_cmd)
 {
 	t_cmd	*lastposition;
 
-	if (!new_cmd)
+	if (!new_cmd || !first_cmd)
 		return ;
-	if (*cmd)
-	{
-		lastposition = cmd_last(*cmd);
-		lastposition->next = new_cmd;
-	}
-	if (!(*cmd))
-		*cmd = new_cmd;	
+	lastposition = cmd_last(first_cmd);
+	lastposition->next = new_cmd;
+	new_cmd->prev = lastposition;
 }
 
 // trouver le dernier element de la liste cmd
 t_cmd	*cmd_last(t_cmd *cmd)
 {
-	if (cmd == NULL)
-		return (0);
+	if (!cmd)
+		return (NULL);
 	while (cmd->next != NULL)
 		cmd = cmd->next;
 	return (cmd);
@@ -73,11 +69,14 @@ t_cmd	*cmd_last(t_cmd *cmd)
 
 void	cmd_display(t_cmd *cmd)
 {
-	if (cmd == NULL)
+	if (!cmd)
+	{
+		printf("there is no cmd ?\n");
 		return ;
+	}
 	while (cmd)
 	{
-		printf("cmd value :[%s] -- type : [%d]\n", cmd->value, cmd->type);
+		printf("-- infile: [%s] -- outfile:[%s]\n", cmd->infile, cmd->outfile);
 		cmd = cmd->next;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:58:50 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/04 14:42:31 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/04 16:56:41 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int	handle_redir(t_manager *manager, char *line, int i, char **word)
 		j++;
 	}
 	(*word)[j] = '\0';	
-	printf("in handle redir word is [%s]\n", *word);
 	return (i);
 }
 

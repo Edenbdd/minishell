@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/04 14:21:00 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/04 17:36:38 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ struct s_cmd
 	pid_t		pid;
 //	t_redirs	*redir;
 	char	*infile;
-	char	*lim;
 	int		in_fd;
 	char	*outfile;
 	int		out_fd;
@@ -171,11 +170,11 @@ void		env_display(t_env *env);
 //char	*absolute_path(char *cmd, t_err *err);
 
 //oplist_cmd
-//void	*cmd_add_new(t_cmd *new_cmd, t_cmd **cmd);
-//t_cmd	*cmd_new(t_token *current_token, int type);
-//void	cmd_add_back(t_cmd **cmd, t_cmd *new_cmd);
-//t_cmd	*cmd_last(t_cmd *cmd);
-//void	cmd_display(t_cmd *cmd);
+// void	*cmd_add_new(t_cmd *new_cmd, t_cmd **cmd);
+t_cmd	*cmd_new(void);
+void	cmd_add_back(t_cmd *cmd, t_cmd *new_cmd);
+t_cmd	*cmd_last(t_cmd *cmd);
+void	cmd_display(t_cmd *cmd);
 
 //expand
 void	expand(t_token *token, t_env *s_env);
@@ -185,8 +184,9 @@ char	*replace_expand(char *str, int pos, char *expansion);
 void	expand_dquote(t_token *current_token, t_env *s_env);
 char	*cut_expand(char *str, int pos);
 
-//exec
-void	expand(t_token *token, t_env *s_env);
-void	exec_cmd(t_manager *manager, t_env *s_env);
+//fill cmd struct
+void	fill_cmd(t_manager *manager, t_env *s_env);
+t_token	*fill_args(t_token *current, char **args);
+void	expand_loop(t_token *current_token, t_env *s_env);
 
 #endif

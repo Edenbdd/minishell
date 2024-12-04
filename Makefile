@@ -6,7 +6,7 @@
 #    By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/15 09:42:50 by smolines          #+#    #+#              #
-#    Updated: 2024/12/04 14:12:28 by aubertra         ###   ########.fr        #
+#    Updated: 2024/12/04 16:49:25 by aubertra         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ SRCS 			= 	main.c\
 					init.c\
 					oplist_token.c\
 					oplist_env.c\
+					oplist_cmd.c\
 					free.c\
 					error.c\
 					env.c\
