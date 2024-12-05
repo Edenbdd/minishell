@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:12:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/03 18:05:05 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/05 13:13:27 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ char	*get_toexpand(char *str, int i)
 char	*expand_exists(char *to_expand, t_env *s_env)
 {
 	t_env	*current;
-	printf("in exopand exists to expand is [%s]\n", to_expand);
 	current = s_env;
 	while (current)
 	{
@@ -81,10 +80,8 @@ char	*replace_expand(char *str, int pos, char *expansion)
 	j = 0;
 	while (str[j + i])
 	{	
-		printf("in the first loop\n");
 		if ((j + i) == pos)
 		{
-			printf("in the first if\n");
 			while (str[i + j] && !ft_is_space(str[i + j]))
 				j++;
 		}
@@ -98,18 +95,14 @@ char	*replace_expand(char *str, int pos, char *expansion)
 	l = 0;
 	while (str[j])
 	{	
-		printf("in the second loop, str[j] is %c\n", str[j]);
 		if (j == pos)
 		{
-			printf("j %d pos %d\n", j, pos);
 			while (str[j] && !ft_is_space(str[j]))
 			{
 				j++;
-				printf("skipping expand: [%c]\n", str[j]);
 			}
 			while (expansion[k])
 			{
-				printf("in the expansion\n");
 				result[l] = expansion[k];
 				k++;
 				l++;
@@ -120,7 +113,6 @@ char	*replace_expand(char *str, int pos, char *expansion)
 		j++;
 	}
 	result[i + j] = '\0';
-	printf("at the end result is [%s]\n", result);
 	return (result);	
 }
 
@@ -160,7 +152,6 @@ char	*cut_expand(char *str, int pos)
 		j++;
 	}
 	result[j] = '\0';
-	printf("at the end result is [%s]\n", result);
 	return (result);	
 }
 
@@ -181,13 +172,8 @@ void	expand_dquote(t_token *current_token, t_env *s_env)
 			i++;
 			to_expand = get_toexpand(str, i);
 			expansion = expand_exists(to_expand, s_env);
-			printf("expansion is [%s]\n", expansion);
 			if (expansion)
-			{
-				printf("I go into the if\n");
 				str = replace_expand(str, i - 1, expansion);
-				printf("AFTER REPLACEING str is [%s]\n", str);
-			}
 			else
 				str = cut_expand(str, i - 1);
 		}

@@ -6,21 +6,21 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 22:30:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/04 17:04:05 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/05 13:45:30 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 
-// //ajouter le nouveau cmd a la liste cmd
-// void	*cmd_add_new(t_cmd *new_cmd, t_cmd **cmd)
-// {
-// 	if (!new_cmd)
-// 		return (NULL);
-// 	cmd_add_back((*cmd), new_cmd);
-// 	return (new_cmd);
-// }
+//handle the creation and fills the cmd list
+void	create_cmd_list(t_cmd *new_cmd, int cmd_node_count, t_manager *manager)
+{
+	if (cmd_node_count == 0) //save the first node in the manager
+			manager->cmd_first = new_cmd;
+	else
+		cmd_add_back(manager->cmd_first, new_cmd); //ajouter a la suite des cmd
+}
 
 //creer un nouveau cmd avec tout set a NULL
 t_cmd	*cmd_new(void)
@@ -36,6 +36,7 @@ t_cmd	*cmd_new(void)
 	//new_cmd->redirs = NULL;
 	new_cmd->infile = NULL;
 	new_cmd->in_fd = -1;
+	new_cmd->lim = NULL;
 	new_cmd->outfile = NULL;
 	new_cmd->out_fd = -1;	
 	new_cmd->pfd[0]	= -1;
@@ -76,7 +77,7 @@ void	cmd_display(t_cmd *cmd)
 	}
 	while (cmd)
 	{
-		printf("-- infile: [%s] -- outfile:[%s]\n", cmd->infile, cmd->outfile);
+		printf("arg[0]: [%s]-- infile: [%s]-- lim: [%s] -- outfile:[%s]\n",cmd->args[0], cmd->infile,  cmd->lim, cmd->outfile);
 		cmd = cmd->next;
 	}
 }

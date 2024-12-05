@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/04 17:36:38 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/05 13:36:13 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ struct s_cmd
 //	t_redirs	*redir;
 	char	*infile;
 	int		in_fd;
+	char	*lim;
 	char	*outfile;
 	int		out_fd;
 	int		pfd[2];
@@ -186,7 +187,10 @@ char	*cut_expand(char *str, int pos);
 
 //fill cmd struct
 void	fill_cmd(t_manager *manager, t_env *s_env);
-t_token	*fill_args(t_token *current, char **args);
+t_token	*fill_args(t_token *current, t_cmd *cmd);
 void	expand_loop(t_token *current_token, t_env *s_env);
+t_token	*cmd_loop(t_token *current_token, t_cmd *cmd);
+void	redir_loop(t_token *current_token, t_cmd *cmd);
+void	create_cmd_list(t_cmd *new_cmd, int cmd_node_count, t_manager *manager);
 
 #endif

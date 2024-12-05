@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:58:50 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/04 16:56:41 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/05 11:09:18 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #include "minishell.h"
 #include "libft.h"
-
+//gerer les files entre "" et '' A CHANGER
 int	handle_redir(t_manager *manager, char *line, int i, char **word)
 {
 	int	j;
@@ -51,6 +51,8 @@ int	handle_lim(t_manager *manager, char *line, int i, char **word)
 		i++;
 	i = verif_operator(manager, line, i, &type);
 	if (type == DOUBLE_QUOTE)
+		i = handle_quote(line, i, type, word);
+	if (type == SIMPLE_QUOTE)
 		i = handle_quote(line, i, type, word);
 	else if (type == CMD_ARG)
 		i = regular_word(manager, line, i, word);
