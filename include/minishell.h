@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/05 16:12:12 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/05 16:41:06 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,8 @@ void	token_display(t_token *token);
 
 //free
 void	free_token(t_token **token);
+void	closing(t_cmd *cmd, int *previous_fd);
+void	free_path(char **paths);
 
 //error
 int parsing_error(t_manager *manager, int code);
@@ -167,10 +169,11 @@ t_env		*env_last(t_env *env);
 void		env_display(t_env *env);
 
 //cmd_path
-//char	*handle_cmd(char *cmd, char **env, t_err *err);
-//char	*join_path(char *path, char *cmd, t_err *err, char **paths);
-//char	*test_path(char **paths, char *cmd, t_err *err);
-//char	*absolute_path(char *cmd, t_err *err);
+char	*get_path(t_env *s_env);
+char	*find_path(char *cmd, t_env *s_env, t_manager *manager);
+char	*join_path(char *path, char *cmd, t_manager *manager, char **paths);
+char	*test_path(char **paths, char *cmd, t_manager *manager);
+char	*absolute_path(char *cmd, t_manager *manager);
 
 //oplist_cmd
 void	create_cmd_list(t_cmd *new_cmd, int cmd_node_count, t_manager *manager);

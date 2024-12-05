@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/05 16:12:41 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/05 16:49:26 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manage
 	}
 	dup2(cmd->pfd[1], STDOUT_FILENO); //A PROTEGER
 	path = find_path(cmd->args[0], s_env, manager);
-	//ici faire fonction closing
+	closing(cmd, previous_fd);
 	execve(path, cmd->args, s_env); //EXECVE A PROTEGER AUSSI !!!
 }
 

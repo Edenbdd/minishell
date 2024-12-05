@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:19 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/05 16:12:45 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/05 16:38:04 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,39 @@
 #include "minishell.h"
 #include "libft.h"
 
+char	*get_path(t_env *s_env)
+{
+	t_env	*current;
+
+	current = s_env;
+	while (current)
+	{
+		if (!ft_strcmp(current->field, "PATH"))
+			break ;
+		current = current->next;
+	}
+	return (current->content);
+}
 
 char	*find_path(char *cmd, t_env *s_env, t_manager *manager)
 {
 	char	**paths;
 	char	*right_path;
 
-	if (!cmd || !cmd[0])
-		error_exit(1, 1, error_msg(err, "empty cmd "), err);
-	if (!env || cmd[0] == '.' || cmd[0] == '/')
-		return (absolute_path(cmd, err));
-	paths = ft_split(getenv(env), ':');
-	if (!paths)
-		error_exit(1, 1, "paths in handle cmd ", err);
-	right_path = test_path(paths, cmd, err);
-	free_path(paths);
+//	if (!cmd || !cmd[0]) faire gestion d erreur si pas trouver de cmd
+	if (!s_env || cmd[0] == '.' || cmd[0] == '/') //gerer les paths absolut/relatif et sans env
+		return (absolute_path(cmd, manager));
+	paths = ft_split(get_path(s_env), ':');
+	if (!paths) 
+		return (NULL); //faire une sortie d erreur correcte si fail du split !
+	right_path = test_path(paths, cmd, manager);
+	free_path(paths);//a ajouter dans free
 	if (!right_path)
-		error_exit(1, 1, error_msg(err, "cmd path cannot be found "), err);
+		return (NULL); //gerer la sortie d erreur si opas de right path trouver
 	return (right_path);
 }
 
-char	*join_path(char *path, char *cmd, t_err *err, char **paths)
+char	*join_path(char *path, char *cmd, t_manager *manager, char **paths)
 {
 	char	*tmp;
 	char	*to_test;
@@ -43,20 +55,20 @@ char	*join_path(char *path, char *cmd, t_err *err, char **paths)
 	tmp = ft_strjoin(path, "/");
 	if (!tmp)
 	{
-		free_path(paths);
-		error_exit(1, 1, error_msg(err, "ft_join failed for tmp "), err);
+		free_path(paths); //pareil a ajouter au free
+		//gestion d erreur ici
 	}
 	to_test = ft_strjoin(tmp, cmd);
 	free(tmp);
 	if (!to_test)
 	{
 		free_path(paths);
-		error_exit(1, 1, error_msg(err, "ft_join failed for to_test "), err);
+		//gestion d erreur ici
 	}
 	return (to_test);
 }
 
-char	*test_path(char **paths, char *cmd, t_err *err)
+char	*test_path(char **paths, char *cmd, t_manager *manager)
 {
 	int		i;
 	char	*to_test;
@@ -66,7 +78,7 @@ char	*test_path(char **paths, char *cmd, t_err *err)
 	right_path = NULL;
 	while (paths[i])
 	{
-		to_test = join_path(paths[i], cmd, err, paths);
+		to_test = join_path(paths[i], cmd, manager, paths);
 		if (access(to_test, F_OK) == 0)
 		{
 			if (access(to_test, X_OK) == 0)
@@ -84,7 +96,7 @@ char	*test_path(char **paths, char *cmd, t_err *err)
 	return (right_path);
 }
 
-char	*absolute_path(char *cmd, t_err *err)
+char	*absolute_path(char *cmd, t_manager *manager)
 {
 	if (access(cmd, F_OK) == 0)
 	{
@@ -92,8 +104,7 @@ char	*absolute_path(char *cmd, t_err *err)
 			return (cmd);
 		else
 		{
-			error_exit(1, 1, error_msg(err,
-					"absolute/relative path can't be executed "), err);
+			//gestion d erreur ici
 			return (NULL);
 		}
 	}
