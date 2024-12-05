@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/05 14:02:11 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/05 16:02:02 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,16 @@ void	redir_loop(t_token *current_token, t_cmd *cmd)
 {
 	while (current_token && current_token->type != PIPE)
 	{
-		if (current_token->type == REDIR_APPEND 
-					|| current_token->type == REDIR_OUT)
+		if (current_token->type == REDIR_APPEND)
+		{
+			cmd->append = 1;
 			cmd->outfile = current_token->value;
+		}
+		else if (current_token->type == REDIR_OUT)
+		{
+			cmd->append = 0;
+			cmd->outfile = current_token->value;
+		}
 		else if (current_token->type == REDIR_IN)
 			cmd->infile = current_token->value;
 		else if (current_token->type == REDIR_HEREDOC)

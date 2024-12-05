@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/04 16:51:55 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/05 16:08:35 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	main(int argc, char **argv, char **env)
 	char		*line;
 	t_manager	manager;
 	t_env		*first_env;
+	int			exitcode;
 
 	(void)argc;
 	(void)argv;
@@ -44,6 +45,7 @@ int	main(int argc, char **argv, char **env)
 		fill_cmd(&manager, first_env);
 		printf("display de la liste cmd\n");
 		cmd_display(manager.cmd_first);
+		exitcode = execution(&manager, first_env); //si diff de 0 j exit? ou je passe a la suite? ou je le stock?
 	}
 	return (0);
 }

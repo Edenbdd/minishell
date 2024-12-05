@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/05 13:45:46 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/05 16:12:41 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,99 +15,78 @@
 #include "minishell.h"
 #include "libft.h"
 
-t_token	*fill_args(t_token *current, t_cmd *cmd)
+//voir comment integrer les heredocs dans le truc sans faire de la merde
+//verifier la logique car quelques diff avec le pipex de base !
+int	execution(t_manager *manager, t_env *s_env)
 {
-	t_token	*save_first;
-	int		cmd_count;
-	int		i;
+	t_cmd	*current_cmd;
+	int		id;
+	int		previous_fd;
 
-	cmd_count = 0;
-	save_first = current;
-	while (current && (current->type == CMD_ARG
-				|| current->type == DOUBLE_QUOTE
-				|| current->type == SIMPLE_QUOTE))
+	previous_fd = 0; //voir plus tard si je le met a -1 ou si je le laisse a 0 pour que cela corresponde a stdin de base ??
+	current_cmd = manager->cmd_first;
+	while (current_cmd)
 	{
-		cmd_count++;
-		current = current->next;
+		pipe(current_cmd->pfd); //A PROTEGER
+		id = fork(); //A PROTEGER
+		if (id == 0)
+			child_process(current_cmd, &previous_fd, s_env, manager);
+		close(current_cmd->pfd[1]); //A PROTEGER
+		if (current_cmd->index >= 1)
+			close(previous_fd); //A PROTEGER
+		previous_fd = current_cmd->pfd[0];
+		current_cmd = current_cmd->next;
 	}
-	cmd->args=(char **)malloc(sizeof(char *) * (cmd_count + 1));
-	if (!cmd->args)
-		return (NULL);
-	i = 0;
-	while (save_first && i < cmd_count)
-	{
-		cmd->args[i] = save_first->value;
-		save_first = save_first->next;
-		i++;
-	}
-	cmd->args[i] = "\0";
-	return (current);
+	//ici il y a un big free pour tout clean je pense (clean manager en entier)
+	return (waiting(id)); //id is gonna be the last child's id
 }
 
-void	expand_loop(t_token *current_token, t_env *s_env)
+void	child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manager)
 {
-	while (current_token && current_token->type != PIPE)
-	{
-		if (current_token->type == ENV_VAR)
-			expand(current_token, s_env);
-		else if (current_token->type == DOUBLE_QUOTE)
-			expand_dquote(current_token, s_env);
-		current_token = current_token->next;
-	}
-}
+	char	*path;
 
-void	redir_loop(t_token *current_token, t_cmd *cmd)
-{
-	while (current_token && current_token->type != PIPE)
+	//ICI je dois check les access des infiles et outfiles ! faire une fonction !
+	//if (cmd->lim) //si c est un heredoc, j exec un truc special heredoc
+	//???
+	if (cmd->infile && !cmd->lim) //s il y a un infile et pas de heredoc, je lis dedans
 	{
-		if (current_token->type == REDIR_APPEND 
-					|| current_token->type == REDIR_OUT)
-			cmd->outfile = current_token->value;
-		else if (current_token->type == REDIR_IN)
-			cmd->infile = current_token->value;
-		else if (current_token->type == REDIR_HEREDOC)
-			cmd->lim = current_token->value;
-		current_token = current_token->next;
+		*previous_fd = open(cmd->infile, O_RDONLY); //A PROTEGER
 	}
-}
-t_token	*cmd_loop(t_token *current_token, t_cmd *cmd)
-{
-	while (current_token)
+	dup2(*previous_fd, STDIN_FILENO); // A PROTEGER
+	if (cmd->outfile)
 	{
-		if (current_token->type == CMD_ARG
-			|| current_token->type == DOUBLE_QUOTE
-			|| current_token->type == SIMPLE_QUOTE)
-				current_token = fill_args(current_token, cmd);
-		if (current_token->type == PIPE)
-			break;
+		close(cmd->pfd[1]); //PROTEGER LE CLOSE?
+		if (cmd->append == 1)
+			cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		else
-			current_token = current_token->next;
+			cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		//PROTEGER LES OPEN
 	}
-	return (current_token);
+	dup2(cmd->pfd[1], STDOUT_FILENO); //A PROTEGER
+	path = find_path(cmd->args[0], s_env, manager);
+	//ici faire fonction closing
+	execve(path, cmd->args, s_env); //EXECVE A PROTEGER AUSSI !!!
 }
-//cmd de test
-//echo "coucou $USER !" | cat -e > out.txt
-//<  /dev/stdin  echo "coucou $USER !" | << lim cat -e >> outfile.txt
 
-void	fill_cmd(t_manager *manager, t_env *s_env)
+//A check et remodifier pour que waiting nous donne bien les bons codes et msg erreurs
+int	waiting(int id_last)
 {
-	t_token	*current_token;
-	t_cmd	*cmd;
-	int		cmd_node_count;
+	int	status;
+	int	retcode;
 
-	current_token = manager->token_first;
-	cmd_node_count = 0;
-	while (current_token)
+	while (ECHILD != errno)
 	{
-		expand_loop(current_token, s_env);
-		cmd = cmd_new();
-		redir_loop(current_token, cmd);
-		current_token = cmd_loop(current_token, cmd);
-		create_cmd_list(cmd, cmd_node_count, manager);
-		if (current_token && current_token->type == PIPE)
+		if (waitpid(-1, &status, 0) == id_last)
 		{
-			current_token = current_token->next;
-			cmd_node_count++;
+			if (WIFEXITED(status))
+				retcode = WEXITSTATUS(status);
+			if (WIFSIGNALED(status))
+			{
+				retcode = WTERMSIG(status);
+				if (retcode != 131)
+					retcode += 128;
+			}
 		}
 	}
+	return (retcode);
 }

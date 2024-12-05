@@ -6,11 +6,13 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:06:55 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/05 14:07:23 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/05 14:47:42 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //Check infiles and outfiles access included heredoc creation
+
+#include "minishell.h"
 
 void	check_access(char *infile, char *outfile, t_err *err)
 {

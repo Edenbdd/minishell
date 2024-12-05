@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/05 13:56:01 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/05 16:12:12 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,18 +65,20 @@ struct s_token
 
 struct s_cmd
 {
-	char		*path;
-	char		**args;
-	pid_t		pid;
+	int		index;
+	char	*path;
+	char	**args;
+	pid_t	pid;
 //	t_redirs	*redir;
 	char	*infile;
 	int		in_fd;
 	char	*lim;
 	char	*outfile;
+	int		append;
 	int		out_fd;
 	int		pfd[2];
-	t_cmd		*next;
-	t_cmd		*prev;	
+	t_cmd	*next;
+	t_cmd	*prev;
 };
 
 //struct s_redirs
@@ -171,7 +173,7 @@ void		env_display(t_env *env);
 //char	*absolute_path(char *cmd, t_err *err);
 
 //oplist_cmd
-// void	*cmd_add_new(t_cmd *new_cmd, t_cmd **cmd);
+void	create_cmd_list(t_cmd *new_cmd, int cmd_node_count, t_manager *manager);
 t_cmd	*cmd_new(void);
 void	cmd_add_back(t_cmd *cmd, t_cmd *new_cmd);
 t_cmd	*cmd_last(t_cmd *cmd);
@@ -191,6 +193,11 @@ t_token	*fill_args(t_token *current, t_cmd *cmd);
 void	expand_loop(t_token *current_token, t_env *s_env);
 t_token	*cmd_loop(t_token *current_token, t_cmd *cmd);
 void	redir_loop(t_token *current_token, t_cmd *cmd);
-void	create_cmd_list(t_cmd *new_cmd, int cmd_node_count, t_manager *manager);
+
+
+//exec
+int		execution(t_manager *manager, t_env *s_env);
+void	child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manager);
+int		waiting(int id_last);
 
 #endif
