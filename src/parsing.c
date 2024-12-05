@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/04 16:57:46 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/05 13:54:28 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,7 @@ int	parsing(t_manager *manager, char *line)
 		{
 			if (type == REDIR_APPEND || type == REDIR_HEREDOC)
 				i++;
-			if (type == REDIR_HEREDOC)
-				i = handle_lim(manager, line, i, &word);
-			else
-				i = handle_redir(manager, line, i, &word);
+			i = handle_redir(manager, line, i, &word);
 		}
 		else
 			i = regular_word(manager, line, i, &word);

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:58:50 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/05 11:09:18 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/05 13:55:56 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,8 @@
 
 #include "minishell.h"
 #include "libft.h"
-//gerer les files entre "" et '' A CHANGER
+
 int	handle_redir(t_manager *manager, char *line, int i, char **word)
-{
-	int	j;
-
-	while (line[i] && ft_is_space(line[i]))
-		i++;
-	j = 0;
-	while (line[i + j] && !ft_is_space(line[i + j]) 
-			&& (!is_operators(manager, line, i + j) 
-			|| is_operators(manager, line, i + j) == ENV_VAR))
-		j++;
-	*word = (char *)malloc(sizeof(char) * (j + 1));
-	if (!(*word))
-		return (-1);
-	j = 0;
-	while (line[i] && !ft_is_space(line[i]) 
-			&& (!is_operators(manager, line, i) 
-			|| is_operators(manager, line, i) == ENV_VAR))
-	{
-		(*word)[j] = line[i];
-		i++;
-		j++;
-	}
-	(*word)[j] = '\0';	
-	return (i);
-}
-
-int	handle_lim(t_manager *manager, char *line, int i, char **word)
 {
 	int	type;
 	
