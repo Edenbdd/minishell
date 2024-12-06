@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:12:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/06 15:54:13 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/06 17:23:04 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,6 @@ char	*expand_exists(char *to_expand, t_env *s_env)
 	t_env	*current;
 	current = s_env;
 
-	printf("here this should print\n");
-	printf("to_expand is [%s]\n", to_expand);
 	while (current)
 	{
 		if (!ft_strcmp(current->field, to_expand))

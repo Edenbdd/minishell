@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/06 16:00:34 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/06 17:59:18 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,14 @@ int	execution(t_manager *manager, t_env *s_env)
 		close(current_cmd->pfd[1]); //A PROTEGER
 		if (current_cmd->index >= 1)
 			close(previous_fd); //A PROTEGER
-		previous_fd = current_cmd->pfd[0];
+		previous_fd = current_cmd->pfd[0]; //it takes the cmd fd 0 to pass it to the next
 		current_cmd = current_cmd->next;
 	}
+	printf("id is [%d]\n" , id);
 	//ici il y a un big free pour tout clean je pense (clean manager en entier)
 	return (waiting(id)); //id is gonna be the last child's id
 }
 
-//cmd test: echo "hello Pierre et $USER in $HOME !" | cat -e | cat -e > out.txt
 
 void	child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manager)
 {
@@ -53,19 +53,22 @@ void	child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manage
 	// if (cmd->lim) //si c est un heredoc, j exec un truc special heredoc???
 	if (cmd->infile || cmd->index != 0) //infile ou pas le premier
 	{
-		printf("is it weird here ?\n");
-		*previous_fd = open(cmd->infile, O_RDONLY); //A PROTEGER
+		printf("[%d] coming in the infile?\n", getpid());
+		if (cmd->infile)
+			*previous_fd = open(cmd->infile, O_RDONLY); //A PROTEGER
 		dup2(*previous_fd, STDIN_FILENO); // A PROTEGER
 	}
+	printf("checking the math size is [%d] index is [%d] for [%d]\n", manager->size_cmd, cmd->index, getpid());
 	if (cmd->outfile || (cmd->index + 1) != manager->size_cmd) //outfile ou pas le dernier
 	{
-		close(cmd->pfd[1]); //PROTEGER LE CLOSE?
-		if (cmd->append == 1)
+		printf("[%d] coming in the outfile\n", getpid());
+		if (cmd->append == 1 && cmd->outfile)
 			cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		else
+		else if (cmd->outfile)
 			cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		//PROTEGER LES OPEN
 		dup2(cmd->pfd[1], STDOUT_FILENO); //A PROTEGER
+		close(cmd->pfd[1]); //PROTEGER LE CLOSE?
 	}
 	path = find_path(cmd->args[0], s_env, manager);
 	closing(cmd, previous_fd);
