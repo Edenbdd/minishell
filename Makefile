@@ -6,7 +6,7 @@
 #    By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/15 09:42:50 by smolines          #+#    #+#              #
-#    Updated: 2024/12/05 14:47:03 by aubertra         ###   ########.fr        #
+#    Updated: 2024/12/06 12:03:36 by aubertra         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,10 +34,12 @@ SRCS 			= 	main.c\
 					oplist_cmd.c\
 					free.c\
 					fill_cmd.c\
+					cmd_path.c\
 					error.c\
 					env.c\
 					exec.c\
 					expand.c\
+					handle_files.c\
 
 
 

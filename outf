@@ -1,8 +1,0 @@
-total 16
-drwxr-xr-x 2 aubertra 2023_paris   40 Dec  4 13:03 include
-drwxr-xr-x 2 aubertra 2023_paris 4096 Dec  5 13:56 libft
--rw-r--r-- 1 aubertra 2023_paris 2007 Dec  5 14:47 Makefile
--rw-r--r-- 1 aubertra 2023_paris    0 Dec  5 15:47 outf
--rw-r--r-- 1 aubertra 2023_paris    0 Dec  5 15:47 outfile
--rw-r--r-- 1 aubertra 2023_paris   18 Dec  5 15:47 out.txt
-drwxr-xr-x 2 aubertra 2023_paris 4096 Dec  5 14:40 src

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:19 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/05 16:38:04 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/06 12:05:39 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ char	*find_path(char *cmd, t_env *s_env, t_manager *manager)
 	char	**paths;
 	char	*right_path;
 
+	(void)manager;
 //	if (!cmd || !cmd[0]) faire gestion d erreur si pas trouver de cmd
 	if (!s_env || cmd[0] == '.' || cmd[0] == '/') //gerer les paths absolut/relatif et sans env
 		return (absolute_path(cmd, manager));
@@ -52,6 +53,7 @@ char	*join_path(char *path, char *cmd, t_manager *manager, char **paths)
 	char	*tmp;
 	char	*to_test;
 
+	(void)manager;
 	tmp = ft_strjoin(path, "/");
 	if (!tmp)
 	{
@@ -98,6 +100,7 @@ char	*test_path(char **paths, char *cmd, t_manager *manager)
 
 char	*absolute_path(char *cmd, t_manager *manager)
 {
+	(void)manager;
 	if (access(cmd, F_OK) == 0)
 	{
 		if (access(cmd, X_OK) == 0)

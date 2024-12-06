@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/05 16:41:06 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/06 15:18:14 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ struct s_token
 {
 	char	*value;
 	int		type;
-	int		flag; //use as a bool i.e. 0 or 1
+//	int		flag; //use as a bool i.e. 0 or 1
 	t_token	*next;
 	t_token	*prev;
 };
@@ -69,7 +69,6 @@ struct s_cmd
 	char	*path;
 	char	**args;
 	pid_t	pid;
-//	t_redirs	*redir;
 	char	*infile;
 	int		in_fd;
 	char	*lim;
@@ -81,14 +80,6 @@ struct s_cmd
 	t_cmd	*prev;
 };
 
-//struct s_redirs
-//{
-//	char	*infile;
-//	int		in_fd;
-//	char	*outfile;
-//	int		out_fd;
-//	int		pfd[2];
-//};
 
 struct s_env
 {
@@ -106,8 +97,6 @@ struct s_export
 	t_export	*prev;
 };
 
-
-//Moniter/Control/Manager
 typedef struct s_manager
 {
 	t_token		*token_first;
@@ -115,10 +104,10 @@ typedef struct s_manager
 	int			size_token;
 	t_cmd		*cmd_first;
 	t_cmd		*cmd_last;
-	int			size_cmd;
-	t_env		*env_first;
-	t_env		*env_last;
-	int			size_env;
+	int			size_cmd; //size cmd a update dans le truc de cmd
+	// t_env		*env_first; l env n est pas lie au manager pour l instant
+	// t_env		*env_last;   car il est creee avant le manager
+	// int			size_env; //size env a update dans les fichiers env
 	t_export	*export_first;
 	t_export	*export_last;
 	int			size_export;
@@ -159,10 +148,13 @@ int parsing_error(t_manager *manager, int code);
 //display
 void	token_display(t_token *token);
 
-//operations sur l environnement : env et oplist_env
+//env
 char		*get_name(char *str);
+char	**convert_env(t_env *s_env);
 char		*get_content(char *str);
 t_env		*handle_env(char **env);
+
+//oplist_env
 t_env		*env_new(char *str);
 void		env_add_back(t_env *first_env, char *str);
 t_env		*env_last(t_env *env);
@@ -192,9 +184,9 @@ char	*cut_expand(char *str, int pos);
 
 //fill cmd struct
 void	fill_cmd(t_manager *manager, t_env *s_env);
-t_token	*fill_args(t_token *current, t_cmd *cmd);
+t_token	*fill_args(t_token *current, t_cmd *cmd, t_manager *manager);
 void	expand_loop(t_token *current_token, t_env *s_env);
-t_token	*cmd_loop(t_token *current_token, t_cmd *cmd);
+t_token	*cmd_loop(t_token *current_token, t_cmd *cmd, t_manager *manager);
 void	redir_loop(t_token *current_token, t_cmd *cmd);
 
 
@@ -202,5 +194,8 @@ void	redir_loop(t_token *current_token, t_cmd *cmd);
 int		execution(t_manager *manager, t_env *s_env);
 void	child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manager);
 int		waiting(int id_last);
+
+//handle files
+void	check_access(char *lim, char *infile, char *outfile, t_manager *manager);
 
 #endif

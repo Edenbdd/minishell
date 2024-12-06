@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 22:30:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/05 16:02:54 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/06 14:47:35 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 void	create_cmd_list(t_cmd *new_cmd, int cmd_node_count, t_manager *manager)
 {
 	new_cmd->index = cmd_node_count;
+	manager->size_cmd = cmd_node_count + 1;
 	if (cmd_node_count == 0) //save the first node in the manager
 		manager->cmd_first = new_cmd;
 	else

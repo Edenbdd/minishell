@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/05 16:49:26 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/06 15:09:24 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include "minishell.h"
 #include "libft.h"
+
 
 //voir comment integrer les heredocs dans le truc sans faire de la merde
 //verifier la logique car quelques diff avec le pipex de base !
@@ -41,19 +42,22 @@ int	execution(t_manager *manager, t_env *s_env)
 	return (waiting(id)); //id is gonna be the last child's id
 }
 
+//cmd test: echo "hello Pierre et $USER in $HOME !" | cat -e | cat -e > out.txt
+
 void	child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manager)
 {
 	char	*path;
-
-	//ICI je dois check les access des infiles et outfiles ! faire une fonction !
-	//if (cmd->lim) //si c est un heredoc, j exec un truc special heredoc
-	//???
-	if (cmd->infile && !cmd->lim) //s il y a un infile et pas de heredoc, je lis dedans
+	char	**env_arr;
+	printf("here in a new child process for [%s] with id [%d]\n", cmd->args[0], getpid());
+	check_access(cmd->lim, cmd->infile, cmd->outfile, manager);
+	// if (cmd->lim) //si c est un heredoc, j exec un truc special heredoc???
+	if (cmd->infile || cmd->index != 0) //infile ou pas le premier
 	{
+		printf("is it weird here ?\n");
 		*previous_fd = open(cmd->infile, O_RDONLY); //A PROTEGER
+		dup2(*previous_fd, STDIN_FILENO); // A PROTEGER
 	}
-	dup2(*previous_fd, STDIN_FILENO); // A PROTEGER
-	if (cmd->outfile)
+	if (cmd->outfile || cmd->index != (manager->size_cmd + 1)) //outfile ou pas le dernier
 	{
 		close(cmd->pfd[1]); //PROTEGER LE CLOSE?
 		if (cmd->append == 1)
@@ -61,11 +65,12 @@ void	child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manage
 		else
 			cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		//PROTEGER LES OPEN
+		dup2(cmd->pfd[1], STDOUT_FILENO); //A PROTEGER
 	}
-	dup2(cmd->pfd[1], STDOUT_FILENO); //A PROTEGER
 	path = find_path(cmd->args[0], s_env, manager);
 	closing(cmd, previous_fd);
-	execve(path, cmd->args, s_env); //EXECVE A PROTEGER AUSSI !!!
+	env_arr = convert_env(s_env);
+	execve(path, cmd->args, env_arr); //EXECVE A PROTEGER AUSSI !!!
 }
 
 //A check et remodifier pour que waiting nous donne bien les bons codes et msg erreurs
