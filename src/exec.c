@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/06 15:09:24 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/06 16:00:34 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manage
 		*previous_fd = open(cmd->infile, O_RDONLY); //A PROTEGER
 		dup2(*previous_fd, STDIN_FILENO); // A PROTEGER
 	}
-	if (cmd->outfile || cmd->index != (manager->size_cmd + 1)) //outfile ou pas le dernier
+	if (cmd->outfile || (cmd->index + 1) != manager->size_cmd) //outfile ou pas le dernier
 	{
 		close(cmd->pfd[1]); //PROTEGER LE CLOSE?
 		if (cmd->append == 1)

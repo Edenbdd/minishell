@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:36 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/06 15:01:48 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/06 16:03:35 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ char	**convert_env(t_env *s_env)
 		i++;
 		current = current->next;
 	}
-	env_arr[i] = "\0";
+	env_arr[i] = NULL;
 	// print_env(env_arr);
 	return (env_arr);
 }

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/06 14:40:57 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/06 16:03:11 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ t_token	*fill_args(t_token *current, t_cmd *cmd, t_manager *manager)
 		save_first = save_first->next;
 		i++;
 	}
-	cmd->args[i] = "\0";
+	cmd->args[i] = NULL;
 	return (current);
 }
 
