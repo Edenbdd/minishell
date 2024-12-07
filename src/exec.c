@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/06 17:59:18 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/07 16:48:20 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,21 +24,26 @@ int	execution(t_manager *manager, t_env *s_env)
 	int		id;
 	int		previous_fd;
 
-	previous_fd = 0; //voir plus tard si je le met a -1 ou si je le laisse a 0 pour que cela corresponde a stdin de base ??
+	previous_fd = -1; //voir plus tard si je le met a -1 ou si je le laisse a 0 pour que cela corresponde a stdin de base ??
 	current_cmd = manager->cmd_first;
 	while (current_cmd)
 	{
-		pipe(current_cmd->pfd); //A PROTEGER
+		if (current_cmd->lim)
+			create_doc(manager, &previous_fd, current_cmd->lim);
+		if (manager->size_cmd != 1)	
+			pipe(current_cmd->pfd); //A PROTEGER
 		id = fork(); //A PROTEGER
 		if (id == 0)
 			child_process(current_cmd, &previous_fd, s_env, manager);
-		close(current_cmd->pfd[1]); //A PROTEGER
-		if (current_cmd->index >= 1)
-			close(previous_fd); //A PROTEGER
+		if (current_cmd->pfd[1] != -1)
+			close(current_cmd->pfd[1]);
+		if (current_cmd->index >= 1 && previous_fd != -1)
+			close(previous_fd);
 		previous_fd = current_cmd->pfd[0]; //it takes the cmd fd 0 to pass it to the next
 		current_cmd = current_cmd->next;
+		// unlink_heredoc(manager);
 	}
-	printf("id is [%d]\n" , id);
+	printf("before the wait process is [%d]\n" , getpid());
 	//ici il y a un big free pour tout clean je pense (clean manager en entier)
 	return (waiting(id)); //id is gonna be the last child's id
 }
@@ -48,17 +53,17 @@ void	child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manage
 {
 	char	*path;
 	char	**env_arr;
+
 	printf("here in a new child process for [%s] with id [%d]\n", cmd->args[0], getpid());
-	check_access(cmd->lim, cmd->infile, cmd->outfile, manager);
-	// if (cmd->lim) //si c est un heredoc, j exec un truc special heredoc???
-	if (cmd->infile || cmd->index != 0) //infile ou pas le premier
+	if (cmd->infile || cmd->index != 0  || cmd->heredoc_priority) //infile ou pas le premier
 	{
 		printf("[%d] coming in the infile?\n", getpid());
-		if (cmd->infile)
-			*previous_fd = open(cmd->infile, O_RDONLY); //A PROTEGER
-		dup2(*previous_fd, STDIN_FILENO); // A PROTEGER
+		if (cmd->infile  && !cmd->heredoc_priority)
+		{
+			*previous_fd = open(cmd->infile, O_RDONLY);
+		}
+		dup2(*previous_fd, STDIN_FILENO);
 	}
-	printf("checking the math size is [%d] index is [%d] for [%d]\n", manager->size_cmd, cmd->index, getpid());
 	if (cmd->outfile || (cmd->index + 1) != manager->size_cmd) //outfile ou pas le dernier
 	{
 		printf("[%d] coming in the outfile\n", getpid());

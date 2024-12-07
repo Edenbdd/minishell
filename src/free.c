@@ -6,9 +6,11 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 12:00:56 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/05 16:40:35 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/07 16:19:27 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+//fonctions pour free les differentes struct
 
 #include "minishell.h"
 #include "libft.h"
@@ -50,6 +52,17 @@ void	closing(t_cmd *cmd, int *previous_fd)
 		close(cmd->pfd[0]);
 	if (*previous_fd != -1)
 		close(*previous_fd);
+}
+
+
+void	unlink_heredoc(t_manager *manager)
+{
+	(void)manager;
+	if (!access("heredoc_tmp", F_OK))
+	{
+		if (unlink("heredoc_tmp") == -1)
+			printf("we need an error handling here\n");
+	}
 }
 //ici il me faut un free path
 //ici il me faut aussi un free manager

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/06 15:18:14 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/07 16:19:22 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ typedef enum e_token_type
 }   t_token_type;
 
 typedef struct s_token t_token;
-//typedef struct s_redirs t_redirs;
 typedef struct s_cmd t_cmd;
 typedef struct s_env t_env;
 typedef struct s_export t_export;
@@ -68,13 +67,11 @@ struct s_cmd
 	int		index;
 	char	*path;
 	char	**args;
-	pid_t	pid;
 	char	*infile;
-	int		in_fd;
 	char	*lim;
+	int		heredoc_priority;
 	char	*outfile;
 	int		append;
-	int		out_fd;
 	int		pfd[2];
 	t_cmd	*next;
 	t_cmd	*prev;
@@ -105,9 +102,6 @@ typedef struct s_manager
 	t_cmd		*cmd_first;
 	t_cmd		*cmd_last;
 	int			size_cmd; //size cmd a update dans le truc de cmd
-	// t_env		*env_first; l env n est pas lie au manager pour l instant
-	// t_env		*env_last;   car il est creee avant le manager
-	// int			size_env; //size env a update dans les fichiers env
 	t_export	*export_first;
 	t_export	*export_last;
 	int			size_export;
@@ -141,6 +135,7 @@ void	token_display(t_token *token);
 void	free_token(t_token **token);
 void	closing(t_cmd *cmd, int *previous_fd);
 void	free_path(char **paths);
+void	unlink_heredoc(t_manager *manager);
 
 //error
 int parsing_error(t_manager *manager, int code);
@@ -187,8 +182,7 @@ void	fill_cmd(t_manager *manager, t_env *s_env);
 t_token	*fill_args(t_token *current, t_cmd *cmd, t_manager *manager);
 void	expand_loop(t_token *current_token, t_env *s_env);
 t_token	*cmd_loop(t_token *current_token, t_cmd *cmd, t_manager *manager);
-void	redir_loop(t_token *current_token, t_cmd *cmd);
-
+void	redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager);
 
 //exec
 int		execution(t_manager *manager, t_env *s_env);
@@ -196,6 +190,9 @@ void	child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manage
 int		waiting(int id_last);
 
 //handle files
-void	check_access(char *lim, char *infile, char *outfile, t_manager *manager);
+void	check_infile(char *infile, t_manager *manager);
+void	check_outfile(char *outfile, t_manager *manager);
+void	create_doc(t_manager *manager, int *previous_fd, char *lim);
+void	check_heredoc(t_manager *manager);
 
 #endif

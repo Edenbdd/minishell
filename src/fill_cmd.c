@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/06 16:03:11 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/07 15:35:57 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,25 +56,32 @@ void	expand_loop(t_token *current_token, t_env *s_env)
 	}
 }
 
-void	redir_loop(t_token *current_token, t_cmd *cmd)
+void	redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 {
 	while (current_token && current_token->type != PIPE)
 	{
 		if (current_token->type == REDIR_APPEND)
 		{
 			cmd->append = 1;
+			check_outfile(current_token->value, manager);
 			cmd->outfile = current_token->value;
 		}
 		else if (current_token->type == REDIR_OUT)
 		{
 			cmd->append = 0;
+			check_outfile(current_token->value, manager);
 			cmd->outfile = current_token->value;
 		}
 		else if (current_token->type == REDIR_IN)
+		{
+			cmd->heredoc_priority = 0;
+			check_infile(current_token->value, manager);	
 			cmd->infile = current_token->value;
+		}
 		else if (current_token->type == REDIR_HEREDOC)
 		{
-			cmd->infile = NULL;
+			cmd->heredoc_priority = 1;
+			check_heredoc(manager);
 			cmd->lim = current_token->value;
 		}
 		current_token = current_token->next;
@@ -107,7 +114,7 @@ void	fill_cmd(t_manager *manager, t_env *s_env)
 	{
 		expand_loop(current_token, s_env);
 		cmd = cmd_new();
-		redir_loop(current_token, cmd);
+		redir_loop(current_token, cmd, manager);
 		current_token = cmd_loop(current_token, cmd, manager);
 		create_cmd_list(cmd, cmd_node_count, manager);
 		if (current_token && current_token->type == PIPE)

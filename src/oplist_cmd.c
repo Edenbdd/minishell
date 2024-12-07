@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 22:30:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/06 14:47:35 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/07 14:36:11 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,12 @@ t_cmd	*cmd_new(void)
 	new_cmd->index = 0;
 	new_cmd->path = NULL;
 	new_cmd->args = NULL;
-	new_cmd->pid = -1;
 	//new_cmd->redirs = NULL;
 	new_cmd->infile = NULL;
-	new_cmd->in_fd = -1;
 	new_cmd->lim = NULL;
+	new_cmd->heredoc_priority = -1;
 	new_cmd->outfile = NULL;
-	new_cmd->append = -1;
-	new_cmd->out_fd = -1;	
+	new_cmd->append = -1;	
 	new_cmd->pfd[0]	= -1;
 	new_cmd->pfd[1]	= -1;
 	new_cmd->next = NULL;
