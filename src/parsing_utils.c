@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 09:47:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/04 14:39:30 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/10 11:05:48 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,15 @@ int check_operator_err(t_manager *manager, char *line, int i)
 //si >>> et plus regarder les messages d'erreur specifiques. idem autres operateurs
 	if ((line[i] == '|' && line[i + 1] == '|') 
 		|| (line[i] == '&' && line[i + 1] == '&')
-		|| (line[i] == ';') || (line[i] == '#') || (line[i] == '\\')
-		|| (line[i] == '<' && line[i + 1] == '<' && line[i + 2] == '<')
+		|| (line[i] == ';') 
+		|| (line[i] == '#') 
+		|| (line[i] == '\\'))
+			return (parsing_error_op(manager, 4, line[i], 0)); //ok
+
+		
+	if ((line[i] == '<' && line[i + 1] == '<' && line[i + 2] == '<')
 		|| (line[i] == '>' && line[i + 1] == '>' && line[i + 2] == '>'))
-			return (parsing_error(manager, 1));
+			return (parsing_error_op(manager, 4, line[i], line[i + 1])); //ok
 	return (0);
 }
 
@@ -122,6 +127,6 @@ int	count_quotes(t_manager *manager, char *line, char quote1, char quote2)
 		i++;
 	}
 	if (dquote % 2 != 0)
-		return (parsing_error(manager, 2));
+		return (parsing_error_op(manager, 4, quote1, 0)); // OK comportement indefini de bash
 	return (dquote);
 }

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:12:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/05 13:13:27 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/06 17:23:04 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,17 +47,15 @@ char	*get_toexpand(char *str, int i)
 		to_expand[j] = str[i + j];
 		j++;
 	}
+	to_expand[j] = '\0';
 	return (to_expand);
 }
-
-//int	(char *str, char *to_expand)
-//{
-//}
 
 char	*expand_exists(char *to_expand, t_env *s_env)
 {
 	t_env	*current;
 	current = s_env;
+
 	while (current)
 	{
 		if (!ft_strcmp(current->field, to_expand))
@@ -112,7 +110,7 @@ char	*replace_expand(char *str, int pos, char *expansion)
 		l++;
 		j++;
 	}
-	result[i + j] = '\0';
+	result[l] = '\0';
 	return (result);	
 }
 
@@ -179,4 +177,5 @@ void	expand_dquote(t_token *current_token, t_env *s_env)
 		}
 		i++;
 	}
+	current_token->value = str;
 }

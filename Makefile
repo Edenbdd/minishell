@@ -6,7 +6,7 @@
 #    By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/15 09:42:50 by smolines          #+#    #+#              #
-#    Updated: 2024/12/04 16:49:25 by aubertra         ###   ########.fr        #
+#    Updated: 2024/12/07 15:00:30 by aubertra         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,17 +28,18 @@ SRCS 			= 	main.c\
 					parsing.c\
 					parsing_utils.c\
 					parsing_utils2.c\
-					init.c\
+					oplist_manager.c\
 					oplist_token.c\
 					oplist_env.c\
 					oplist_cmd.c\
 					free.c\
+					fill_cmd.c\
+					cmd_path.c\
 					error.c\
 					env.c\
 					exec.c\
 					expand.c\
-
-
+					handle_files.c\
 
 SRCS_ALL 		= $(addprefix $(SRC_PATH), $(SRCS))
 
