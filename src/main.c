@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/10 12:04:22 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/10 16:44:27 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	main(int argc, char **argv, char **env)
 	char		*line;
 	t_manager	manager;
 	t_env		*first_env;
-	int			exitcode;
+//	int			exitcode;
 
 	(void)argc;
 	(void)argv;
@@ -40,18 +40,19 @@ int	main(int argc, char **argv, char **env)
 			continue;
 		if (token_error(&manager) == -1)
 			continue ;
-
-		 printf("display de la liste token\n");
-		 token_display(manager.token_first);
+//		 printf("display de la liste token\n");
+//		 token_display(manager.token_first);
 		if (fill_cmd(&manager, first_env) == -1)
 			continue;
-		 printf("display de la liste cmd\n");
-		 cmd_display(manager.cmd_first);
+//		 printf("display de la liste cmd\n");
+//		 cmd_display(manager.cmd_first);
 		// printf("check if the expand worked: [%s]\n", manager.cmd_first->args[1]);
-		exitcode = execution(&manager, first_env); //si diff de 0 j exit? ou je passe a la suite? ou je le stock?
-		if (exitcode == -1)
-			continue;
+		manager.exit_status = execution(&manager, first_env); //si diff de 0 j exit? ou je passe a la suite? ou je le stock?
+		//if (manager.exit_status == -1)
+		//	continue;
+		printf("manager.exit_status : [%d]\n", manager.exit_status);
 	}
+//	free_manager(&manager);
 	return (0);
 }
 

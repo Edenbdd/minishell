@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/10 12:02:23 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/10 16:12:36 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,19 +29,31 @@ int	execution(t_manager *manager, t_env *s_env)
 	while (current_cmd)
 	{
 		if (current_cmd->lim)
-			create_doc(manager, &previous_fd, current_cmd->lim);
+		{
+			if (create_doc(manager, &previous_fd, current_cmd->lim) == -1)
+				return (-1);
+		}
 		if (manager->size_cmd != 1)	
-			pipe(current_cmd->pfd); //A PROTEGER
-		id = fork(); //A PROTEGER
+			if (pipe(current_cmd->pfd) == -1) 
+				return (open_close_error(manager, 3));
+		id = fork(); 
+		if (id == -1)
+				return (open_close_error(manager, 4));
 		if (id == 0)
-			{
-				if (child_process(current_cmd, &previous_fd, s_env, manager) == -1)
-					return (-1);
-			}
+		{
+			if (child_process(current_cmd, &previous_fd, s_env, manager) == -1)
+				return (-1);
+		}
 		if (current_cmd->pfd[1] != -1)
-			close(current_cmd->pfd[1]);
+		{
+			if (close(current_cmd->pfd[1]) == -1)
+				return (open_close_error(manager, 1));
+		}
 		if (current_cmd->index >= 1 && previous_fd != -1)
-			close(previous_fd);
+		{
+			if (close(previous_fd) == -1)
+				return (open_close_error(manager, 1));
+		}
 		previous_fd = current_cmd->pfd[0]; //it takes the cmd fd 0 to pass it to the next
 		current_cmd = current_cmd->next;
 		// unlink_heredoc(manager);
@@ -76,18 +88,17 @@ int	child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manager
 			cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (cmd->pfd[1] == -1)
 				return (open_close_error(manager, 1));
-			
-		//PROTEGER LES OPEN : if fd = -1
-		dup2(cmd->pfd[1], STDOUT_FILENO); //A PROTEGER
+		dup2(cmd->pfd[1], STDOUT_FILENO); 
 		if (close(cmd->pfd[1] == -1))
-			return (open_close_error(manager, 1));
+			return (open_close_error(manager, 1));			
 	}
 	path = find_path(cmd->args[0], s_env, manager);
 	if (path == NULL)
 		return (cmd_error(manager, 6, cmd->args[0]));
 	closing(cmd, previous_fd);
 	env_arr = convert_env(s_env);
-	execve(path, cmd->args, env_arr); //EXECVE A PROTEGER AUSSI !!!
+	if (execve(path, cmd->args, env_arr) == -1) 
+		return (open_close_error(manager, 2));
 	return (0);
 }
 

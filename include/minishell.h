@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/10 13:11:01 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/10 15:31:34 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,11 @@ void	free_token(t_token **token);
 void	closing(t_cmd *cmd, int *previous_fd);
 void	free_path(char **paths);
 void	unlink_heredoc(t_manager *manager);
+void	free_env(t_env **env);
+void	free_export(t_export **export);
+void	free_cmd_args(char **args);
+void	free_cmd(t_cmd **cmd);
+void	free_manager(t_manager **manager);
 
 //error
 int parsing_error(t_manager *manager, int code);
@@ -199,6 +204,6 @@ int		waiting(int id_last);
 int		check_infile(char *infile, t_manager *manager);
 int		check_outfile(char *outfile, t_manager *manager);
 int		check_heredoc(t_manager *manager);
-void	create_doc(t_manager *manager, int *previous_fd, char *lim);
+int	create_doc(t_manager *manager, int *previous_fd, char *lim);
 
 #endif

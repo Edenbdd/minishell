@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:06:55 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/10 11:23:33 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/10 13:29:33 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,15 @@ int	check_outfile(char *outfile, t_manager *manager)
 }
 
 //gere la creation du fichier temporaire heredoc et le met dans previous_fd
-void	create_doc(t_manager *manager, int *previous_fd, char *lim)
+int	create_doc(t_manager *manager, int *previous_fd, char *lim)
 {
 	char	*current_line;
 	char	*tmp;
 
 	(void)manager; //sera utiliser pour les sorties d erreur (protection)
 	*previous_fd = open("heredoc_tmp", O_RDWR | O_CREAT | O_TRUNC, 0644);
-	//OPEN A PROTEGER
+	if (*previous_fd == -1)
+		return (open_close_error(manager, 1));
 	tmp = ft_strjoin(lim, "\n"); //PROTEGER LE JOIN
 	while (1)
 	{
@@ -80,7 +81,10 @@ void	create_doc(t_manager *manager, int *previous_fd, char *lim)
 		//PROTEGER LE WRITE ?
 		free(current_line);
 	}
-	close(*previous_fd); //PROTEGER LE CLOSE ?
+	if (close(*previous_fd) == -1) 
+		return (open_close_error(manager, 1));
 	*previous_fd = open("heredoc_tmp", O_RDWR | O_CREAT, 0644);
-	//PROTEGER OPEN
+	if (*previous_fd == -1)
+		return (open_close_error(manager, 1));
+	return (0);
 }

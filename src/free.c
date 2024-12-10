@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 12:00:56 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/10 09:59:57 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/10 15:28:06 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,15 +141,20 @@ void	free_cmd(t_cmd **cmd)
 	*cmd = NULL;
 }
 
-//void	free_manager(t_manager **manager)
-//{
-//	if ((*manager)->token_first)
-//		free_token(manager->token_first);
-//	if ((*manager)->cmd_first)
-//		free_cmd(manager->cmd_first);
-//	if ((*manager)->export_first)
-//		free_export(manager->export_first);
-//}
+void	free_manager(t_manager **manager)
+{
+	if (!manager || !(*manager))
+		return;
+	if ((*manager)->token_first)
+		free_token(&(*manager)->token_first); 
+	if ((*manager)->cmd_first)
+		free_cmd(&(*manager)->cmd_first);
+	if ((*manager)->export_first)
+		free_export(&(*manager)->export_first);
+	free(*manager);
+	*manager = NULL;
+}
+
 
 //ici il me faut aussi un free manager
 //ici il me faut un free env

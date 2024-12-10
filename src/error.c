@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/10 13:10:30 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/10 16:35:13 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,15 +105,20 @@ return (-1);
 
 int open_close_error(t_manager *manager, int code)
 {
-		if (code == 1)
-	{
+	if (code == 1)
 		printf("bash: open or close error\n");
-		if (manager->token_first)
-			free_token(&(manager)->token_first);
-		//pas de exit status selon chat gpt	
-		return (-1);
-	}
-return (-1);
+	if (code == 2)
+		printf("bash: execve error\n");
+	if (code == 3)
+		printf("bash: pipe error\n");
+	if (code == 4)
+		printf("bash: fork error\n");
+	if (manager)
+		free_manager(&manager);
+	//if (manager->token_first)
+	//	free_token(&(manager)->token_first);
+	//pas de exit status selon chat gpt	
+	return (-1);
 }
 
 
