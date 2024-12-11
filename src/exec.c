@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/10 16:12:36 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/11 11:15:51 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,13 @@
 #include "minishell.h"
 #include "libft.h"
 
-
-//voir comment integrer les heredocs dans le truc sans faire de la merde
-//verifier la logique car quelques diff avec le pipex de base !
 int	execution(t_manager *manager, t_env *s_env)
 {
 	t_cmd	*current_cmd;
 	int		id;
 	int		previous_fd;
 
-	previous_fd = -1; //voir plus tard si je le met a -1 ou si je le laisse a 0 pour que cela corresponde a stdin de base ??
+	previous_fd = -1;
 	current_cmd = manager->cmd_first;
 	while (current_cmd)
 	{
@@ -48,22 +45,21 @@ int	execution(t_manager *manager, t_env *s_env)
 		{
 			if (close(current_cmd->pfd[1]) == -1)
 				return (open_close_error(manager, 1));
+			current_cmd->pfd[1] = -1;
 		}
 		if (current_cmd->index >= 1 && previous_fd != -1)
 		{
 			if (close(previous_fd) == -1)
 				return (open_close_error(manager, 1));
 		}
-		previous_fd = current_cmd->pfd[0]; //it takes the cmd fd 0 to pass it to the next
+		previous_fd = current_cmd->pfd[0];
 		current_cmd = current_cmd->next;
-		// unlink_heredoc(manager);
+		unlink_heredoc(manager);
 	}
-	// printf("before the wait process is [%d]\n" , getpid());
-	//ici il y a un big free pour tout clean je pense (clean manager en entier)
-	return (waiting(id)); //id is gonna be the last child's id
+	// closing(current_cmd, &previous_fd);
+	free_manager(&manager);
+	return (waiting(id));
 }
-
-
 
 int	child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manager)
 {
@@ -103,7 +99,6 @@ int	child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manager
 	return (0);
 }
 
-//A check et remodifier pour que waiting nous donne bien les bons codes et msg erreurs
 int	waiting(int id_last)
 {
 	int	status;

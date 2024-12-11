@@ -6,13 +6,14 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/07 15:35:57 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/11 11:11:19 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //Transforming the token list into the cmd list
 
 #include "minishell.h"
+#include "libft.h"
 
 t_token	*fill_args(t_token *current, t_cmd *cmd, t_manager *manager)
 {
@@ -36,7 +37,7 @@ t_token	*fill_args(t_token *current, t_cmd *cmd, t_manager *manager)
 	i = 0;
 	while (save_first && i < cmd_count)
 	{
-		cmd->args[i] = save_first->value;
+		cmd->args[i] = ft_strdup(save_first->value);
 		save_first = save_first->next;
 		i++;
 	}
@@ -66,28 +67,28 @@ int	redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 			cmd->append = 1;
 			if (check_outfile(current_token->value, manager) == -1)
 				return (-1);
-			cmd->outfile = current_token->value;
+			cmd->outfile = ft_strdup(current_token->value);
 		}
 		else if (current_token->type == REDIR_OUT)
 		{
 			cmd->append = 0;
 			if (check_outfile(current_token->value, manager) == -1)
 				return (-1);
-			cmd->outfile = current_token->value;
+			cmd->outfile = ft_strdup(current_token->value);
 		}
 		else if (current_token->type == REDIR_IN)
 		{
 			cmd->heredoc_priority = 0;
 			if (check_infile(current_token->value, manager) == -1)
 				return (-1);
-			cmd->infile = current_token->value;
+			cmd->infile = ft_strdup(current_token->value);
 		}
 		else if (current_token->type == REDIR_HEREDOC)
 		{
 			cmd->heredoc_priority = 1;
 			if (check_heredoc(manager) == - 1)
 				return (-1);
-			cmd->lim = current_token->value;
+			cmd->lim = ft_strdup(current_token->value);
 		}
 		current_token = current_token->next;
 	}

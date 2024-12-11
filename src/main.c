@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/07 16:58:26 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/11 10:56:19 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,10 @@ int	main(int argc, char **argv, char **env)
 			continue;
 		if (*line)
 			add_history(line);
-		// if (!ft_strncmp(line, "exit", ft_strlen(line) - 1))
-		// 	break;
+		if (!ft_strncmp(line, "stop", ft_strlen(line) - 1))
+		{
+			break;
+		}
 		if (parsing(&manager, line) == -1)
 
 			continue;
@@ -53,7 +55,7 @@ int	main(int argc, char **argv, char **env)
 		//	continue;
 		printf("manager.exit_status : [%d]\n", manager.exit_status);
 	}
-//	free_manager(&manager);
+	free_env(&first_env);
 	return (0);
 }
 

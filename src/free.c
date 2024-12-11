@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 12:00:56 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/07 16:19:27 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/11 11:14:14 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ void	free_path(char **paths)
 
 void	closing(t_cmd *cmd, int *previous_fd)
 {
-	if (cmd->pfd[1] != -1)
-		close(cmd->pfd[1]);
+	// if (cmd->pfd[1] != -1)
+	// 	close(cmd->pfd[1]);
 	if (cmd->pfd[0] != -1)
 		close(cmd->pfd[0]);
 	if (*previous_fd != -1)
@@ -150,6 +150,4 @@ void	free_manager(t_manager **manager)
 		free_cmd(&(*manager)->cmd_first);
 	if ((*manager)->export_first)
 		free_export(&(*manager)->export_first);
-	free(*manager);
-	*manager = NULL;
 }
