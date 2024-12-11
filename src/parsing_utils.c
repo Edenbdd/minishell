@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 09:47:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/10 11:05:48 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/11 15:59:26 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,9 @@ int check_operator_err(t_manager *manager, char *line, int i)
 		|| (line[i] == '&' && line[i + 1] == '&')
 		|| (line[i] == ';') 
 		|| (line[i] == '#') 
-		|| (line[i] == '\\'))
+		|| (line[i] == '\\')
+		)
 			return (parsing_error_op(manager, 4, line[i], 0)); //ok
-
-		
 	if ((line[i] == '<' && line[i + 1] == '<' && line[i + 2] == '<')
 		|| (line[i] == '>' && line[i + 1] == '>' && line[i + 2] == '>'))
 			return (parsing_error_op(manager, 4, line[i], line[i + 1])); //ok
@@ -36,12 +35,12 @@ int check_operator_err(t_manager *manager, char *line, int i)
 //recuperer un toker "operator"
 int	is_operators(t_manager *manager, char *line, int i)
 {
-	if (check_operator_err(manager, line, i) == -1)
-		return (-1);
 	if (line[i] == '<' && line[i + 1] == '<')
 		return (REDIR_HEREDOC);
 	if (line[i] == '>' && line[i + 1] == '>')
 		return (REDIR_APPEND);
+	if (check_operator_err(manager, line, i) == -1)
+		return (-1);
 	if (line[i] == '<')
 		return (REDIR_IN);
 	if (line[i] == '>')

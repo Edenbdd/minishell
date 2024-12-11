@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/10 16:35:13 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:47:47 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ int	parsing_error_op(t_manager *manager, int code, char operator, char dble_op)
 	//	manager->exit_status = 0;			
 	//	return (-1);
 	//}
-		if (code == 4)
+	if (code == 4)
 	{
-		if (dble_op != '0')
+		if (dble_op)
 			printf("bash : syntax error near unexpected token '%c%c'\n", operator, dble_op);
 		else 
 			printf("bash : syntax error near unexpected token '%c'\n", operator);
 		if (manager->token_first)
-			free_token(&(manager)->token_first);
+			free_token(manager->token_first);
 		manager->exit_status = 2;			
 		return (-1);
 	}
@@ -44,7 +44,7 @@ int parsing_error(t_manager *manager, int code)
 	{
 		printf("bash: syntax error near unexpected token `newline'\n");
 		if (manager->token_first)
-			free_token(&(manager)->token_first);
+			free_token(manager->token_first);
 		manager->exit_status = 2;			
 		return (-1);
 	}
@@ -53,7 +53,7 @@ int parsing_error(t_manager *manager, int code)
 	{
 //		printf("empty line\n");
 		if (manager->token_first)
-			free_token(&(manager)->token_first);
+			free_token(manager->token_first);
 		manager->exit_status = 127;			
 		return (-1);
 	}
@@ -72,9 +72,9 @@ int parsing_error(t_manager *manager, int code)
 	
 	if (code == 4)
 	{
-		printf("bash : syntax error");
+		printf("bash : syntax error\n");
 		if (manager->token_first)
-			free_token(&(manager)->token_first);
+			free_token(manager->token_first);
 		manager->exit_status = 2;			
 		return (-1);
 	}
@@ -96,7 +96,7 @@ int access_error(t_manager *manager, int code, char *str)
 	{
 		printf("bash : %s: Permission denied\n", str);
 		if (manager->token_first)
-			free_token(&(manager)->token_first);
+			free_token(manager->token_first);
 		manager->exit_status = 1;			
 		return (-1);
 	}
@@ -114,7 +114,7 @@ int open_close_error(t_manager *manager, int code)
 	if (code == 4)
 		printf("bash: fork error\n");
 	if (manager)
-		free_manager(&manager);
+		free_manager(manager);
 	//if (manager->token_first)
 	//	free_token(&(manager)->token_first);
 	//pas de exit status selon chat gpt	
@@ -128,7 +128,7 @@ int cmd_error(t_manager *manager, int code, char *cmd)
 	{
 		printf("bash: %s: command not found\n", cmd);
 		if (manager->token_first)
-			free_token(&(manager)->token_first);
+			free_token(manager->token_first);
 		manager->exit_status = 127;			
 		return (-1);
 	}

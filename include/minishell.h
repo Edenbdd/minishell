@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/07 16:19:22 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:37:03 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ typedef struct s_manager
 int		parsing(t_manager *manager,char *line);
 int		verif_operator(t_manager *manager, char *line, int i, int *type);
 
-//parsing_utils
+//parsing_utils 1 & 2
 int		check_operator_err(t_manager *manager, char *line, int i);
 int		is_operators(t_manager *manager, char *line, int i);
 int		handle_quote(char *line, int i, int type, char **word);
@@ -122,8 +122,9 @@ int		regular_word(t_manager *manager, char *line, int i, char **word);
 int		count_quotes(t_manager *manager, char *line, char quote1, char quote2);
 int		handle_redir(t_manager *manager, char *line, int i, char **word);
 int		token_error(t_manager *manager);
+int		handle_pipe(t_manager *manager, char *line, int i, char **word);
 
-//init
+//oplist_manager
 t_manager	*init_manager(t_manager *manager);
 
 //Operations sur liste token
@@ -134,15 +135,15 @@ t_token	*token_last(t_token *token);
 void	token_display(t_token *token);
 
 //free
-void	free_token(t_token **token);
-void	closing(t_cmd *cmd, int *previous_fd);
+void	free_token(t_token *token);
+int		closing(t_cmd *cmd, int *previous_fd, t_manager *manager);
 void	free_path(char **paths);
 void	unlink_heredoc(t_manager *manager);
-void	free_env(t_env **env);
-void	free_export(t_export **export);
+void	free_env(t_env *env);
+void	free_export(t_export *export);
 void	free_cmd_args(char **args);
-void	free_cmd(t_cmd **cmd);
-void	free_manager(t_manager **manager);
+void	free_cmd(t_cmd *cmd);
+void	free_manager(t_manager *manager);
 
 //error
 int parsing_error(t_manager *manager, int code);

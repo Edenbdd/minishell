@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:58:50 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/10 14:53:31 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/11 17:15:11 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,29 @@ int	handle_redir(t_manager *manager, char *line, int i, char **word)
 		i = regular_word(manager, line, i, word);
 	else if (type == PIPE)
 		return (parsing_error_op(manager, 4, '|', 0));
-	//revoir les messages erreurs des redirs : 
-	//souci pour gerer le bon operateur a renvoyer	
 	else if (type == REDIR_OUT)
 		return (parsing_error_op(manager, 4, '<', '<'));
 	else if (type == REDIR_IN)
 		return (parsing_error_op(manager, 4, '>', '>'));
-	else // sera a completer 
+	else
 		return (-1);
 	return (i);
+}
+
+int	handle_pipe(t_manager *manager, char *line, int i, char **word)
+{
+	if (ft_is_space(line[i + 1]))
+	{
+		*word = "|\0";
+		return (i);
+	}
+	else if (ft_isalpha(line[i + 1]))
+	{
+		*word = "|\0";
+		return (i++);
+	}
+	else
+		return (parsing_error_op(manager, 4, '|', line[i + 1]));
 }
 
 // gerer les erreurs dans parsing
@@ -55,7 +69,10 @@ int token_error(t_manager *manager)
 	
 	token_tour = manager->token_first;
 	if (manager->token_first->type == PIPE)
-			return (parsing_error_op(manager, 4, '|', 0)); //ok
+	{
+		printf("I come here\n");	
+		return (parsing_error_op(manager, 4, '|', 0)); //ok
+	}
 	last_token = *(token_last(manager->token_first));
 	if (last_token.type == PIPE) 
 			return (parsing_error_op(manager, 4, '|', 0)); //ok
@@ -83,5 +100,4 @@ int token_error(t_manager *manager)
 	token_tour = token_tour->next;
 	}
 return (0);
-
 }
