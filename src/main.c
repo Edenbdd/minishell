@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/10 16:44:27 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/07 16:58:26 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int	main(int argc, char **argv, char **env)
 		// if (!ft_strncmp(line, "exit", ft_strlen(line) - 1))
 		// 	break;
 		if (parsing(&manager, line) == -1)
+
 			continue;
 		if (token_error(&manager) == -1)
 			continue ;

@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:19 by aubertra          #+#    #+#             */
 /*   Updated: 2024/12/09 18:34:13 by smolines         ###   ########.fr       */
@@ -35,7 +35,6 @@ char	*find_path(char *cmd, t_env *s_env, t_manager *manager)
 	char	*right_path;
 
 	(void)manager;
-	//faire gestion d erreur si pas trouver de cmd
 	if (!cmd || !cmd[0]) 
 		return (NULL);
 	if (!s_env || cmd[0] == '.' || cmd[0] == '/') //gerer les paths absolut/relatif et sans env

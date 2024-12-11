@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/09 17:42:49 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/07 15:35:57 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	expand_loop(t_token *current_token, t_env *s_env)
 	}
 }
 
+
 int	redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 {
 	while (current_token && current_token->type != PIPE)
@@ -92,6 +93,7 @@ int	redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 	}
 	return (0);
 }
+
 t_token	*cmd_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 {
 	while (current_token)
@@ -106,6 +108,7 @@ t_token	*cmd_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 	}
 	return (current_token);
 }
+
 
 int	fill_cmd(t_manager *manager, t_env *s_env)
 {

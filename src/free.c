@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 12:00:56 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/10 15:28:06 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/07 16:19:27 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ void	closing(t_cmd *cmd, int *previous_fd)
 	if (*previous_fd != -1)
 		close(*previous_fd);
 }
-
 
 void	unlink_heredoc(t_manager *manager)
 {
@@ -154,8 +153,3 @@ void	free_manager(t_manager **manager)
 	free(*manager);
 	*manager = NULL;
 }
-
-
-//ici il me faut aussi un free manager
-//ici il me faut un free env
-//ici il me faut un free cmd

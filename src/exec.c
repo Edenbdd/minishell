@@ -64,6 +64,7 @@ int	execution(t_manager *manager, t_env *s_env)
 }
 
 
+
 int	child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manager)
 {
 	char	*path;
