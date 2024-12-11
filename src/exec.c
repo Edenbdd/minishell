@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/05 13:45:46 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/10 16:12:36 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,99 +15,112 @@
 #include "minishell.h"
 #include "libft.h"
 
-t_token	*fill_args(t_token *current, t_cmd *cmd)
-{
-	t_token	*save_first;
-	int		cmd_count;
-	int		i;
 
-	cmd_count = 0;
-	save_first = current;
-	while (current && (current->type == CMD_ARG
-				|| current->type == DOUBLE_QUOTE
-				|| current->type == SIMPLE_QUOTE))
-	{
-		cmd_count++;
-		current = current->next;
-	}
-	cmd->args=(char **)malloc(sizeof(char *) * (cmd_count + 1));
-	if (!cmd->args)
-		return (NULL);
-	i = 0;
-	while (save_first && i < cmd_count)
-	{
-		cmd->args[i] = save_first->value;
-		save_first = save_first->next;
-		i++;
-	}
-	cmd->args[i] = "\0";
-	return (current);
-}
-
-void	expand_loop(t_token *current_token, t_env *s_env)
+//voir comment integrer les heredocs dans le truc sans faire de la merde
+//verifier la logique car quelques diff avec le pipex de base !
+int	execution(t_manager *manager, t_env *s_env)
 {
-	while (current_token && current_token->type != PIPE)
-	{
-		if (current_token->type == ENV_VAR)
-			expand(current_token, s_env);
-		else if (current_token->type == DOUBLE_QUOTE)
-			expand_dquote(current_token, s_env);
-		current_token = current_token->next;
-	}
-}
+	t_cmd	*current_cmd;
+	int		id;
+	int		previous_fd;
 
-void	redir_loop(t_token *current_token, t_cmd *cmd)
-{
-	while (current_token && current_token->type != PIPE)
+	previous_fd = -1; //voir plus tard si je le met a -1 ou si je le laisse a 0 pour que cela corresponde a stdin de base ??
+	current_cmd = manager->cmd_first;
+	while (current_cmd)
 	{
-		if (current_token->type == REDIR_APPEND 
-					|| current_token->type == REDIR_OUT)
-			cmd->outfile = current_token->value;
-		else if (current_token->type == REDIR_IN)
-			cmd->infile = current_token->value;
-		else if (current_token->type == REDIR_HEREDOC)
-			cmd->lim = current_token->value;
-		current_token = current_token->next;
-	}
-}
-t_token	*cmd_loop(t_token *current_token, t_cmd *cmd)
-{
-	while (current_token)
-	{
-		if (current_token->type == CMD_ARG
-			|| current_token->type == DOUBLE_QUOTE
-			|| current_token->type == SIMPLE_QUOTE)
-				current_token = fill_args(current_token, cmd);
-		if (current_token->type == PIPE)
-			break;
-		else
-			current_token = current_token->next;
-	}
-	return (current_token);
-}
-//cmd de test
-//echo "coucou $USER !" | cat -e > out.txt
-//<  /dev/stdin  echo "coucou $USER !" | << lim cat -e >> outfile.txt
-
-void	fill_cmd(t_manager *manager, t_env *s_env)
-{
-	t_token	*current_token;
-	t_cmd	*cmd;
-	int		cmd_node_count;
-
-	current_token = manager->token_first;
-	cmd_node_count = 0;
-	while (current_token)
-	{
-		expand_loop(current_token, s_env);
-		cmd = cmd_new();
-		redir_loop(current_token, cmd);
-		current_token = cmd_loop(current_token, cmd);
-		create_cmd_list(cmd, cmd_node_count, manager);
-		if (current_token && current_token->type == PIPE)
+		if (current_cmd->lim)
 		{
-			current_token = current_token->next;
-			cmd_node_count++;
+			if (create_doc(manager, &previous_fd, current_cmd->lim) == -1)
+				return (-1);
+		}
+		if (manager->size_cmd != 1)	
+			if (pipe(current_cmd->pfd) == -1) 
+				return (open_close_error(manager, 3));
+		id = fork(); 
+		if (id == -1)
+				return (open_close_error(manager, 4));
+		if (id == 0)
+		{
+			if (child_process(current_cmd, &previous_fd, s_env, manager) == -1)
+				return (-1);
+		}
+		if (current_cmd->pfd[1] != -1)
+		{
+			if (close(current_cmd->pfd[1]) == -1)
+				return (open_close_error(manager, 1));
+		}
+		if (current_cmd->index >= 1 && previous_fd != -1)
+		{
+			if (close(previous_fd) == -1)
+				return (open_close_error(manager, 1));
+		}
+		previous_fd = current_cmd->pfd[0]; //it takes the cmd fd 0 to pass it to the next
+		current_cmd = current_cmd->next;
+		// unlink_heredoc(manager);
+	}
+	// printf("before the wait process is [%d]\n" , getpid());
+	//ici il y a un big free pour tout clean je pense (clean manager en entier)
+	return (waiting(id)); //id is gonna be the last child's id
+}
+
+
+int	child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manager)
+{
+	char	*path;
+	char	**env_arr;
+
+	// printf("here in a new child process for [%s] with id [%d]\n", cmd->args[0], getpid());
+	if (cmd->infile || cmd->index != 0  || cmd->heredoc_priority) //infile ou pas le premier
+	{
+		// printf("[%d] coming in the infile?\n", getpid());
+		if (cmd->infile  && !cmd->heredoc_priority)
+		{
+			*previous_fd = open(cmd->infile, O_RDONLY);
+		}
+		dup2(*previous_fd, STDIN_FILENO);
+	}
+	if (cmd->outfile || (cmd->index + 1) != manager->size_cmd) //outfile ou pas le dernier
+	{
+		// printf("[%d] coming in the outfile\n", getpid());
+		if (cmd->append == 1 && cmd->outfile)
+			cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		else if (cmd->outfile)
+			cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (cmd->pfd[1] == -1)
+				return (open_close_error(manager, 1));
+		dup2(cmd->pfd[1], STDOUT_FILENO); 
+		if (close(cmd->pfd[1] == -1))
+			return (open_close_error(manager, 1));			
+	}
+	path = find_path(cmd->args[0], s_env, manager);
+	if (path == NULL)
+		return (cmd_error(manager, 6, cmd->args[0]));
+	closing(cmd, previous_fd);
+	env_arr = convert_env(s_env);
+	if (execve(path, cmd->args, env_arr) == -1) 
+		return (open_close_error(manager, 2));
+	return (0);
+}
+
+//A check et remodifier pour que waiting nous donne bien les bons codes et msg erreurs
+int	waiting(int id_last)
+{
+	int	status;
+	int	retcode;
+
+	while (ECHILD != errno)
+	{
+		if (waitpid(-1, &status, 0) == id_last)
+		{
+			if (WIFEXITED(status))
+				retcode = WEXITSTATUS(status);
+			if (WIFSIGNALED(status))
+			{
+				retcode = WTERMSIG(status);
+				if (retcode != 131)
+					retcode += 128;
+			}
 		}
 	}
+	return (retcode);
 }

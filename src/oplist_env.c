@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 22:30:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/03 09:07:14 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/06 14:55:32 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_env	*env_new(char *str)
 	if (!new_env)
 		return (NULL);
 	new_env->field = get_name(str);
-	new_env->content = get_content(str);
+	new_env->content = get_content(str); //check si ca fonctionne bien
 	new_env->next = NULL;
 	new_env->prev = NULL;
 	return (new_env);

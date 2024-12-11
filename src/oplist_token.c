@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   oplist_token.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 22:30:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/04 16:46:00 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/09 16:29:58 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,12 @@ t_token	*token_new(char *word, int type)
 	new_token = (t_token *)malloc(sizeof(t_token));
 	if (new_token == NULL)
 		return (NULL);
-	new_token->value = ft_strdup(word);
+	if (*word)	
+		new_token->value = ft_strdup(word);
+	else
+		new_token->value = NULL;
 	new_token->type = type;
-	new_token->flag = 0;
+	// new_token->flag = 0; voir plus tard si utile
 	new_token->next = NULL;
 	new_token->prev = NULL;
 	return (new_token);
