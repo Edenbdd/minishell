@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/11 16:47:47 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/11 18:00:40 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,14 +124,15 @@ int open_close_error(t_manager *manager, int code)
 
 int cmd_error(t_manager *manager, int code, char *cmd)
 {
-		if (code == 6)
+	if (code == 6)
 	{
 		printf("bash: %s: command not found\n", cmd);
 		if (manager->token_first)
 			free_token(manager->token_first);
+		manager->token_first = NULL;
 		manager->exit_status = 127;			
 		return (-1);
 	}
-return (-1);
+	return (-1);
 }
 

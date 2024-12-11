@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:58:50 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/11 17:15:11 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/11 17:36:29 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,16 @@ int	handle_redir(t_manager *manager, char *line, int i, char **word)
 
 int	handle_pipe(t_manager *manager, char *line, int i, char **word)
 {
+	if ((i + 1) >= ft_strlen(line))
+		return (parsing_error_op(manager, 4, '|', 0));
 	if (ft_is_space(line[i + 1]))
 	{
-		*word = "|\0";
+		*word = ft_strdup("|");
 		return (i);
 	}
 	else if (ft_isalpha(line[i + 1]))
 	{
-		*word = "|\0";
+		*word = ft_strdup("|");
 		return (i++);
 	}
 	else
