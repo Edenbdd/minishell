@@ -56,37 +56,44 @@ void	expand_loop(t_token *current_token, t_env *s_env)
 	}
 }
 
-void	redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
+
+int	redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 {
 	while (current_token && current_token->type != PIPE)
 	{
 		if (current_token->type == REDIR_APPEND)
 		{
 			cmd->append = 1;
-			check_outfile(current_token->value, manager);
+			if (check_outfile(current_token->value, manager) == -1)
+				return (-1);
 			cmd->outfile = current_token->value;
 		}
 		else if (current_token->type == REDIR_OUT)
 		{
 			cmd->append = 0;
-			check_outfile(current_token->value, manager);
+			if (check_outfile(current_token->value, manager) == -1)
+				return (-1);
 			cmd->outfile = current_token->value;
 		}
 		else if (current_token->type == REDIR_IN)
 		{
 			cmd->heredoc_priority = 0;
-			check_infile(current_token->value, manager);	
+			if (check_infile(current_token->value, manager) == -1)
+				return (-1);
 			cmd->infile = current_token->value;
 		}
 		else if (current_token->type == REDIR_HEREDOC)
 		{
 			cmd->heredoc_priority = 1;
-			check_heredoc(manager);
+			if (check_heredoc(manager) == - 1)
+				return (-1);
 			cmd->lim = current_token->value;
 		}
 		current_token = current_token->next;
 	}
+	return (0);
 }
+
 t_token	*cmd_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 {
 	while (current_token)
@@ -102,7 +109,8 @@ t_token	*cmd_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 	return (current_token);
 }
 
-void	fill_cmd(t_manager *manager, t_env *s_env)
+
+int	fill_cmd(t_manager *manager, t_env *s_env)
 {
 	t_token	*current_token;
 	t_cmd	*cmd;
@@ -114,7 +122,8 @@ void	fill_cmd(t_manager *manager, t_env *s_env)
 	{
 		expand_loop(current_token, s_env);
 		cmd = cmd_new();
-		redir_loop(current_token, cmd, manager);
+		if (redir_loop(current_token, cmd, manager) == -1)
+			return (-1);
 		current_token = cmd_loop(current_token, cmd, manager);
 		create_cmd_list(cmd, cmd_node_count, manager);
 		if (current_token && current_token->type == PIPE)
@@ -123,4 +132,5 @@ void	fill_cmd(t_manager *manager, t_env *s_env)
 			cmd_node_count++;
 		}
 	}
+	return (0);
 }

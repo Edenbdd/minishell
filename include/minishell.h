@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
 /*   Updated: 2024/12/07 16:19:22 by aubertra         ###   ########.fr       */
@@ -39,6 +39,7 @@ typedef enum e_token_type
     REDIR_APPEND, // For '>>'
     REDIR_HEREDOC, // For '<<'
     ENV_VAR, // For environment variables start with $
+	EXIT_STAT, // for $?
 	ECHO,
 	CD,
 	PWD,
@@ -120,6 +121,7 @@ int		handle_quote(char *line, int i, int type, char **word);
 int		regular_word(t_manager *manager, char *line, int i, char **word);
 int		count_quotes(t_manager *manager, char *line, char quote1, char quote2);
 int		handle_redir(t_manager *manager, char *line, int i, char **word);
+int		token_error(t_manager *manager);
 
 //init
 t_manager	*init_manager(t_manager *manager);
@@ -136,9 +138,18 @@ void	free_token(t_token **token);
 void	closing(t_cmd *cmd, int *previous_fd);
 void	free_path(char **paths);
 void	unlink_heredoc(t_manager *manager);
+void	free_env(t_env **env);
+void	free_export(t_export **export);
+void	free_cmd_args(char **args);
+void	free_cmd(t_cmd **cmd);
+void	free_manager(t_manager **manager);
 
 //error
 int parsing_error(t_manager *manager, int code);
+int	parsing_error_op(t_manager *manager, int code, char operator, char dble_op);
+int access_error(t_manager *manager, int code, char *str);
+int cmd_error(t_manager *manager, int code, char *cmd);
+int open_close_error(t_manager *manager, int code);
 
 //display
 void	token_display(t_token *token);
@@ -178,21 +189,21 @@ void	expand_dquote(t_token *current_token, t_env *s_env);
 char	*cut_expand(char *str, int pos);
 
 //fill cmd struct
-void	fill_cmd(t_manager *manager, t_env *s_env);
+int		fill_cmd(t_manager *manager, t_env *s_env);
 t_token	*fill_args(t_token *current, t_cmd *cmd, t_manager *manager);
 void	expand_loop(t_token *current_token, t_env *s_env);
 t_token	*cmd_loop(t_token *current_token, t_cmd *cmd, t_manager *manager);
-void	redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager);
+int		redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager);
 
 //exec
 int		execution(t_manager *manager, t_env *s_env);
-void	child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manager);
+int		child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manager);
 int		waiting(int id_last);
 
 //handle files
-void	check_infile(char *infile, t_manager *manager);
-void	check_outfile(char *outfile, t_manager *manager);
-void	create_doc(t_manager *manager, int *previous_fd, char *lim);
-void	check_heredoc(t_manager *manager);
+int		check_infile(char *infile, t_manager *manager);
+int		check_outfile(char *outfile, t_manager *manager);
+int		check_heredoc(t_manager *manager);
+int	create_doc(t_manager *manager, int *previous_fd, char *lim);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/05 13:54:28 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/10 13:44:07 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	parsing(t_manager *manager, char *line)
 	i = 0;
 	word = NULL;
 	if (line[0] == '\0')
-		return (parsing_error(manager, 3));
+		return (parsing_error(manager, 3)); //ok
 	if ((count_quotes(manager, line, 34, 39) == -1) || (count_quotes(manager, line, 39, 34) % 2 == -1))
 		return (-1);
 	while (line[i])
@@ -56,7 +56,14 @@ int	parsing(t_manager *manager, char *line)
 			if (type == REDIR_APPEND || type == REDIR_HEREDOC)
 				i++;
 			i = handle_redir(manager, line, i, &word);
+			if (i == -1)
+			{
+				printf("error here parsing - handle redir\n"); // a revoir
+				return (parsing_error(manager, 4));
+			}
 		}
+		//else if (type == EXIT_STAT)
+		//	i++;
 		else
 			i = regular_word(manager, line, i, &word);
 		token_add_back(&(manager->token_first), token_new(word, type));

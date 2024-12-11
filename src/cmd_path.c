@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:19 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/06 12:05:39 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/09 18:34:13 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ char	*find_path(char *cmd, t_env *s_env, t_manager *manager)
 	char	*right_path;
 
 	(void)manager;
-//	if (!cmd || !cmd[0]) faire gestion d erreur si pas trouver de cmd
+	if (!cmd || !cmd[0]) 
+		return (NULL);
 	if (!s_env || cmd[0] == '.' || cmd[0] == '/') //gerer les paths absolut/relatif et sans env
 		return (absolute_path(cmd, manager));
 	paths = ft_split(get_path(s_env), ':');
@@ -58,14 +59,14 @@ char	*join_path(char *path, char *cmd, t_manager *manager, char **paths)
 	if (!tmp)
 	{
 		free_path(paths); //pareil a ajouter au free
-		//gestion d erreur ici
+		return (NULL);
 	}
 	to_test = ft_strjoin(tmp, cmd);
 	free(tmp);
 	if (!to_test)
 	{
 		free_path(paths);
-		//gestion d erreur ici
+		return (NULL);
 	}
 	return (to_test);
 }
@@ -81,6 +82,8 @@ char	*test_path(char **paths, char *cmd, t_manager *manager)
 	while (paths[i])
 	{
 		to_test = join_path(paths[i], cmd, manager, paths);
+		if (to_test == NULL)
+			return (NULL);
 		if (access(to_test, F_OK) == 0)
 		{
 			if (access(to_test, X_OK) == 0)
