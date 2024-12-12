@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/12 14:43:37 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/12 15:58:18 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ int	parsing_error_op(t_manager *manager, int code, char operator, char dble_op)
 			printf("bash : syntax error near unexpected token '%c%c'\n", operator, dble_op);
 		else 
 			printf("bash : syntax error near unexpected token '%c'\n", operator);
-		if (manager->token_first)
-			free_token(manager->token_first);
 		manager->exit_status = 2;			
 		return (-1);
 	}

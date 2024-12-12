@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 09:47:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/12 15:16:34 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/12 17:18:50 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@
 int check_operator_err(t_manager *manager, char *line, int i)
 {
 //si >>> et plus regarder les messages d'erreur specifiques. idem autres operateurs
-	if ((line[i] == '|' && line[i + 1] == '|') 
-		|| (line[i] == '&' && line[i + 1] == '&')
+	if ((line[i] == '&' && line[i + 1] == '&')
 		|| (line[i] == ';') 
 		|| (line[i] == '#') 
 		|| (line[i] == '\\')

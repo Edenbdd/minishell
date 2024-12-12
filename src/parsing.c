@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/12 15:12:02 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/12 17:14:20 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,15 @@
 //recuperer les doubles operateurs
 int	verif_operator(t_manager *manager, char *line, int i, int *type)
 {
-	if 	(is_operators(manager, line, i) == -1)
+	int	result;
+
+	result = is_operators(manager, line, i);
+	if 	(result == -1)
 			return (-1);
-	else if (is_operators(manager, line, i))
+	else if (result)
 	{
-		*type = is_operators(manager, line, i);
-		if (is_operators(manager, line, i) != DIR)
+		*type = result;
+		if (result != DIR && result != PIPE)
 			i++;
 	}
 	return (i);
@@ -85,9 +88,11 @@ int	parsing(t_manager *manager, char *line)
 		else
 			i = regular_word(manager, line, i, &word);
 		if (i == -1)
+		{
+			free(word);
 			return (-1);
+		}
 		token_add_back(&(manager->token_first), token_new(word, manager->type));
-		free(word);
 	}
 	return (0);
 }

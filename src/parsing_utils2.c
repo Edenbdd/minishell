@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:58:50 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/12 15:16:47 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/12 17:20:06 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,15 +56,11 @@ int	handle_pipe(t_manager *manager, char *line, int i, char **word)
 {
 	if ((i + 1) >= ft_strlen(line))
 		return (parsing_error_op(manager, 4, '|', 0));
-	if (ft_is_space(line[i + 1]))
+	else if (ft_isalpha(line[i + 1]) || ft_is_space(line[i + 1]))
 	{
 		*word = ft_strdup("|");
+		i++;
 		return (i);
-	}
-	else if (ft_isalpha(line[i + 1]))
-	{
-		*word = ft_strdup("|");
-		return (i++);
 	}
 	else
 		return (parsing_error_op(manager, 4, '|', line[i + 1]));
@@ -89,7 +85,7 @@ int handle_dir(t_manager *manager, char *line, int i, char **word)
 }
 
 
-int token_error(t_manager *manager)
+int token_error(t_manager *manager) //a revoir/check
 {
 	t_token *token_tour;
 	t_token last_token;
@@ -114,7 +110,10 @@ int token_error(t_manager *manager)
 				return (parsing_error(manager, 2)); //ok
 		}
 		if ((token_tour->next) && (token_tour->type == PIPE && token_tour->next->type == PIPE))
+		{	
+			printf("coucou i am useful\n");
 			return (parsing_error_op(manager, 4, '|', 0)); //ok
+		}
 	token_tour = token_tour->next;
 	}
 return (0);
