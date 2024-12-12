@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:58:50 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/12 13:16:43 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/12 15:16:47 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,8 @@
 int	handle_redir(t_manager *manager, char *line, int i, char **word)
 {
 	int	new_type;
-	char op;
-	
+
 	new_type = 0;
-	op = line[i];
 	if (manager->type == REDIR_IN && line[i] == '>')
 		return (parsing_error(manager, 2));
 	if (manager->type == REDIR_OUT && line[i] == '<')
@@ -29,10 +27,10 @@ int	handle_redir(t_manager *manager, char *line, int i, char **word)
 	while (line[i] && ft_is_space(line[i]))
 		i++;
 	i = verif_operator(manager, line, i, &new_type);
-	// printf("new_type is %d\n", new_type);
+	// printf("new type is %d\n", new_type);
 	if (new_type == DOUBLE_QUOTE)
 		i = handle_quote(line, i, new_type, word);
-	if (new_type == SIMPLE_QUOTE)
+	else if (new_type == SIMPLE_QUOTE)
 		i = handle_quote(line, i, new_type, word);
 	else if (new_type == CMD_ARG)
 		i = regular_word(manager, line, i, word);
@@ -47,7 +45,10 @@ int	handle_redir(t_manager *manager, char *line, int i, char **word)
 	else if (new_type == REDIR_HEREDOC)
 		return (parsing_error_op(manager, 4, '<', '<'));
 	else
+	{
+		printf("I exit too early here\n");
 		return (-1);
+	}
 	return (i);
 }
 
@@ -69,9 +70,24 @@ int	handle_pipe(t_manager *manager, char *line, int i, char **word)
 		return (parsing_error_op(manager, 4, '|', line[i + 1]));
 }
 
-// gerer les erreurs dans parsing
-// pipe en debit ou fin de chaine
-// operateurs multiples separes par whitespaces
+int handle_dir(t_manager *manager, char *line, int i, char **word)
+{
+	regular_word(manager, line, i, word);
+	if (access(*word, F_OK))
+	{
+		printf("bash: %s: No such file or directory\n", *word);
+		manager->exit_status = 127;			
+		return (-1);
+	}
+	else
+	{
+		printf("bash: %s: Is a directory\n", *word);
+		manager->exit_status = 126;			
+		return (-1);
+	}
+
+}
+
 
 int token_error(t_manager *manager)
 {
@@ -80,10 +96,7 @@ int token_error(t_manager *manager)
 	
 	token_tour = manager->token_first;
 	if (manager->token_first->type == PIPE)
-	{
-		printf("I come here\n");	
 		return (parsing_error_op(manager, 4, '|', 0)); //ok
-	}
 	last_token = *(token_last(manager->token_first));
 	if (last_token.type == PIPE) 
 			return (parsing_error_op(manager, 4, '|', 0)); //ok
@@ -96,15 +109,9 @@ int token_error(t_manager *manager)
 		{
 			if ((token_tour->next && token_tour->next->type == PIPE) 
 				|| (token_tour->prev && token_tour->prev->type == PIPE))
-					{
-					// printf("bbb\n\bbb\nbbbbb\n");
-					return (parsing_error_op(manager, 4, '|', 0)); //ok
-					}
+				return (parsing_error_op(manager, 4, '|', 0)); //ok
 			else 
-			{
-				// printf("aaa\naaa\naaa\naaa\n");
 				return (parsing_error(manager, 2)); //ok
-			}
 		}
 		if ((token_tour->next) && (token_tour->type == PIPE && token_tour->next->type == PIPE))
 			return (parsing_error_op(manager, 4, '|', 0)); //ok

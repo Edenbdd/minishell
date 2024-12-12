@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/12 13:59:14 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/12 14:43:37 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,32 +36,13 @@ int	parsing_error_op(t_manager *manager, int code, char operator, char dble_op)
 	}
 	return (-1);
 }
-		
-// int dir_error(t_manager *manager, int code, char *word)
-// {
-// 	if (code == 1)
-// 	{
-// 		printf("bash: %s: No such file or directory\n", word);
-// 		manager->exit_status = 127;			
-// 		return (-1);
-// 	}
-
-// 	if (code == 2)
-// 	{
-// 		printf("bash: %s: Is a directory\n", word);
-// 		manager->exit_status = 126;			
-// 		return (-1);
-// 	}
-
-// }
+	
 
 int parsing_error(t_manager *manager, int code)
 {
 	if (code == 2)
 	{
 		printf("bash: syntax error near unexpected token `newline'\n");
-		if (manager->token_first)
-			free_token(manager->token_first);
 		manager->exit_status = 2;			
 		return (-1);
 	}
@@ -69,8 +50,6 @@ int parsing_error(t_manager *manager, int code)
 	if (code == 3)
 	{
 //		printf("empty line\n");
-		if (manager->token_first)
-			free_token(manager->token_first);
 		manager->exit_status = 127;			
 		return (-1);
 	}

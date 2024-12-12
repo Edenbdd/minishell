@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 09:47:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/12 13:56:42 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/12 15:16:34 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,10 @@ int	is_operators(t_manager *manager, char *line, int i)
 		return (SIMPLE_QUOTE);
 	if (line[i] == '|')
 		return (PIPE);
-	if (line[i] == '/' || line[i] == '.' )
+	if (line[i] == '$')
 		return (ENV_VAR);
+	if (line[i] == '/' || line[i] == '.' )
+		return (DIR);
 	return (CMD_ARG); // is 0
 }
 
@@ -89,13 +91,17 @@ int	regular_word(t_manager *manager, char *line, int i, char **word)
 	int	j;
 
 	j = 0;
-	while (line[i + j] && !ft_is_space(line[i]) && !is_operators(manager, line, i))
+	while (line[i + j] && !ft_is_space(line[i]) 
+			&& (!is_operators(manager, line, i)
+			|| is_operators(manager, line, i) == DIR))
 		j++;
 	*word = (char *)malloc(sizeof(char) * (j + 1));
 	if (!(*word))
 		return (-1);
 	j = 0;
-	while (line[i] && !ft_is_space(line[i]) && !is_operators(manager, line, i))
+	while (line[i] && !ft_is_space(line[i]) 
+			&& (!is_operators(manager, line, i)
+			|| is_operators(manager, line, i) == DIR))
 	{
 		(*word)[j] = line[i];
 		j++;
