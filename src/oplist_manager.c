@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:13:00 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/12 12:14:18 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/12 17:34:41 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 t_manager	*init_manager(t_manager *manager)
 {
 	manager->type = -1;
+	manager->sec_type = -1;
 	manager->token_first = NULL;
 	manager->token_last = NULL;
 	manager->size_token = -1;

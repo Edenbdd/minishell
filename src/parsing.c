@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/12 17:14:20 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/12 17:40:26 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	parsing(t_manager *manager, char *line)
 		if (i == -1)
 			return (-1);
 		if (manager->type == DOUBLE_QUOTE || manager->type == SIMPLE_QUOTE)
-			i = handle_quote(line, i, manager->type, &word);
+			i = handle_quote(line, i, manager, &word);
 		else if (manager->type == REDIR_IN || manager->type == REDIR_OUT 
 			|| manager->type == REDIR_APPEND || manager->type == REDIR_HEREDOC)
 		{
@@ -93,6 +93,7 @@ int	parsing(t_manager *manager, char *line)
 			return (-1);
 		}
 		token_add_back(&(manager->token_first), token_new(word, manager->type));
+		free(word);
 	}
 	return (0);
 }

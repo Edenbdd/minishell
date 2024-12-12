@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/12 14:17:05 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/12 17:34:02 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ struct s_export
 typedef struct s_manager
 {
 	int			type;
+	int			sec_type;
 	t_token		*token_first;
 	t_token		*token_last; //voir si necessaire
 	int			size_token; //voir si necessaire
@@ -122,7 +123,7 @@ int		is_symbols(char c);
 int 	handle_dir(t_manager *manager, char *line, int i, char **word);
 int		check_operator_err(t_manager *manager, char *line, int i);
 int		is_operators(t_manager *manager, char *line, int i);
-int		handle_quote(char *line, int i, int type, char **word);
+int		handle_quote(char *line, int i, t_manager *manager, char **word);
 int		regular_word(t_manager *manager, char *line, int i, char **word);
 int		count_quotes(t_manager *manager, char *line, char quote1, char quote2);
 int		handle_redir(t_manager *manager, char *line, int i, char **word);

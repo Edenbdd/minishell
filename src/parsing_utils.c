@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 09:47:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/12 17:18:50 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/12 17:29:24 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,18 +58,20 @@ int	is_operators(t_manager *manager, char *line, int i)
 }
 
 //recuperer un token "entre quote"
-int	handle_quote(char *line, int i, int type, char **word)
+int	handle_quote(char *line, int i, t_manager *manager, char **word)
 {
 	int		j;
 	char	separator;
 
-	if (type == 1)
+	if (manager->type == 1)
 		separator = '\'';
 	else
 		separator = '"';
 	j = 0;
 	while (line[i + j] && line[i] != separator)
 		j++;
+	if (j == 0)
+		return (cmd_error(manager, 6, ""));
 	*word = (char *)malloc(sizeof(char) * (j + 1));
 	if (!(*word))
 		return (-1);

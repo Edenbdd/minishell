@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:58:50 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/12 17:20:06 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/12 17:36:15 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,32 +17,31 @@
 
 int	handle_redir(t_manager *manager, char *line, int i, char **word)
 {
-	int	new_type;
 
-	new_type = 0;
+	manager->sec_type = 0;
 	if (manager->type == REDIR_IN && line[i] == '>')
 		return (parsing_error(manager, 2));
 	if (manager->type == REDIR_OUT && line[i] == '<')
 		return (parsing_error_op(manager, 4, '<', 0));
 	while (line[i] && ft_is_space(line[i]))
 		i++;
-	i = verif_operator(manager, line, i, &new_type);
-	// printf("new type is %d\n", new_type);
-	if (new_type == DOUBLE_QUOTE)
-		i = handle_quote(line, i, new_type, word);
-	else if (new_type == SIMPLE_QUOTE)
-		i = handle_quote(line, i, new_type, word);
-	else if (new_type == CMD_ARG)
+	i = verif_operator(manager, line, i, &(manager->sec_type));
+	// printf("new type is %d\n", manager->sec_type);
+	if (manager->sec_type == DOUBLE_QUOTE)
+		i = handle_quote(line, i, manager, word);
+	else if (manager->sec_type == SIMPLE_QUOTE)
+		i = handle_quote(line, i, manager, word);
+	else if (manager->sec_type == CMD_ARG)
 		i = regular_word(manager, line, i, word);
-	else if (new_type == PIPE)
+	else if (manager->sec_type == PIPE)
 		return (parsing_error_op(manager, 4, '|', 0));
-	else if (new_type == REDIR_OUT)
+	else if (manager->sec_type == REDIR_OUT)
 		return (parsing_error_op(manager, 4, '>', 0));
-	else if (new_type == REDIR_APPEND)
+	else if (manager->sec_type == REDIR_APPEND)
 		return (parsing_error_op(manager, 4, '>', '>'));
-	else if (new_type == REDIR_IN)
+	else if (manager->sec_type == REDIR_IN)
 		return (parsing_error_op(manager, 4, '<', 0));
-	else if (new_type == REDIR_HEREDOC)
+	else if (manager->sec_type == REDIR_HEREDOC)
 		return (parsing_error_op(manager, 4, '<', '<'));
 	else
 	{
