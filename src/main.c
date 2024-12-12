@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/12 17:06:29 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/12 17:44:38 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ int	main(int argc, char **argv, char **env)
 			free_manager(&manager);
 			continue ;
 		}
-		printf("display de la liste token\n");
-		token_display(manager.token_first);
+		// printf("display de la liste token\n");
+		// token_display(manager.token_first);
 		if (fill_cmd(&manager, first_env) == -1)
 		{
 			free_manager(&manager);
@@ -62,6 +62,7 @@ int	main(int argc, char **argv, char **env)
 		execution(&manager, first_env);
 		free_manager(&manager);
 	}
+	printf("we exit\n");
 	free_env(first_env);
 	return (0);
 }
