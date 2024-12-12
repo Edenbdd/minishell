@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:58:50 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/11 17:36:29 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/12 13:16:43 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,26 +17,35 @@
 
 int	handle_redir(t_manager *manager, char *line, int i, char **word)
 {
-	int	type;
+	int	new_type;
 	char op;
 	
-	type = 0;
+	new_type = 0;
 	op = line[i];
+	if (manager->type == REDIR_IN && line[i] == '>')
+		return (parsing_error(manager, 2));
+	if (manager->type == REDIR_OUT && line[i] == '<')
+		return (parsing_error_op(manager, 4, '<', 0));
 	while (line[i] && ft_is_space(line[i]))
 		i++;
-	i = verif_operator(manager, line, i, &type);
-	if (type == DOUBLE_QUOTE)
-		i = handle_quote(line, i, type, word);
-	if (type == SIMPLE_QUOTE)
-		i = handle_quote(line, i, type, word);
-	else if (type == CMD_ARG)
+	i = verif_operator(manager, line, i, &new_type);
+	// printf("new_type is %d\n", new_type);
+	if (new_type == DOUBLE_QUOTE)
+		i = handle_quote(line, i, new_type, word);
+	if (new_type == SIMPLE_QUOTE)
+		i = handle_quote(line, i, new_type, word);
+	else if (new_type == CMD_ARG)
 		i = regular_word(manager, line, i, word);
-	else if (type == PIPE)
+	else if (new_type == PIPE)
 		return (parsing_error_op(manager, 4, '|', 0));
-	else if (type == REDIR_OUT)
-		return (parsing_error_op(manager, 4, '<', '<'));
-	else if (type == REDIR_IN)
+	else if (new_type == REDIR_OUT)
+		return (parsing_error_op(manager, 4, '>', 0));
+	else if (new_type == REDIR_APPEND)
 		return (parsing_error_op(manager, 4, '>', '>'));
+	else if (new_type == REDIR_IN)
+		return (parsing_error_op(manager, 4, '<', 0));
+	else if (new_type == REDIR_HEREDOC)
+		return (parsing_error_op(manager, 4, '<', '<'));
 	else
 		return (-1);
 	return (i);
@@ -88,12 +97,12 @@ int token_error(t_manager *manager)
 			if ((token_tour->next && token_tour->next->type == PIPE) 
 				|| (token_tour->prev && token_tour->prev->type == PIPE))
 					{
-					printf("bbb\n\bbb\nbbbbb\n");
+					// printf("bbb\n\bbb\nbbbbb\n");
 					return (parsing_error_op(manager, 4, '|', 0)); //ok
 					}
 			else 
 			{
-				printf("aaa\naaa\naaa\naaa\n");
+				// printf("aaa\naaa\naaa\naaa\n");
 				return (parsing_error(manager, 2)); //ok
 			}
 		}

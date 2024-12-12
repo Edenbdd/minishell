@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 09:47:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/11 15:59:26 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/12 13:56:42 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	is_operators(t_manager *manager, char *line, int i)
 		return (SIMPLE_QUOTE);
 	if (line[i] == '|')
 		return (PIPE);
-	if (line[i] == '$')
+	if (line[i] == '/' || line[i] == '.' )
 		return (ENV_VAR);
 	return (CMD_ARG); // is 0
 }

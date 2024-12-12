@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_is_space.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 13:16:44 by aubertra          #+#    #+#             */
-/*   Updated: 2024/11/28 14:56:08 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/12 11:02:52 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_is_space(char c)
 {
-	if (c == 32 || c == 9)
+	if (c == 32 || (c >= 9 && c <= 13))
 		return (1);
 	return (0);
 }

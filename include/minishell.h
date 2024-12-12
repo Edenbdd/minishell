@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/11 16:37:03 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/12 13:56:34 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef enum e_token_type
     REDIR_HEREDOC, // For '<<'
     ENV_VAR, // For environment variables start with $
 	EXIT_STAT, // for $?
+	DIR,
 	ECHO,
 	CD,
 	PWD,
@@ -97,12 +98,13 @@ struct s_export
 
 typedef struct s_manager
 {
+	int			type;
 	t_token		*token_first;
-	t_token		*token_last;
-	int			size_token;
+	t_token		*token_last; //voir si necessaire
+	int			size_token; //voir si necessaire
 	t_cmd		*cmd_first;
-	t_cmd		*cmd_last;
-	int			size_cmd; //size cmd a update dans le truc de cmd
+	t_cmd		*cmd_last; //voir si necessaire
+	int			size_cmd;
 	t_export	*export_first;
 	t_export	*export_last;
 	int			size_export;
@@ -113,6 +115,8 @@ typedef struct s_manager
 //parsing
 int		parsing(t_manager *manager,char *line);
 int		verif_operator(t_manager *manager, char *line, int i, int *type);
+int		only_space_symbols(char *str);
+int		is_symbols(char c);
 
 //parsing_utils 1 & 2
 int		check_operator_err(t_manager *manager, char *line, int i);
@@ -123,6 +127,7 @@ int		count_quotes(t_manager *manager, char *line, char quote1, char quote2);
 int		handle_redir(t_manager *manager, char *line, int i, char **word);
 int		token_error(t_manager *manager);
 int		handle_pipe(t_manager *manager, char *line, int i, char **word);
+// int		dir_path(t_manager *manager, char *line, int i, char **word);
 
 //oplist_manager
 t_manager	*init_manager(t_manager *manager);
@@ -151,6 +156,7 @@ int	parsing_error_op(t_manager *manager, int code, char operator, char dble_op);
 int access_error(t_manager *manager, int code, char *str);
 int cmd_error(t_manager *manager, int code, char *cmd);
 int open_close_error(t_manager *manager, int code);
+int dir_error(t_manager *manager, int code, char *word);
 
 //display
 void	token_display(t_token *token);
