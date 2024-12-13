@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 09:47:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/12 17:29:24 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/13 16:56:24 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,30 @@ int check_operator_err(t_manager *manager, char *line, int i)
 	return (0);
 }
 
-//recuperer un toker "operator"
+int	is_a_dir(char *line, int i)
+{
+	while (line[i] && !ft_is_space(line[i]))
+	{
+		if (line[i] == '/')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+
+int	is_an_expand(char *line, int i)
+{
+	while (line[i] && !ft_is_space(line[i]))
+	{
+		if (line[i] == '$')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+//recuperer un token "operator"
 int	is_operators(t_manager *manager, char *line, int i)
 {
 	if (line[i] == '<' && line[i + 1] == '<')
@@ -52,13 +75,13 @@ int	is_operators(t_manager *manager, char *line, int i)
 		return (PIPE);
 	if (line[i] == '$')
 		return (ENV_VAR);
-	if (line[i] == '/' || line[i] == '.' )
+	if (is_a_dir(line, i))
 		return (DIR);
 	return (CMD_ARG); // is 0
 }
 
 //recuperer un token "entre quote"
-int	handle_quote(char *line, int i, t_manager *manager, char **word)
+int	handle_quote(char *line, int i, t_manager *manager)
 {
 	int		j;
 	char	separator;
@@ -72,22 +95,22 @@ int	handle_quote(char *line, int i, t_manager *manager, char **word)
 		j++;
 	if (j == 0)
 		return (cmd_error(manager, 6, ""));
-	*word = (char *)malloc(sizeof(char) * (j + 1));
-	if (!(*word))
+	manager->word = (char *)malloc(sizeof(char) * (j + 1));
+	if (!manager->word)
 		return (-1);
 	j = 0;
 	while (line[i] && line[i] != separator)
 	{
-		(*word)[j] = line[i];
+		manager->word[j] = line[i];
 		j++;
 		i++;
 	}
-	(*word)[j] = '\0';
+	manager->word[j] = '\0';
 	return (i + 1);
 }
 
 //recuperer un token "mot"
-int	regular_word(t_manager *manager, char *line, int i, char **word)
+int	regular_word(t_manager *manager, char *line, int i)
 {
 	int	j;
 
@@ -96,19 +119,19 @@ int	regular_word(t_manager *manager, char *line, int i, char **word)
 			&& (!is_operators(manager, line, i)
 			|| is_operators(manager, line, i) == DIR))
 		j++;
-	*word = (char *)malloc(sizeof(char) * (j + 1));
-	if (!(*word))
+	manager->word = (char *)malloc(sizeof(char) * (j + 1));
+	if (!manager->word)
 		return (-1);
 	j = 0;
 	while (line[i] && !ft_is_space(line[i]) 
 			&& (!is_operators(manager, line, i)
 			|| is_operators(manager, line, i) == DIR))
 	{
-		(*word)[j] = line[i];
+		manager->word[j] = line[i];
 		j++;
 		i++;
 	}
-	(*word)[j] = '\0';
+	manager->word[j] = '\0';
 	return (i);
 }
 

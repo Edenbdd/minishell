@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:07:25 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/06 15:41:40 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/13 13:35:13 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	ft_strcmp(char *s1, char *s2)
 	unsigned int	i;
 
 	i = 0;
+	if (!s1 || !s2)
+		return (1000); //error value
 	while (s1[i] || s2[i])
 	{
 		if (s1[i] != s2[i])

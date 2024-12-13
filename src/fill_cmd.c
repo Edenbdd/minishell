@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/13 13:05:44 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/13 18:26:48 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ t_token	*fill_args(t_token *current, t_cmd *cmd, t_manager *manager)
 	save_first = current;
 	while (current && (current->type == CMD_ARG
 				|| current->type == DOUBLE_QUOTE
-				|| current->type == SIMPLE_QUOTE))
+				|| current->type == SIMPLE_QUOTE
+				|| current->type == DIR))
 	{
 		cmd_count++;
 		current = current->next;
@@ -51,14 +52,25 @@ int	expand_loop(t_token *current_token, t_env *s_env, t_manager *manager)
 	{
 		if (current_token->type == ENV_VAR)
 		{
-			expand(current_token, s_env);
-			current_token->type = is_operators(manager, current_token->value, 0);
-			if (current_token->type == DIR)
-				return (handle_dir(manager, NULL, 0, &(current_token->value)));
+			if (!expand(current_token, s_env))
+			{
+				current_token->value = NULL;
+				if (current_token->next == NULL 
+					&& current_token->prev == NULL)
+					return (-1);
+			}
+			else
+			{
+				current_token->type = is_operators(manager, current_token->value, 0);
+				if (current_token->type == DIR)
+					return (handle_dir(manager, NULL, 0, current_token));
+			}
 		}
 		else if (current_token->type == DOUBLE_QUOTE)
 		{
 			expand_dquote(current_token, s_env);
+			if (current_token->value == NULL)
+				return (cmd_error(manager, 6, NULL));
 		}
 		current_token = current_token->next;
 	}

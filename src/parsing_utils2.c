@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:58:50 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/13 13:23:25 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/13 18:27:41 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "minishell.h"
 #include "libft.h"
 
-int	handle_redir(t_manager *manager, char *line, int i, char **word)
+int	handle_redir(t_manager *manager, char *line, int i)
 {
 
 	manager->sec_type = 0;
@@ -28,11 +28,11 @@ int	handle_redir(t_manager *manager, char *line, int i, char **word)
 	i = verif_operator(manager, line, i, &(manager->sec_type));
 	// printf("new type is %d\n", manager->sec_type);
 	if (manager->sec_type == DOUBLE_QUOTE)
-		i = handle_quote(line, i, manager, word);
+		i = handle_quote(line, i, manager);
 	else if (manager->sec_type == SIMPLE_QUOTE)
-		i = handle_quote(line, i, manager, word);
+		i = handle_quote(line, i, manager);
 	else if (manager->sec_type == CMD_ARG)
-		i = regular_word(manager, line, i, word);
+		i = regular_word(manager, line, i);
 	else if (manager->sec_type == PIPE)
 		return (parsing_error_op(manager, 4, '|', 0));
 	else if (manager->sec_type == REDIR_OUT)
@@ -48,44 +48,49 @@ int	handle_redir(t_manager *manager, char *line, int i, char **word)
 	return (i);
 }
 
-int	handle_pipe(t_manager *manager, char *line, int i, char **word)
+int	handle_pipe(t_manager *manager, char *line, int i)
 {
 	if ((i + 1) >= ft_strlen(line))
 		return (parsing_error_op(manager, 4, '|', 0));
 	else if (ft_isalpha(line[i + 1]) || ft_is_space(line[i + 1]))
 	{
-		*word = ft_strdup("|");
+		manager->word = ft_strdup("|");
 		i++;
 		return (i);
 	}
 	else
 	{
-		*word = NULL;
+		manager->word = NULL;
 		return (parsing_error_op(manager, 4, '|', line[i + 1]));
 	}
 }
 
-int handle_dir(t_manager *manager, char *line, int i, char **word)
+int handle_dir(t_manager *manager, char *line, int i, t_token *current)
 {
+	char	*to_test;
+
 	if (line)
-		regular_word(manager, line, i, word);
-	if (access(*word, F_OK))
+		regular_word(manager, line, i);
+	if (!current)
+		to_test = manager->word;
+	else
+		to_test = current->value;
+	write(2, "bash: ", 6);
+	if (current && current-> prev && current->space == 0)
+		ft_putstr_fd(current->prev->value, 2);
+	ft_putstr_fd(to_test, 2);
+	if (access(to_test, F_OK))
 	{
-		write(2, "bash: ", 6);
-		ft_putstr_fd(*word, 2);
 		write(2, ": No such file or directory\n",28);
 		manager->exit_status = 127;			
 		return (-1);
 	}
 	else
 	{
-		write(2, "bash: ", 6);
-		ft_putstr_fd(*word, 2);
 		write(2, ": Is a directory\n",17);
 		manager->exit_status = 126;			
-		return (-1);
 	}
-
+	return (-1);
 }
 
 

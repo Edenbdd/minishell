@@ -6,13 +6,12 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/13 13:18:48 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/13 18:26:26 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
-
 
 //recuperer les doubles operateurs
 int	verif_operator(t_manager *manager, char *line, int i, int *type)
@@ -50,14 +49,27 @@ int	only_space_symbols(char *str)
 }
 
 
+int handle_env_pars(t_manager *manager, char *line, int i)
+{
+	if (line[i - 1] == '$' && (line[i] == '\0' || ft_is_space(line[i])))
+	{
+		manager->type = CMD_ARG;
+		manager->word = ft_strdup("$\0");
+	}
+	else 
+		i = regular_word(manager, line, i);
+	return (i);
+}
+
+
 //parser la chaine de caractere saisie
 int	parsing(t_manager *manager, char *line)
 {
 	int		i;
-	char	*word;
+	int		prec_space;
 
 	i = 0;
-	word = NULL;
+	manager->word = NULL;
 	if (line[0] == '\0')
 		return (parsing_error(manager, 3)); //ok
 	if (only_space_symbols(line))
@@ -67,30 +79,37 @@ int	parsing(t_manager *manager, char *line)
 	while (line[i])
 	{
 		manager->type = 0;
+		prec_space = 0;
 		while (line[i] && ft_is_space(line[i]))
+		{
+			prec_space++;
 			i++;
+		}
 		i = verif_operator(manager, line, i, &(manager->type));
+		// printf("type is %d i is %d, line[i] %c\n", manager->type, i, line[i]);
 		if (i == -1)
 			return (-1);
 		if (manager->type == DOUBLE_QUOTE || manager->type == SIMPLE_QUOTE)
-			i = handle_quote(line, i, manager, &word);
+			i = handle_quote(line, i, manager);
 		else if (manager->type == REDIR_IN || manager->type == REDIR_OUT 
 			|| manager->type == REDIR_APPEND || manager->type == REDIR_HEREDOC)
 		{
 			if (manager->type == REDIR_APPEND || manager->type == REDIR_HEREDOC)
 				i++;
-			i = handle_redir(manager, line, i, &word);
+			i = handle_redir(manager, line, i);
 		}
 		else if (manager->type == PIPE)
-			i = handle_pipe(manager, line, i, &word);
+			i = handle_pipe(manager, line, i);
 		else if (manager->type == DIR)
-			i = handle_dir(manager, line, i, &word);
+			i = handle_dir(manager, line, i, NULL);
+		else if (manager->type == ENV_VAR)
+			i = handle_env_pars(manager, line, i);
 		else
-			i = regular_word(manager, line, i, &word);
+			i = regular_word(manager, line, i);
 		if (i == -1)
-			return (free(word), -1);
-		token_add_back(&(manager->token_first), token_new(word, manager->type));
-		free(word);
+			return (free(manager->word), -1);
+		token_add_back(&(manager->token_first), token_new(prec_space, manager));
+		free(manager->word);
 	}
 	return (0);
 }

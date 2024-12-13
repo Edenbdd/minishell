@@ -6,17 +6,19 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:12:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/13 13:05:19 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/13 14:18:41 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 
-void	expand(t_token *token, t_env *s_env)
+int	expand(t_token *token, t_env *s_env)
 {
 	t_env	*current;
-	
+	int		found_something;
+
+	found_something = 0;
 	current = s_env;
 	while (current)
 	{
@@ -24,11 +26,12 @@ void	expand(t_token *token, t_env *s_env)
 		{
 			free(token->value);
 			token->value = ft_strdup(current->content);
+			found_something = 1;
 			break;
 		}
 		current = current->next;
-		// si pas de correspondance trouvee entre current->content et token->value : ERROR status =0 command not found
 	}
+	return (found_something);
 }
 char	*get_toexpand(char *str, int i)
 {
@@ -119,24 +122,26 @@ char	*cut_expand(char *str, int pos)
 	char	*result;
 	int		i;
 	int		j;
-	int		k;
 
 	i = 0;
 	j = 0;
 	while (str[j + i])
-	{	
+	{
 		if ((j + i) == pos)
 		{
 			while (str[i + j] && !ft_is_space(str[i + j]))
 				j++;
 		}
+		if (j >= ft_strlen(str))
+			break;
 		i++;
 	}
+	if (j >= i)
+		return (NULL);
 	result = (char *)malloc(sizeof(char) * (i - j + 1));
 	if (!result)
 		return (NULL);
 	j = 0;
-	k = 0;
 	i = 0;
 	while (str[j])
 	{	
@@ -163,7 +168,7 @@ void	expand_dquote(t_token *current_token, t_env *s_env)
 
 	str = current_token->value;
 	i = 0;
-	while (str[i])
+	while (str && str[i])
 	{
 		if (str[i] == '$' && !ft_is_space(str[i + 1]) && str[i + 1] != '\0')
 		{

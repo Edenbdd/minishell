@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/13 13:02:45 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/13 17:09:16 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ struct s_token
 {
 	char	*value;
 	int		type;
-//	int		flag; //use as a bool i.e. 0 or 1
+	int		space; //1 if precedant char is space, 0 otherwise
 	t_token	*next;
 	t_token	*prev;
 };
@@ -101,15 +101,12 @@ typedef struct s_manager
 {
 	int			type;
 	int			sec_type;
+	char		*word;
 	t_token		*token_first;
-	t_token		*token_last; //voir si necessaire
 	int			size_token; //voir si necessaire
 	t_cmd		*cmd_first;
-	t_cmd		*cmd_last; //voir si necessaire
 	int			size_cmd;
 	t_export	*export_first;
-	t_export	*export_last;
-	int			size_export;
 	int 		exit_status;
 	t_env		*env_first;
 } t_manager;
@@ -120,24 +117,27 @@ int		parsing(t_manager *manager,char *line);
 int		verif_operator(t_manager *manager, char *line, int i, int *type);
 int		only_space_symbols(char *str);
 int		is_symbols(char c);
+int		handle_env_pars(t_manager *manager, char *line, int i);
+int		is_a_dir(char *line, int i);
+int		is_an_expand(char *line, int i);
 
 //parsing_utils 1 & 2
-int 	handle_dir(t_manager *manager, char *line, int i, char **word);
+int 	handle_dir(t_manager *manager, char *line, int i, t_token *current);
 int		check_operator_err(t_manager *manager, char *line, int i);
 int		is_operators(t_manager *manager, char *line, int i);
-int		handle_quote(char *line, int i, t_manager *manager, char **word);
-int		regular_word(t_manager *manager, char *line, int i, char **word);
+int		handle_quote(char *line, int i, t_manager *manager);
+int		regular_word(t_manager *manager, char *line, int i);
 int		count_quotes(t_manager *manager, char *line, char quote1, char quote2);
-int		handle_redir(t_manager *manager, char *line, int i, char **word);
+int		handle_redir(t_manager *manager, char *line, int i);
 int		token_error(t_manager *manager);
-int		handle_pipe(t_manager *manager, char *line, int i, char **word);
+int		handle_pipe(t_manager *manager, char *line, int i);
 
 //oplist_manager
 t_manager	*init_manager(t_manager *manager, t_env first_env);
 
 //Operations sur liste token
 void	*token_add_new(t_token *new_token, t_token **token);
-t_token	*token_new(char *word, int flag);
+t_token	*token_new(int prec_space, t_manager *manager);
 void	token_add_back(t_token **token, t_token *new_token);
 t_token	*token_last(t_token *token);
 void	token_display(t_token *token);
@@ -191,7 +191,7 @@ t_cmd	*cmd_last(t_cmd *cmd);
 void	cmd_display(t_cmd *cmd);
 
 //expand
-void	expand(t_token *token, t_env *s_env);
+int		expand(t_token *token, t_env *s_env);
 char	*get_toexpand(char *str, int i);
 char	*expand_exists(char *to_expand, t_env *s_env);
 char	*replace_expand(char *str, int pos, char *expansion);
