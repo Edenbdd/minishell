@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/12 18:54:58 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/13 13:05:44 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,23 +45,24 @@ t_token	*fill_args(t_token *current, t_cmd *cmd, t_manager *manager)
 	return (current);
 }
 
-void	expand_loop(t_token *current_token, t_env *s_env)
+int	expand_loop(t_token *current_token, t_env *s_env, t_manager *manager)
 {
-	printf("je rentre dans expand_loop\n");
 	while (current_token && current_token->type != PIPE)
 	{
 		if (current_token->type == ENV_VAR)
 		{
-			printf("je rentre dans expand_loop -- type envvar\n");
 			expand(current_token, s_env);
+			current_token->type = is_operators(manager, current_token->value, 0);
+			if (current_token->type == DIR)
+				return (handle_dir(manager, NULL, 0, &(current_token->value)));
 		}
 		else if (current_token->type == DOUBLE_QUOTE)
 		{
-			printf("je rentre dans expand_loop -- type dbequotes\n");
 			expand_dquote(current_token, s_env);
 		}
 		current_token = current_token->next;
 	}
+	return (0);
 }
 
 
@@ -128,21 +129,13 @@ int	fill_cmd(t_manager *manager, t_env *s_env)
 	cmd_node_count = 0;
 	while (current_token)
 	{
-		expand_loop(current_token, s_env);
-		printf("fill_cmd --- apres expand loop\n");
-		cmd = cmd_new();
-		printf("fill_cmd --- apres cmd_new\n");
-		if (redir_loop(current_token, cmd, manager) == -1)
-		{
-			printf("fill_cmd --- apres redir loop et = -1\n");
+		if (expand_loop(current_token, s_env, manager) == -1)
 			return (-1);
-		}
-		printf("fill_cmd --- apres redir loop et succes\n");
+		cmd = cmd_new();
+		if (redir_loop(current_token, cmd, manager) == -1)
+			return (-1);
 		current_token = cmd_loop(current_token, cmd, manager);
-		printf("fill_cmd --- apres cmd loop\n");
 		create_cmd_list(cmd, cmd_node_count, manager);
-		printf("fill_cmd --- apres create cmd list\n");
-
 		if (current_token && current_token->type == PIPE)
 		{
 			current_token = current_token->next;

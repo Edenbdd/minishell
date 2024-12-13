@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:58:50 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/12 17:36:15 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/13 13:13:26 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,7 @@ int	handle_redir(t_manager *manager, char *line, int i, char **word)
 	else if (manager->sec_type == REDIR_HEREDOC)
 		return (parsing_error_op(manager, 4, '<', '<'));
 	else
-	{
-		printf("I exit too early here\n");
 		return (-1);
-	}
 	return (i);
 }
 
@@ -67,16 +64,21 @@ int	handle_pipe(t_manager *manager, char *line, int i, char **word)
 
 int handle_dir(t_manager *manager, char *line, int i, char **word)
 {
-	regular_word(manager, line, i, word);
+	if (line)
+		regular_word(manager, line, i, word);
 	if (access(*word, F_OK))
 	{
-		printf("bash: %s: No such file or directory\n", *word);
+		write(2, "bash: ", 6);
+		ft_putstr_fd(word, 2);
+		write(2, ": No such file or directory\n",28);
 		manager->exit_status = 127;			
 		return (-1);
 	}
 	else
 	{
-		printf("bash: %s: Is a directory\n", *word);
+		write(2, "bash: ", 6);
+		ft_putstr_fd(word, 2);
+		write(2, ": Is a directory\n",17);
 		manager->exit_status = 126;			
 		return (-1);
 	}
@@ -109,10 +111,7 @@ int token_error(t_manager *manager) //a revoir/check
 				return (parsing_error(manager, 2)); //ok
 		}
 		if ((token_tour->next) && (token_tour->type == PIPE && token_tour->next->type == PIPE))
-		{	
-			printf("coucou i am useful\n");
 			return (parsing_error_op(manager, 4, '|', 0)); //ok
-		}
 	token_tour = token_tour->next;
 	}
 return (0);

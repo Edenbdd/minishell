@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 22:30:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/11 10:58:15 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/13 13:06:40 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,7 @@ t_cmd	*cmd_last(t_cmd *cmd)
 void	cmd_display(t_cmd *cmd)
 {
 	if (!cmd)
-	{
-		printf("there is no cmd ?\n");
 		return ;
-	}
 	while (cmd)
 	{
 		printf("arg[0]: [%s]-- infile: [%s]-- lim: [%s] -- append: [%d]-- outfile:[%s]\n",cmd->args[0], cmd->infile,  cmd->lim, cmd->append, cmd->outfile);

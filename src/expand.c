@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:12:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/13 09:53:57 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/13 13:05:19 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,12 @@ void	expand(t_token *token, t_env *s_env)
 	t_env	*current;
 	
 	current = s_env;
-	printf("je rentre dams expand\n");
 	while (current)
 	{
 		if (!ft_strcmp(token->value, current->field))
 		{
 			free(token->value);
 			token->value = ft_strdup(current->content);
-				printf("je rentre dams expand -- dans la boucle\n");
 			break;
 		}
 		current = current->next;
@@ -36,7 +34,7 @@ char	*get_toexpand(char *str, int i)
 {
 	int	j;
 	char *to_expand;
-	printf("je rentre dams get_toexpand\n");
+
 	j = 0;
 	while (str[i + j] && !ft_is_space(str[i + j]))
 		j++;
@@ -56,8 +54,8 @@ char	*get_toexpand(char *str, int i)
 char	*expand_exists(char *to_expand, t_env *s_env)
 {
 	t_env	*current;
+
 	current = s_env;
-	printf("je rentre dans expand_exists\n");
 	while (current)
 	{
 		if (!ft_strcmp(current->field, to_expand))
@@ -78,7 +76,6 @@ char	*replace_expand(char *str, int pos, char *expansion)
 
 	i = 0;
 	j = 0;
-	printf("je rentre dans replace_expand\n");
 	while (str[j + i])
 	{	
 		if ((j + i) == pos)
@@ -126,7 +123,6 @@ char	*cut_expand(char *str, int pos)
 
 	i = 0;
 	j = 0;
-	printf("je rentre dans cut_expand\n");
 	while (str[j + i])
 	{	
 		if ((j + i) == pos)
@@ -167,7 +163,6 @@ void	expand_dquote(t_token *current_token, t_env *s_env)
 
 	str = current_token->value;
 	i = 0;
-	printf("je rentre dans expand_dquote\n");
 	while (str[i])
 	{
 		if (str[i] == '$' && !ft_is_space(str[i + 1]) && str[i + 1] != '\0')

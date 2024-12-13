@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/12 18:38:19 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/13 13:02:45 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,7 @@ char	*cut_expand(char *str, int pos);
 //fill cmd struct
 int		fill_cmd(t_manager *manager, t_env *s_env);
 t_token	*fill_args(t_token *current, t_cmd *cmd, t_manager *manager);
-void	expand_loop(t_token *current_token, t_env *s_env);
+int		expand_loop(t_token *current_token, t_env *s_env, t_manager *manager);
 t_token	*cmd_loop(t_token *current_token, t_cmd *cmd, t_manager *manager);
 int		redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager);
 

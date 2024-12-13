@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/13 10:26:21 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/13 13:06:09 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,17 +49,17 @@ int	main(int argc, char **argv, char **env)
 		free_manager(&manager);
 			continue ;
 		}
-		 printf("display de la liste token\n");
-		 token_display(manager.token_first);
+		//  printf("display de la liste token\n");
+		//  token_display(manager.token_first);
 		if (fill_cmd(&manager, first_env) == -1)
 		{
 			free_manager(&manager);
 			continue;
 		}
-		printf("display de la liste cmd\n");
-		cmd_display(manager.cmd_first);
-//		printf("check if the expand worked: [%s]\n", manager.cmd_first->args[1]);
-//		printf("exit status [%d]\n", manager.env_first->exit_status);
+		// printf("check if the expand worked: [%s]\n", manager.cmd_first->args[1]);
+		// printf("exit status [%d]\n", manager.env_first->exit_status);
+		// printf("display de la liste cmd\n");
+		// cmd_display(manager.cmd_first);
 		execution(&manager, first_env);
 		manager.env_first->exit_status = 0;
 		free_manager(&manager);
