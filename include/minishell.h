@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/12 17:34:02 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/12 18:38:19 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ struct s_env
 	char	*content;
 	t_env	*next;
 	t_env	*prev;
+	int		exit_status;
 };
 
 struct s_export
@@ -110,6 +111,7 @@ typedef struct s_manager
 	t_export	*export_last;
 	int			size_export;
 	int 		exit_status;
+	t_env		*env_first;
 } t_manager;
 
 
@@ -131,7 +133,7 @@ int		token_error(t_manager *manager);
 int		handle_pipe(t_manager *manager, char *line, int i, char **word);
 
 //oplist_manager
-t_manager	*init_manager(t_manager *manager);
+t_manager	*init_manager(t_manager *manager, t_env first_env);
 
 //Operations sur liste token
 void	*token_add_new(t_token *new_token, t_token **token);

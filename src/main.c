@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/12 17:44:38 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/13 10:26:21 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	main(int argc, char **argv, char **env)
 	first_env = handle_env(env);
 	while (1)
 	{
-		init_manager(&manager);
+		init_manager(&manager, *first_env);
 		line = readline("$>");
 		//ajouter protection + signaux plus tard
 		if (!line)
@@ -46,20 +46,22 @@ int	main(int argc, char **argv, char **env)
 		}
 		if (token_error(&manager) == -1)
 		{
-			free_manager(&manager);
+		free_manager(&manager);
 			continue ;
 		}
-		// printf("display de la liste token\n");
-		// token_display(manager.token_first);
+		 printf("display de la liste token\n");
+		 token_display(manager.token_first);
 		if (fill_cmd(&manager, first_env) == -1)
 		{
 			free_manager(&manager);
 			continue;
 		}
-		// printf("display de la liste cmd\n");
-		// cmd_display(manager.cmd_first);
-		// printf("check if the expand worked: [%s]\n", manager.cmd_first->args[1]);
+		printf("display de la liste cmd\n");
+		cmd_display(manager.cmd_first);
+//		printf("check if the expand worked: [%s]\n", manager.cmd_first->args[1]);
+//		printf("exit status [%d]\n", manager.env_first->exit_status);
 		execution(&manager, first_env);
+		manager.env_first->exit_status = 0;
 		free_manager(&manager);
 	}
 	printf("we exit\n");

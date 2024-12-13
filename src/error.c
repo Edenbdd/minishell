@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/12 15:58:18 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/13 10:31:49 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,23 @@ int	parsing_error_op(t_manager *manager, int code, char operator, char dble_op)
 	if (code == 4)
 	{
 		if (dble_op)
-			printf("bash : syntax error near unexpected token '%c%c'\n", operator, dble_op);
+		{
+			write (2, "syntax error near unexpected token ",36);
+			write (2,&operator,1);
+			write (2,&dble_op,1);
+			write (2,"\n",1);
+		}
+//			printf("bash : syntax error near unexpected token '%c%c'\n", operator, dble_op);
 		else 
-			printf("bash : syntax error near unexpected token '%c'\n", operator);
-		manager->exit_status = 2;			
+		{
+			write (2, "syntax error near unexpected token ",36);
+			write (2,&operator,1);
+			write (2,"\n",1);
+		}
+//			printf("bash : syntax error near unexpected token '%c'\n", operator);
+		manager->env_first->exit_status = 2;	
+		//if (manager)
+		//	free_manager(manager);			
 		return (-1);
 	}
 	return (-1);
@@ -40,15 +53,21 @@ int parsing_error(t_manager *manager, int code)
 {
 	if (code == 2)
 	{
-		printf("bash: syntax error near unexpected token `newline'\n");
-		manager->exit_status = 2;			
+//		printf("bash: syntax error near unexpected token `newline'\n");
+		write (2, "syntax error near unexpected token `newline'\n",45);
+
+		manager->env_first->exit_status = 2;
+		//if (manager)
+		//	free_manager(manager);			
 		return (-1);
 	}
 
 	if (code == 3)
 	{
 //		printf("empty line\n");
-		manager->exit_status = 127;			
+		manager->env_first->exit_status = 127;			
+		//if (manager)
+		//	free_manager(manager);
 		return (-1);
 	}
 
@@ -67,19 +86,14 @@ int parsing_error(t_manager *manager, int code)
 	if (code == 4)
 	{
 		printf("bash : syntax error\n");
-		if (manager->token_first)
-			free_token(manager->token_first);
-		manager->exit_status = 2;			
+		//if (manager->token_first)
+		//	free_token(manager->token_first);
+		manager->env_first->exit_status = 2;	
+		//if (manager)
+		//	free_manager(manager);			
 		return (-1);
 	}
-	//	if (code == 5)
-	//{
-	//	printf("bash : Permission denied\n");
-	//	if (manager->token_first)
-	//		free_token(&(manager)->token_first);
-	//	manager->exit_status = 1;			
-	//	return (-1);
-	//}
+
 return (-1);
 }
 
@@ -88,10 +102,14 @@ int access_error(t_manager *manager, int code, char *str)
 {
 		if (code == 5)
 	{
-		printf("bash : %s: Permission denied\n", str);
-		if (manager->token_first)
-			free_token(manager->token_first);
-		manager->exit_status = 1;			
+		ft_putstr_fd(str, 2);
+		write (2, ": Permission denied\n",20);
+	//	printf("bash : %s: Permission denied\n", str);
+		//if (manager->token_first)
+		//	free_token(manager->token_first);
+		manager->env_first->exit_status = 1;
+		//if (manager)
+		//	free_manager(manager);			
 		return (-1);
 	}
 return (-1);
@@ -100,13 +118,14 @@ return (-1);
 int open_close_error(t_manager *manager, int code)
 {
 	if (code == 1)
-		printf("bash: open or close error\n");
+		write (2, "open or close error\n", 20);
 	if (code == 2)
-		printf("bash: execve error\n");
+		write (2, "execve error\n", 13);
 	if (code == 3)
-		printf("bash: pipe error\n");
+		write (2, "pipe error\n", 11);
 	if (code == 4)
-		printf("bash: fork error\n");
+		write (2, "fork error\n", 11);
+		
 	if (manager)
 		free_manager(manager);
 	//if (manager->token_first)
@@ -120,11 +139,15 @@ int cmd_error(t_manager *manager, int code, char *cmd)
 {
 	if (code == 6)
 	{
-		printf("bash: %s: command not found\n", cmd);
-		if (manager->token_first)
-			free_token(manager->token_first);
-		manager->token_first = NULL;
-		manager->exit_status = 127;			
+		ft_putstr_fd(cmd, 2);
+		write (2, ": command not found\n",20);
+//		printf("bash: %s: command not found\n", cmd);
+		//if (manager->token_first)
+		//	free_token(manager->token_first);
+		//manager->token_first = NULL;
+		manager->env_first->exit_status = 127;			
+		//if (manager)
+		//	free_manager(manager);
 		return (-1);
 	}
 	return (-1);

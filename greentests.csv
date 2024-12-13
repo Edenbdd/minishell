@@ -36,3 +36,15 @@
 hola
 hola que tal
 Makefile
+echo
+echo -n
+echo Hola
+echoHola
+echo-nHola
+echo -n Hola
+"echo ""-n"" Hola"
+echo -nHola
+echo Hola -n
+echo Hola Que Tal
+echo         Hola
+echo    Hola     Que    Tal
