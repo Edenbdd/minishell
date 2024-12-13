@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/13 13:24:39 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/13 20:17:52 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	parsing_error_op(t_manager *manager, int code, char operator, char dble_op)
 			write (2,"\n",1);
 		}
 //			printf("bash : syntax error near unexpected token '%c'\n", operator);
-		manager->env_first->exit_status = 2;	
+		manager->exit_status = 2;	
 		//if (manager)
 		//	free_manager(manager);			
 		return (-1);
@@ -59,7 +59,7 @@ int parsing_error(t_manager *manager, int code)
 			write(2, "bash: ",6);
 			write (2, "syntax error near unexpected token `newline'\n",45);
 
-		manager->env_first->exit_status = 2;
+		manager->exit_status = 2;
 		//if (manager)
 		//	free_manager(manager);			
 		return (-1);
@@ -68,7 +68,7 @@ int parsing_error(t_manager *manager, int code)
 	if (code == 3)
 	{
 //		printf("empty line\n");
-		manager->env_first->exit_status = 127;			
+		manager->exit_status = 127;			
 		//if (manager)
 		//	free_manager(manager);
 		return (-1);
@@ -110,7 +110,7 @@ int access_error(t_manager *manager, int code, char *str)
 	//	printf("bash : %s: Permission denied\n", str);
 		//if (manager->token_first)
 		//	free_token(manager->token_first);
-		manager->env_first->exit_status = 1;
+		manager->exit_status = 1;
 		//if (manager)
 		//	free_manager(manager);			
 		return (-1);
@@ -149,7 +149,7 @@ int cmd_error(t_manager *manager, int code, char *cmd)
 		//if (manager->token_first)
 		//	free_token(manager->token_first);
 		//manager->token_first = NULL;
-		manager->env_first->exit_status = 127;			
+		manager->exit_status = 127;			
 		//if (manager)
 		//	free_manager(manager);
 		return (-1);

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/13 17:09:16 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/13 20:17:05 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ struct s_env
 	char	*content;
 	t_env	*next;
 	t_env	*prev;
-	int		exit_status;
 };
 
 struct s_export
@@ -133,7 +132,7 @@ int		token_error(t_manager *manager);
 int		handle_pipe(t_manager *manager, char *line, int i);
 
 //oplist_manager
-t_manager	*init_manager(t_manager *manager, t_env first_env);
+t_manager	*init_manager(t_manager *manager, t_env first_env, int exitcode);
 
 //Operations sur liste token
 void	*token_add_new(t_token *new_token, t_token **token);

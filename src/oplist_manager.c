@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:13:00 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/13 16:52:20 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/13 20:16:37 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "minishell.h"
 #include "libft.h"
 
-t_manager	*init_manager(t_manager *manager, t_env first_env)
+t_manager	*init_manager(t_manager *manager, t_env first_env, int exitcode)
 {
 	manager->type = -1;
 	manager->sec_type = -1;
@@ -26,7 +26,7 @@ t_manager	*init_manager(t_manager *manager, t_env first_env)
 	manager->cmd_first = NULL;
 	manager->size_cmd = -1;
 	manager->export_first = NULL;
-	manager->exit_status = 0;
+	manager->exit_status = exitcode;
 	manager->env_first = &first_env;
 	return (manager);
 }
