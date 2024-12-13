@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/13 11:44:02 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/13 13:18:48 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ int	parsing(t_manager *manager, char *line)
 			i = regular_word(manager, line, i, &word);
 		if (i == -1)
 			return (free(word), -1);
-		
 		token_add_back(&(manager->token_first), token_new(word, manager->type));
 		free(word);
 	}
