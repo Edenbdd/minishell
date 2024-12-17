@@ -13,55 +13,7 @@
 #include "minishell.h"
 #include "libft.h"
 
-//recuperer les doubles operateurs
-int	verif_operator(t_manager *manager, char *line, int i, int *type)
-{
-	int	result;
-
-	result = is_operators(manager, line, i);
-	if 	(result == -1)
-			return (-1);
-	else if (result)
-	{
-		*type = result;
-		if (result != DIR && result != PIPE)
-			i++;
-	}
-	return (i);
-}
-
-int	is_symbols(char c)
-{
-	if (c == ':' || c == '!')
-		return (1);
-	return (0);
-}
-
-int	only_space_symbols(char *str)
-{
-	while (*str)
-	{
-		if (!ft_is_space(*str) && !is_symbols(*str))
-			return (0);
-		str++;	
-	}
-	return (1);
-}
-
-
-int handle_env_pars(t_manager *manager, char *line, int i)
-{
-	if (line[i - 1] == '$' && (line[i] == '\0' || ft_is_space(line[i])))
-	{
-		manager->type = CMD_ARG;
-		manager->word = ft_strdup("$\0");
-	}
-	else 
-		i = regular_word(manager, line, i);
-	return (i);
-}
-
-
+/*
 //parser la chaine de caractere saisie
 int	parsing(t_manager *manager, char *line)
 {
@@ -113,3 +65,110 @@ int	parsing(t_manager *manager, char *line)
 	}
 	return (0);
 }
+*/
+
+
+
+// parsing : Gère les cas d'erreur dans la ligne d'entrée
+int handle_parsing_errors(t_manager *manager, char *line) 
+{
+    if (line[0] == '\0')
+        return (parsing_error(manager, 3));
+    if (only_space_symbols(line))
+        return (-1);
+    if ((count_quotes(manager, line, 34, 39) == -1) || (count_quotes(manager, line, 39, 34) % 2 == -1))
+        return (-1);
+    return (0);
+}
+
+// parsing : Traite les espaces dans la ligne
+int skip_spaces(char *line, int i, int *prec_space) 
+{
+    *prec_space = 0;
+    while (line[i] && ft_is_space(line[i])) {
+        (*prec_space)++;
+        i++;
+    }
+    return i;
+}
+
+// parsing : Gère les parties de chaine en fonction du type
+int process_token(t_manager *manager, char *line, int i) 
+{
+    if (manager->type == DOUBLE_QUOTE || manager->type == SIMPLE_QUOTE)
+        return handle_quote(line, i, manager);
+    else if (manager->type == REDIR_IN || manager->type == REDIR_OUT ||
+             manager->type == REDIR_APPEND || manager->type == REDIR_HEREDOC) 
+			{
+        		if (manager->type == REDIR_APPEND || manager->type == REDIR_HEREDOC)
+            		i++;
+        		return handle_redir(manager, line, i);
+			} 
+	else if (manager->type == PIPE)
+        return handle_pipe(manager, line, i);
+    else if (manager->type == DIR)
+        return handle_dir(manager, line, i, NULL);
+    else if (manager->type == ENV_VAR)
+        return handle_env_pars(manager, line, i);
+    else
+        return regular_word(manager, line, i);
+}
+
+// Fonction principale de parsing
+int parsing(t_manager *manager, char *line) 
+{
+    int i = 0;
+    int prec_space;
+
+    manager->word = NULL;
+    if (handle_parsing_errors(manager, line) == -1)
+        return (-1);
+
+    while (line[i]) 
+	{
+        manager->type = 0;
+        i = skip_spaces(line, i, &prec_space);
+        i = verif_operator(manager, line, i, &(manager->type));
+        if (i == -1)
+            return (-1);
+        i = process_token(manager, line, i);
+        if (i == -1)
+            return (free(manager->word), -1);
+        token_add_back(&(manager->token_first), token_new(prec_space, manager));
+        free(manager->word);
+    }
+    return (0);
+}
+
+int token_error(t_manager *manager) //a revoir/check
+{
+	t_token *token_tour;
+	t_token last_token;
+	
+	token_tour = manager->token_first;
+	if (manager->token_first->type == PIPE)
+		return (parsing_error_op(manager, 4, '|', 0)); //ok
+	last_token = *(token_last(manager->token_first));
+	if (last_token.type == PIPE) 
+			return (parsing_error_op(manager, 4, '|', 0)); //ok
+	while (token_tour)
+	{
+		if ((token_tour->type == REDIR_IN && !token_tour->value)
+		|| (token_tour->type == REDIR_OUT && token_tour->value == NULL)
+		|| (token_tour->type == REDIR_HEREDOC && token_tour->value == NULL)
+		|| (token_tour->type == REDIR_APPEND && token_tour->value == NULL))
+		{
+			if ((token_tour->next && token_tour->next->type == PIPE) 
+				|| (token_tour->prev && token_tour->prev->type == PIPE))
+				return (parsing_error_op(manager, 4, '|', 0)); //ok
+			else 
+				return (parsing_error(manager, 2)); //ok
+		}
+		if ((token_tour->next) && (token_tour->type == PIPE && token_tour->next->type == PIPE))
+			return (parsing_error_op(manager, 4, '|', 0)); //ok
+	token_tour = token_tour->next;
+	}
+return (0);
+}
+
+//parsing_condition

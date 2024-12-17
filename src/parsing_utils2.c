@@ -15,6 +15,7 @@
 #include "minishell.h"
 #include "libft.h"
 
+/*
 int	handle_redir(t_manager *manager, char *line, int i)
 {
 
@@ -47,6 +48,40 @@ int	handle_redir(t_manager *manager, char *line, int i)
 		return (-1);
 	return (i);
 }
+*/
+
+//handle redir : gestion des types secondaires
+int handle_secondary_type(t_manager *manager, char *line, int i)
+{
+    if (manager->sec_type == DOUBLE_QUOTE || manager->sec_type == SIMPLE_QUOTE)
+        return handle_quote(line, i, manager);
+    else if (manager->sec_type == CMD_ARG)
+        return regular_word(manager, line, i);
+    else if (manager->sec_type == PIPE)
+        return parsing_error_op(manager, 4, '|', 0);
+    else if (manager->sec_type == REDIR_OUT)
+        return parsing_error_op(manager, 4, '>', 0);
+    else if (manager->sec_type == REDIR_APPEND)
+        return parsing_error_op(manager, 4, '>', '>');
+    else if (manager->sec_type == REDIR_IN)
+        return parsing_error_op(manager, 4, '<', 0);
+    else if (manager->sec_type == REDIR_HEREDOC)
+        return parsing_error_op(manager, 4, '<', '<');
+    return -1;
+}
+
+int handle_redir(t_manager *manager, char *line, int i)
+{
+    manager->sec_type = 0;
+    if (manager->type == REDIR_IN && line[i] == '>')
+        return (parsing_error(manager, 2));
+    if (manager->type == REDIR_OUT && line[i] == '<')
+        return (parsing_error_op(manager, 4, '<', 0));
+    while (line[i] && ft_is_space(line[i]))
+        i++;
+    i = verif_operator(manager, line, i, &(manager->sec_type));
+    return handle_secondary_type(manager, line, i);
+}
 
 int	handle_pipe(t_manager *manager, char *line, int i)
 {
@@ -65,62 +100,25 @@ int	handle_pipe(t_manager *manager, char *line, int i)
 	}
 }
 
-int handle_dir(t_manager *manager, char *line, int i, t_token *current)
+int	is_an_expand(char *line, int i)
 {
-	char	*to_test;
-
-	if (line)
-		regular_word(manager, line, i);
-	if (!current)
-		to_test = manager->word;
-	else
-		to_test = current->value;
-	write(2, "bash: ", 6);
-	if (current && current-> prev && current->space == 0)
-		ft_putstr_fd(current->prev->value, 2);
-	ft_putstr_fd(to_test, 2);
-	if (access(to_test, F_OK))
+	while (line[i] && !ft_is_space(line[i]))
 	{
-		write(2, ": No such file or directory\n",28);
-		manager->exit_status = 127;			
-		return (-1);
+		if (line[i] == '$')
+			return (1);
+		i++;
 	}
-	else
-	{
-		write(2, ": Is a directory\n",17);
-		manager->exit_status = 126;			
-	}
-	return (-1);
+	return (0);
 }
 
-
-int token_error(t_manager *manager) //a revoir/check
+int handle_env_pars(t_manager *manager, char *line, int i)
 {
-	t_token *token_tour;
-	t_token last_token;
-	
-	token_tour = manager->token_first;
-	if (manager->token_first->type == PIPE)
-		return (parsing_error_op(manager, 4, '|', 0)); //ok
-	last_token = *(token_last(manager->token_first));
-	if (last_token.type == PIPE) 
-			return (parsing_error_op(manager, 4, '|', 0)); //ok
-	while (token_tour)
+	if (line[i - 1] == '$' && (line[i] == '\0' || ft_is_space(line[i])))
 	{
-		if ((token_tour->type == REDIR_IN && !token_tour->value)
-		|| (token_tour->type == REDIR_OUT && token_tour->value == NULL)
-		|| (token_tour->type == REDIR_HEREDOC && token_tour->value == NULL)
-		|| (token_tour->type == REDIR_APPEND && token_tour->value == NULL))
-		{
-			if ((token_tour->next && token_tour->next->type == PIPE) 
-				|| (token_tour->prev && token_tour->prev->type == PIPE))
-				return (parsing_error_op(manager, 4, '|', 0)); //ok
-			else 
-				return (parsing_error(manager, 2)); //ok
-		}
-		if ((token_tour->next) && (token_tour->type == PIPE && token_tour->next->type == PIPE))
-			return (parsing_error_op(manager, 4, '|', 0)); //ok
-	token_tour = token_tour->next;
+		manager->type = CMD_ARG;
+		manager->word = ft_strdup("$\0");
 	}
-return (0);
+	else 
+		i = regular_word(manager, line, i);
+	return (i);
 }

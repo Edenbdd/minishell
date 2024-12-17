@@ -70,13 +70,3 @@ t_cmd	*cmd_last(t_cmd *cmd)
 	return (cmd);
 }
 
-void	cmd_display(t_cmd *cmd)
-{
-	if (!cmd)
-		return ;
-	while (cmd)
-	{
-		printf("arg[0]: [%s]-- infile: [%s]-- lim: [%s] -- append: [%d]-- outfile:[%s]\n",cmd->args[0], cmd->infile,  cmd->lim, cmd->append, cmd->outfile);
-		cmd = cmd->next;
-	}
-}

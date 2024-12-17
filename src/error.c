@@ -15,14 +15,6 @@
 
 int	parsing_error_op(t_manager *manager, int code, char operator, char dble_op)
 {
-	//if (code == 3)
-	//{
-	//	printf("empty line\n");
-	//	if (manager->token_first)
-	//		free_token(&(manager)->token_first);
-	//	manager->exit_status = 0;			
-	//	return (-1);
-	//}
 	if (code == 4)
 	{
 		if (dble_op)
@@ -33,7 +25,6 @@ int	parsing_error_op(t_manager *manager, int code, char operator, char dble_op)
 			write (2,&dble_op,1);
 			write (2,"\n",1);
 		}
-//			printf("bash : syntax error near unexpected token '%c%c'\n", operator, dble_op);
 		else 
 		{
 			write(2, "bash: ",6);
@@ -41,10 +32,7 @@ int	parsing_error_op(t_manager *manager, int code, char operator, char dble_op)
 			write (2,&operator,1);
 			write (2,"\n",1);
 		}
-//			printf("bash : syntax error near unexpected token '%c'\n", operator);
 		manager->exit_status = 2;	
-		//if (manager)
-		//	free_manager(manager);			
 		return (-1);
 	}
 	return (-1);
@@ -55,47 +43,18 @@ int parsing_error(t_manager *manager, int code)
 {
 	if (code == 2)
 	{
-//		printf("bash: syntax error near unexpected token `newline'\n");
 			write(2, "bash: ",6);
 			write (2, "syntax error near unexpected token `newline'\n",45);
 
 		manager->exit_status = 2;
-		//if (manager)
-		//	free_manager(manager);			
 		return (-1);
 	}
 
 	if (code == 3)
 	{
-//		printf("empty line\n");
 		manager->exit_status = 127;			
-		//if (manager)
-		//	free_manager(manager);
 		return (-1);
 	}
-
-// avant cette ligne = parties terminees
-
-	//if (code == 1)
-	//{
-	//	printf("minishell doesn't support the operator\n");
-	//	if (manager->token_first)
-	//		free_token(&(manager)->token_first);
-	//	manager->exit_status = 2;
-	//	return (-1);
-	//	}
-	
-	
-	// // if (code == 4)
-	// // {
-	// // 	printf("bash : syntax error\n");
-	// 	//if (manager->token_first)
-	// 	//	free_token(manager->token_first);
-	// 	manager->env_first->exit_status = 2;	
-	// 	//if (manager)
-	// 	//	free_manager(manager);			
-	// 	return (-1);
-	// }
 return (-1);
 }
 
@@ -107,12 +66,7 @@ int access_error(t_manager *manager, int code, char *str)
 		write(2, "bash: ",6);
 		ft_putstr_fd(str, 2);
 		write (2, ": Permission denied\n",20);
-	//	printf("bash : %s: Permission denied\n", str);
-		//if (manager->token_first)
-		//	free_token(manager->token_first);
 		manager->exit_status = 1;
-		//if (manager)
-		//	free_manager(manager);			
 		return (-1);
 	}
 return (-1);
@@ -131,9 +85,6 @@ int open_close_error(t_manager *manager, int code)
 		
 	if (manager)
 		free_manager(manager);
-	//if (manager->token_first)
-	//	free_token(&(manager)->token_first);
-	//pas de exit status selon chat gpt	
 	return (-1);
 }
 
@@ -145,13 +96,7 @@ int cmd_error(t_manager *manager, int code, char *cmd)
 		write(2, "bash: ",6);
 		ft_putstr_fd(cmd, 2);
 		write (2, ": command not found\n",20);
-//		printf("bash: %s: command not found\n", cmd);
-		//if (manager->token_first)
-		//	free_token(manager->token_first);
-		//manager->token_first = NULL;
 		manager->exit_status = 127;			
-		//if (manager)
-		//	free_manager(manager);
 		return (-1);
 	}
 	return (-1);

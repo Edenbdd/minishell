@@ -25,21 +25,31 @@ RM 				= rm -rf
 
 # Tous les fichiers sources (ajuster si nécessaire)
 SRCS 			= 	main.c\
-					parsing.c\
-					parsing_utils.c\
-					parsing_utils2.c\
+					cmd_path.c\
+					cmd_test_path.c\
+					debug.c\
+					env.c\
+					error.c\
+					exec.c\
+					exec_child.c\
+					expand.c\
+					expand_cut.c\
+					expand_replace.c\
+					fill_cmd.c\
+					fill_cmd_expand.c\
+					fill_cmd_args.c\
+					free_manager.c\
+					free.c\
+					handle_files.c\
+					oplist_cmd.c\
+					oplist_env.c\
 					oplist_manager.c\
 					oplist_token.c\
-					oplist_env.c\
-					oplist_cmd.c\
-					free.c\
-					fill_cmd.c\
-					cmd_path.c\
-					error.c\
-					env.c\
-					exec.c\
-					expand.c\
-					handle_files.c\
+					parsing_dir.c\
+					parsing_space_operator.c\
+					parsing_utils.c\
+					parsing_utils2.c\
+					parsing.c\
 
 SRCS_ALL 		= $(addprefix $(SRC_PATH), $(SRCS))
 

@@ -68,17 +68,3 @@ t_token	*token_last(t_token *token)
 	return (token);
 }
 
-void	token_display(t_token *token)
-{
-	if (token == NULL)
-		return ;
-	while (token)
-	{
-		printf("token value :[%s] -- type : [%d]\n", token->value, token->type);
-		//if (token->prev)
-		//	printf("        prev_value : [%s]\n", token->prev->value);
-		//else
-		//	printf("        prev_value : [NULL]\n");
-		token = token->next;
-	}
-}

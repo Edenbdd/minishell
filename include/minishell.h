@@ -111,63 +111,109 @@ typedef struct s_manager
 } t_manager;
 
 
-//parsing
-int		parsing(t_manager *manager,char *line);
-int		verif_operator(t_manager *manager, char *line, int i, int *type);
-int		only_space_symbols(char *str);
-int		is_symbols(char c);
-int		handle_env_pars(t_manager *manager, char *line, int i);
-int		is_a_dir(char *line, int i);
-int		is_an_expand(char *line, int i);
+//cmd_path
+char		*get_path(t_env *s_env);
+char		*find_path(char *cmd, t_env *s_env, t_manager *manager);
+char		*join_path(char *path, char *cmd, t_manager *manager, char **paths);
+char		*absolute_path(char *cmd, t_manager *manager);
 
-//parsing_utils 1 & 2
-int 	handle_dir(t_manager *manager, char *line, int i, t_token *current);
-int		check_operator_err(t_manager *manager, char *line, int i);
-int		is_operators(t_manager *manager, char *line, int i);
-int		handle_quote(char *line, int i, t_manager *manager);
-int		regular_word(t_manager *manager, char *line, int i);
-int		count_quotes(t_manager *manager, char *line, char quote1, char quote2);
-int		handle_redir(t_manager *manager, char *line, int i);
-int		token_error(t_manager *manager);
-int		handle_pipe(t_manager *manager, char *line, int i);
+//cmd_test_path
+char		*create_and_check_path(char *path, char *cmd, t_manager *manager, char **paths);
+void		update_right_path(char **right_path, char *new_path);
+char		*test_path(char **paths, char *cmd, t_manager *manager);
+
+//debug
+void		print_env(char **env_arr);
+void		token_display(t_token *token);
+void		cmd_display(t_cmd *cmd);
+
+//env
+char		*get_name(char *str);
+char		**convert_env(t_env *s_env);
+char		*get_content(char *str);
+t_env		*handle_env(char **env);
+int			envsize(t_env *lst);
+
+//error
+int			parsing_error(t_manager *manager, int code);
+int			parsing_error_op(t_manager *manager, int code, char operator, char dble_op);
+int			access_error(t_manager *manager, int code, char *str);
+int			cmd_error(t_manager *manager, int code, char *cmd);
+int			open_close_error(t_manager *manager, int code);
+//int dir_error(t_manager *manager, int code, char *word);
+
+//exec_child
+int			handle_input_redirection(t_cmd *cmd, int *previous_fd);
+int			handle_output_redirection(t_cmd *cmd);
+int			child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manager);
+
+//exec
+int			handle_heredoc(t_manager *manager, t_cmd *current_cmd, int *previous_fd);
+int			setup_pipe_and_fork(t_cmd *current_cmd, t_manager *manager);
+int			close_fds(t_cmd *current_cmd, int *previous_fd, t_manager *manager);
+int			execution(t_manager *manager, t_env *s_env);
+int			waiting(int id_last);
+
+//expand_cut
+int			get_cut_length(char *str, int pos);
+void		copy_without_expand(char *str, char *result, int pos);
+char		*cut_expand(char *str, int pos);
+
+//expand_replace
+int			replexpand_length(char *str, int pos, char *expansion);
+void		replexpand_copy(char *str, char *result, int pos, char *expansion);
+char		*replace_expand(char *str, int pos, char *expansion);
+
+//expand
+int	expand(t_token *token, t_env *s_env);
+char	*get_toexpand(char *str, int i);
+char	*expand_exists(char *to_expand, t_env *s_env);
+void	expand_dquote(t_token *current_token, t_env *s_env);
+
+
+//fill_cmd_args
+int			count_args(t_token *current);
+char		**allocate_args(int cmd_count);
+t_token		*fill_args_values(t_token *current, char **args, int cmd_count);
+t_token		*fill_args(t_token *current, t_cmd *cmd, t_manager *manager);
+
+//fill_cmd_expand
+int			exploop_env_var(t_token *current_token, t_env *s_env, t_manager *manager);
+int			exploop_dquote(t_token *current_token, t_env *s_env, t_manager *manager);
+int			expand_loop(t_token *current_token, t_env *s_env, t_manager *manager);
+
+//fill_cmd
+int			redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager);
+t_token		*cmd_loop(t_token *current_token, t_cmd *cmd, t_manager *manager);
+int			fill_cmd(t_manager *manager, t_env *s_env);
+
+//free_manager
+void		free_token(t_token *token);
+void		free_export(t_export *export);
+void		free_cmd(t_cmd *cmd);
+void		free_manager(t_manager *manager);
+void		free_env(t_env *env);
+
+//free
+int			closing(t_cmd *cmd, int *previous_fd, t_manager *manager);
+void		free_path(char **paths);
+void		unlink_heredoc(t_manager *manager);
+void		free_cmd_args(char **args);
+
+//handle_files
+int			check_heredoc(t_manager *manager);
+int			check_infile(char *infile, t_manager *manager);
+int			check_outfile(char *outfile, t_manager *manager);
+int			create_doc(t_manager *manager, int *previous_fd, char *lim);
 
 //oplist_manager
 t_manager	*init_manager(t_manager *manager, t_env first_env, int exitcode);
 
 //Operations sur liste token
-void	*token_add_new(t_token *new_token, t_token **token);
-t_token	*token_new(int prec_space, t_manager *manager);
-void	token_add_back(t_token **token, t_token *new_token);
-t_token	*token_last(t_token *token);
-void	token_display(t_token *token);
-
-//free
-void	free_token(t_token *token);
-int		closing(t_cmd *cmd, int *previous_fd, t_manager *manager);
-void	free_path(char **paths);
-void	unlink_heredoc(t_manager *manager);
-void	free_env(t_env *env);
-void	free_export(t_export *export);
-void	free_cmd_args(char **args);
-void	free_cmd(t_cmd *cmd);
-void	free_manager(t_manager *manager);
-
-//error
-int parsing_error(t_manager *manager, int code);
-int	parsing_error_op(t_manager *manager, int code, char operator, char dble_op);
-int access_error(t_manager *manager, int code, char *str);
-int cmd_error(t_manager *manager, int code, char *cmd);
-int open_close_error(t_manager *manager, int code);
-int dir_error(t_manager *manager, int code, char *word);
-
-//display
-void	token_display(t_token *token);
-
-//env
-char		*get_name(char *str);
-char	**convert_env(t_env *s_env);
-char		*get_content(char *str);
-t_env		*handle_env(char **env);
+void		*token_add_new(t_token *new_token, t_token **token);
+t_token		*token_new(int prec_space, t_manager *manager);
+void		token_add_back(t_token **token, t_token *new_token);
+t_token		*token_last(t_token *token);
 
 //oplist_env
 t_env		*env_new(char *str);
@@ -175,44 +221,40 @@ void		env_add_back(t_env *first_env, char *str);
 t_env		*env_last(t_env *env);
 void		env_display(t_env *env);
 
-//cmd_path
-char	*get_path(t_env *s_env);
-char	*find_path(char *cmd, t_env *s_env, t_manager *manager);
-char	*join_path(char *path, char *cmd, t_manager *manager, char **paths);
-char	*test_path(char **paths, char *cmd, t_manager *manager);
-char	*absolute_path(char *cmd, t_manager *manager);
-
 //oplist_cmd
-void	create_cmd_list(t_cmd *new_cmd, int cmd_node_count, t_manager *manager);
-t_cmd	*cmd_new(void);
-void	cmd_add_back(t_cmd *cmd, t_cmd *new_cmd);
-t_cmd	*cmd_last(t_cmd *cmd);
-void	cmd_display(t_cmd *cmd);
+void		create_cmd_list(t_cmd *new_cmd, int cmd_node_count, t_manager *manager);
+t_cmd		*cmd_new(void);
+void		cmd_add_back(t_cmd *cmd, t_cmd *new_cmd);
+t_cmd		*cmd_last(t_cmd *cmd);
 
-//expand
-int		expand(t_token *token, t_env *s_env);
-char	*get_toexpand(char *str, int i);
-char	*expand_exists(char *to_expand, t_env *s_env);
-char	*replace_expand(char *str, int pos, char *expansion);
-void	expand_dquote(t_token *current_token, t_env *s_env);
-char	*cut_expand(char *str, int pos);
+//parsing_dir
+int			is_a_dir(char *line, int i);
+int			handle_dir(t_manager *manager, char *line, int i, t_token *current);
 
-//fill cmd struct
-int		fill_cmd(t_manager *manager, t_env *s_env);
-t_token	*fill_args(t_token *current, t_cmd *cmd, t_manager *manager);
-int		expand_loop(t_token *current_token, t_env *s_env, t_manager *manager);
-t_token	*cmd_loop(t_token *current_token, t_cmd *cmd, t_manager *manager);
-int		redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager);
+//parsing space_operator
+int			is_symbols(char c);
+int			only_space_symbols(char *str);
+int			is_operators(t_manager *manager, char *line, int i);
+int			check_operator_err(t_manager *manager, char *line, int i);
+int			verif_operator(t_manager *manager, char *line, int i, int *type);
 
-//exec
-int		execution(t_manager *manager, t_env *s_env);
-int		child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manager);
-int		waiting(int id_last);
+//parsing_utils
+int			handle_quote(char *line, int i, t_manager *manager);
+int			regular_word(t_manager *manager, char *line, int i);
+int			count_quotes(t_manager *manager, char *line, char quote1, char quote2);
 
-//handle files
-int		check_infile(char *infile, t_manager *manager);
-int		check_outfile(char *outfile, t_manager *manager);
-int		check_heredoc(t_manager *manager);
-int	create_doc(t_manager *manager, int *previous_fd, char *lim);
+//parsing_utils2
+int			handle_secondary_type(t_manager *manager, char *line, int i);
+int			handle_redir(t_manager *manager, char *line, int i);
+int			handle_pipe(t_manager *manager, char *line, int i);
+int			is_an_expand(char *line, int i);
+int			handle_env_pars(t_manager *manager, char *line, int i);
+
+//parsing
+int			handle_parsing_errors(t_manager *manager, char *line);
+int			skip_spaces(char *line, int i, int *prec_space);
+int			process_token(t_manager *manager, char *line, int i); 
+int			parsing(t_manager *manager, char *line);
+int			token_error(t_manager *manager);
 
 #endif

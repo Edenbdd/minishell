@@ -71,35 +71,6 @@ char	*join_path(char *path, char *cmd, t_manager *manager, char **paths)
 	return (to_test);
 }
 
-char	*test_path(char **paths, char *cmd, t_manager *manager)
-{
-	int		i;
-	char	*to_test;
-	char	*right_path;
-
-	i = 0;
-	right_path = NULL;
-	while (paths[i])
-	{
-		to_test = join_path(paths[i], cmd, manager, paths);
-		if (to_test == NULL)
-			return (NULL);
-		if (access(to_test, F_OK) == 0)
-		{
-			if (access(to_test, X_OK) == 0)
-			{
-				if (right_path)
-					free(right_path);
-				right_path = ft_strdup(to_test);
-			}
-			else
-				right_path = NULL;
-		}
-		free(to_test);
-		i++;
-	}
-	return (right_path);
-}
 
 char	*absolute_path(char *cmd, t_manager *manager)
 {

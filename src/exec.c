@@ -15,6 +15,7 @@
 #include "minishell.h"
 #include "libft.h"
 
+/*
 int	execution(t_manager *manager, t_env *s_env)
 {
 	t_cmd	*current_cmd;
@@ -67,41 +68,90 @@ int	execution(t_manager *manager, t_env *s_env)
 	// printf("prev is %d\n", previous_fd);
 	return (waiting(id));
 }
+*/
 
-int	child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manager)
+//Execution : Gestion du heredoc
+
+int handle_heredoc(t_manager *manager, t_cmd *current_cmd, int *previous_fd)
 {
-	char	*path;
-	char	**env_arr;
-	// printf("cmd here: [%s]\n", cmd->args[0]);
-	// printf("CHILD\nprev: %d, cmd->0: %d cmd->1: %d\n", *previous_fd, cmd->pfd[0], cmd->pfd[1]);
-	if (cmd->infile || cmd->index != 0  || cmd->heredoc_priority)
-	{
-		if (cmd->infile  && !cmd->heredoc_priority)
-		{
-			*previous_fd = open(cmd->infile, O_RDONLY);
-		}
-		dup2(*previous_fd, STDIN_FILENO);
-	}
-	if (cmd->outfile || (cmd->index + 1) != manager->size_cmd)
-	{
-		if (cmd->append == 1 && cmd->outfile)
-			cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		else if (cmd->outfile)
-			cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (cmd->pfd[1] == -1)
-				return (open_close_error(manager, 1));
-		dup2(cmd->pfd[1], STDOUT_FILENO);	
-	}
-	if (closing(cmd, previous_fd, manager) == -1)
-		return (-1);
-	path = find_path(cmd->args[0], s_env, manager);
-	if (path == NULL)
-		return (cmd_error(manager, 6, cmd->args[0]));
-	env_arr = convert_env(s_env);
-	if (execve(path, cmd->args, env_arr) == -1) 
-		return (open_close_error(manager, 2));
-	return (0);
+    if (current_cmd->lim)
+    {
+        if (create_doc(manager, previous_fd, current_cmd->lim) == -1)
+            return (-1);
+    }
+    return (0);
 }
+
+//Execution : Gestion des pipes et fork
+
+int setup_pipe_and_fork(t_cmd *current_cmd, t_manager *manager)
+{
+    if (manager->size_cmd > 1)
+    {
+        if (pipe(current_cmd->pfd) == -1)
+            return (open_close_error(manager, 3));
+    }
+    int id = fork();
+    if (id == -1)
+        return (open_close_error(manager, 4));
+    return id;
+}
+
+//Execution : Gestion de la fermeture des fichiers
+
+int close_fds(t_cmd *current_cmd, int *previous_fd, t_manager *manager)
+{
+    if (current_cmd->pfd[1] != -1)
+    {
+        if (close(current_cmd->pfd[1]) == -1)
+            return (open_close_error(manager, 1));
+    }
+    if (current_cmd->index >= 1 && *previous_fd != -1)
+    {
+        if (close(*previous_fd) == -1)
+            return (open_close_error(manager, 1));
+    }
+    *previous_fd = current_cmd->pfd[0];
+    return (0);
+}
+
+// execution
+
+int execution(t_manager *manager, t_env *s_env)
+{
+    t_cmd *current_cmd;
+    int id;
+    int previous_fd;
+
+    previous_fd = -1;
+    current_cmd = manager->cmd_first;
+    while (current_cmd)
+    {
+        if (handle_heredoc(manager, current_cmd, &previous_fd) == -1)
+            return (-1);
+
+        id = setup_pipe_and_fork(current_cmd, manager);
+        if (id == -1)
+            return (-1);
+
+        if (id == 0)
+        {
+            if (child_process(current_cmd, &previous_fd, s_env, manager) == -1)
+                return (-1);
+        }
+
+        if (close_fds(current_cmd, &previous_fd, manager) == -1)
+            return (-1);
+
+        current_cmd = current_cmd->next;
+        unlink_heredoc(manager);
+    }
+    return (waiting(id));
+}
+
+
+
+
 
 int	waiting(int id_last)
 {

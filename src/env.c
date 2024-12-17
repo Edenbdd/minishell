@@ -75,18 +75,6 @@ int	envsize(t_env *lst)
 	}
 	return (len);
 }
-//utile pour le debug only
-// static void		print_env(char **env_arr)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (env_arr[i])
-// 	{
-// 		printf("%s\n", env_arr[i]);
-// 		i++;
-// 	}
-// }
 
 char	**convert_env(t_env *s_env)
 {
@@ -136,3 +124,4 @@ char	*get_content(char *str)
 	content[len_content] = '\0';
 	return (content);
 }
+

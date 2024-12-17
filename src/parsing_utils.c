@@ -15,70 +15,7 @@
 
 //Utils de parsing lies au operators, quotes et regular word (cmd/arg)
 
-//checker les operateurs non geres
-int check_operator_err(t_manager *manager, char *line, int i)
-{
-//si >>> et plus regarder les messages d'erreur specifiques. idem autres operateurs
-	if ((line[i] == '&' && line[i + 1] == '&')
-		|| (line[i] == ';') 
-		|| (line[i] == '#') 
-		|| (line[i] == '\\')
-		)
-			return (parsing_error_op(manager, 4, line[i], 0)); //ok
-	if ((line[i] == '<' && line[i + 1] == '<' && line[i + 2] == '<')
-		|| (line[i] == '>' && line[i + 1] == '>' && line[i + 2] == '>'))
-			return (parsing_error_op(manager, 4, line[i], line[i + 1])); //ok
-	return (0);
-}
 
-int	is_a_dir(char *line, int i)
-{
-	while (line[i] && !ft_is_space(line[i]))
-	{
-		if (line[i] == '/')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-
-int	is_an_expand(char *line, int i)
-{
-	while (line[i] && !ft_is_space(line[i]))
-	{
-		if (line[i] == '$')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-//recuperer un token "operator"
-int	is_operators(t_manager *manager, char *line, int i)
-{
-	if (line[i] == '<' && line[i + 1] == '<')
-		return (REDIR_HEREDOC);
-	if (line[i] == '>' && line[i + 1] == '>')
-		return (REDIR_APPEND);
-	if (check_operator_err(manager, line, i) == -1)
-		return (-1);
-	if (line[i] == '<')
-		return (REDIR_IN);
-	if (line[i] == '>')
-		return (REDIR_OUT);
-	if (line[i] == '"')
-		return (DOUBLE_QUOTE);
-	if (line[i] == '\'')
-		return (SIMPLE_QUOTE);
-	if (line[i] == '|')
-		return (PIPE);
-	if (line[i] == '$')
-		return (ENV_VAR);
-	if (is_a_dir(line, i))
-		return (DIR);
-	return (CMD_ARG); // is 0
-}
 
 //recuperer un token "entre quote"
 int	handle_quote(char *line, int i, t_manager *manager)
