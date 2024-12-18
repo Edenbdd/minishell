@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/18 18:39:32 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/18 19:56:21 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,7 @@ int	parsing(t_manager *manager, char *line)
 		free(manager->word);
 	}
 	return (0);
-}
-*/
-
-
+}*/
 
 // parsing : Gère les cas d'erreur dans la ligne d'entrée
 int handle_parsing_errors(t_manager *manager, char *line) 
@@ -80,6 +77,7 @@ int handle_parsing_errors(t_manager *manager, char *line)
         return (-1);
     return (0);
 }
+
 
 // parsing : Traite les espaces dans la ligne
 int skip_spaces(char *line, int i, int *prec_space) 
@@ -96,22 +94,22 @@ int skip_spaces(char *line, int i, int *prec_space)
 int process_token(t_manager *manager, char *line, int i) 
 {
     if (manager->type == DOUBLE_QUOTE || manager->type == SIMPLE_QUOTE)
-        return handle_quote(line, i, manager);
+        return (printf("going to handle quote\n"), handle_quote(line, i, manager));
     else if (manager->type == REDIR_IN || manager->type == REDIR_OUT ||
              manager->type == REDIR_APPEND || manager->type == REDIR_HEREDOC) 
 			{
         		if (manager->type == REDIR_APPEND || manager->type == REDIR_HEREDOC)
             		i++;
-        		return handle_redir(manager, line, i);
+        		return (handle_redir(manager, line, i));
 			} 
 	else if (manager->type == PIPE)
-        return handle_pipe(manager, line, i);
+        return (handle_pipe(manager, line, i));
     else if (manager->type == DIR)
-        return handle_dir(manager, line, i, NULL);
+        return (handle_dir(manager, line, i, NULL));
     else if (manager->type == ENV_VAR)
-        return handle_env_pars(manager, line, i);
+        return (handle_env_pars(manager, line, i));
     else
-        return regular_word(manager, line, i);
+        return (regular_word(manager, line, i));
 }
 
 // Fonction principale de parsing
@@ -133,13 +131,14 @@ int parsing(t_manager *manager, char *line)
             return (-1);
         i = process_token(manager, line, i);
         if (i == -1)
-            return (free(manager->word), -1);
+	        return (printf("token issue?\n"), free(manager->word), -1);
         token_add_back(&(manager->token_first), token_new(prec_space, manager));
         free(manager->word);
     }
     return (0);
 }
 
+//parsing_condition
 int token_error(t_manager *manager) //a revoir/check
 {
 	t_token *token_tour;
@@ -168,7 +167,5 @@ int token_error(t_manager *manager) //a revoir/check
 			return (parsing_error_op(manager, 4, '|', 0)); //ok
 	token_tour = token_tour->next;
 	}
-return (0);
+	return (0);
 }
-
-//parsing_condition

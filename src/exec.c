@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/18 18:01:37 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/18 19:46:26 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,22 +116,21 @@ int close_fds(t_cmd *current_cmd, int *previous_fd, t_manager *manager)
 }
 
 // execution
+#include <sys/stat.h>
 
 int execution(t_manager *manager, t_env *s_env)
 {
-    t_cmd *current_cmd;
-    int id;
-    int previous_fd;
-
-    previous_fd = -1;
+    t_cmd 	*current_cmd;
+    int 	id;
+    int 	previous_fd;
+    
+	previous_fd = -1;
     current_cmd = manager->cmd_first;
     while (current_cmd)
     {
-        if (handle_heredoc(manager, current_cmd, &previous_fd, s_env) == -1)
-        {
-			// printf("do I exit here ?\n");
+        if (handle_heredoc(manager, 
+			current_cmd, &previous_fd, s_env) == -1)
 		    return (-1);
-		}
 		id = setup_pipe_and_fork(current_cmd, manager);
         if (id == -1)
             return (-1);
@@ -144,6 +143,9 @@ int execution(t_manager *manager, t_env *s_env)
             return (-1);
         current_cmd = current_cmd->next;
         unlink_heredoc(manager);
+		//J ai des fd ouvert avec les heredoc et ca fix le pb somehow ???
+		close(3);
+		close(4);
     }
     return (waiting(id));
 }

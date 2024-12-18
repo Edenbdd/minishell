@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:58:50 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/18 18:32:48 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/18 18:45:44 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ int	handle_redir(t_manager *manager, char *line, int i)
 //handle redir : gestion des types secondaires
 int handle_secondary_type(t_manager *manager, char *line, int i)
 {
-	printf("sec type is %d\n", manager->sec_type);
+	// printf("sec type is %d\n", manager->sec_type);
     if (manager->sec_type == DOUBLE_QUOTE || manager->sec_type == SIMPLE_QUOTE)
 	{
-		printf("char is [%c] and i is %d\n", line[i], i);
+		// printf("char is [%c] and i is %d\n", line[i], i);
 		return (handle_quote(line, i - 1, manager));
 	}
 	else if (manager->sec_type == CMD_ARG)
