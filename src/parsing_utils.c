@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 09:47:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/18 13:01:27 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/18 18:33:03 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,9 @@ int	handle_quote(char *line, int i, t_manager *manager)
 	else
 		separator = '"';
 	j = 0;
-	while (line[i + j] && line[i] != separator)
+	if (line[i + j] == separator)
+		j++;
+	while (line[i + j] && line[i + j] != separator)
 		j++;
 	if (j == 0)
 		return (cmd_error(manager, 6, ""));
@@ -43,6 +45,7 @@ int	handle_quote(char *line, int i, t_manager *manager)
 		i++;
 	}
 	manager->word[j] = '\0';
+	printf("end of handle word, word is [%s]\n", manager->word);
 	return (i + 1);
 }
 
@@ -78,21 +81,25 @@ int	count_quotes(t_manager *manager, char *line, char quote1, char quote2)
 	int dquote;
 	int i;
 
+	(void)quote2;
 	dquote = 0;
 	i = 0;
 	while (line[i])
 	{
 		if (line[i] == quote1)
 			dquote++;
-		if (line[i] == quote2)
-			{
-				i++;
-				while (line[i] && line[i] != quote2)
-				i++;
-			}
+		// if (line[i] == quote2)
+		// 	{
+		// 		i++;
+		// 		while (line[i] && line[i] != quote2)
+		// 		i++;
+		// 	}
 		i++;
 	}
 	if (dquote % 2 != 0)
+	{
+		printf("is it in count quotes?\n");
 		return (parsing_error_op(manager, 4, quote1, 0)); // OK comportement indefini de bash
+	}
 	return (dquote);
 }

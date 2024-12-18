@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:06:55 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/18 17:24:59 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/18 18:02:11 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,23 +62,23 @@ int	create_doc(t_manager *manager, int *previous_fd,  t_cmd *current_cmd, t_env 
 	*previous_fd = open("heredoc_tmp", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (*previous_fd == -1)
 	{
-		printf("exit possible 1\n");
+		// printf("exit possible 1\n");
 		return (open_close_error(manager, 1));
 	}
 	if (create_doc_loop(previous_fd, manager, current_cmd, s_env) == -1)
 	{	
-		printf("exit possible 2\n");
+		// printf("exit possible 2\n");
 		return (-1);
 	}
 	if (close(*previous_fd) == -1)
 	{ 
-		printf("exit possible 3\n");
+		// printf("exit possible 3\n");
 		return (open_close_error(manager, 1));
 	}
 	*previous_fd = open("heredoc_tmp", O_RDWR | O_CREAT, 0644);
 	if (*previous_fd == -1)
 	{
-		printf("exit possible 4\n");
+		// printf("exit possible 4\n");
 		return (open_close_error(manager, 1));
 	}
 	return (0);
@@ -97,11 +97,11 @@ int		create_doc_loop(int *previous_fd, t_manager *manager, t_cmd *current_cmd, t
 		current_line = get_next_line(STDIN_FILENO);
 		if (!current_line
 			|| !ft_strncmp(current_line, tmp, ft_strlen(current_line)))
-			return (printf ("exit A\n"), free(tmp), free(current_line), 0);
+			return (free(tmp), free(current_line), 0);
 		if (!current_cmd->heredoc_quotes)
 			current_line = expand_heredoc(current_line, s_env);
 		if (write(*previous_fd, current_line, ft_strlen(current_line)) == -1)
-			return (printf ("exit B\n"), open_close_error(manager, 5));
+			return (open_close_error(manager, 5));
 		free(current_line);
 	}
 	return (0);

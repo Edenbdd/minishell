@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/18 13:00:19 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/18 18:39:32 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,13 +117,14 @@ int process_token(t_manager *manager, char *line, int i)
 // Fonction principale de parsing
 int parsing(t_manager *manager, char *line) 
 {
-    int i = 0;
+    int i;
     int prec_space;
-
-    manager->word = NULL;
+    
+	i = 0;
+	manager->word = NULL;
     if (handle_parsing_errors(manager, line) == -1)
         return (-1);
-    while (line[i]) 
+    while (i <= ft_strlen(line) && line[i])
 	{
         manager->type = 0;
         i = skip_spaces(line, i, &prec_space);

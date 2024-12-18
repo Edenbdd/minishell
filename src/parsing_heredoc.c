@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:17:44 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/18 17:20:32 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/18 18:11:57 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	parse_lim(t_token *current_token, t_cmd *cmd, t_manager *manager)
 	printf("a parser [%s]\n", limiter); // debug, a virer par la suite
 	if (count_quotes(manager, limiter, 34, 39) == -1 //check nb de quotes impair
 		|| count_quotes(manager, limiter, 39, 34) == -1)
-        return (-1);
+        return (printf("count quotes issues\n"), -1);
 	if (count_quotes(manager, limiter, 34, 39) > 0 //check nb de quotes impair
 		|| count_quotes(manager, limiter, 39, 34) > 0)
 		cmd->heredoc_quotes = 1;
