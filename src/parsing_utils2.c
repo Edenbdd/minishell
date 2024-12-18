@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:58:50 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/13 18:27:41 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/18 12:46:21 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int handle_redir(t_manager *manager, char *line, int i)
     while (line[i] && ft_is_space(line[i]))
         i++;
     i = verif_operator(manager, line, i, &(manager->sec_type));
-    return handle_secondary_type(manager, line, i);
+    return (handle_secondary_type(manager, line, i));
 }
 
 int	handle_pipe(t_manager *manager, char *line, int i)

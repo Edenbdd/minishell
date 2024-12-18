@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/13 20:17:52 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/18 13:09:07 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,18 @@ int open_close_error(t_manager *manager, int code)
 {
 	if (code == 1)
 		write (2, "bash: open or close error\n", 26);
-	if (code == 2)
+	else if (code == 2)
 		write (2, "bash: execve error\n", 19);
-	if (code == 3)
+	else if (code == 3)
 		write (2, "bash: pipe error\n", 17);
-	if (code == 4)
+	else if (code == 4)
 		write (2, "bash: fork error\n", 17);
-		
+	else if (code == 5)
+		write (2, "bash: write error\n", 18);
+	else if (code == 6)
+		write (2, "bash: join error\n", 17);
+	else if (code == 7)
+		write (2, "bash: malloc error\n", 18);	
 	if (manager)
 		free_manager(manager);
 	return (-1);

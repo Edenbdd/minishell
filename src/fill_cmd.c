@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/13 20:20:04 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/18 15:17:24 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,43 @@
 #include "minishell.h"
 #include "libft.h"
 
-
-
+//Fonction redir loop avant d etre scinder en 2 (a garder pour reference)
+// int	redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
+// {
+// 	while (current_token && current_token->type != PIPE)
+// 	{
+// 		if (current_token->type == REDIR_APPEND)
+// 		{
+// 			cmd->append = 1;
+// 			if (check_outfile(current_token->value, manager) == -1)
+// 				return (-1);
+// 			cmd->outfile = ft_strdup(current_token->value);
+// 		}
+// 		else if (current_token->type == REDIR_OUT)
+// 		{
+// 			cmd->append = 0;
+// 			if (check_outfile(current_token->value, manager) == -1)
+// 				return (-1);
+// 			cmd->outfile = ft_strdup(current_token->value);
+// 		}
+// 		else if (current_token->type == REDIR_IN)
+// 		{
+// 			cmd->heredoc_priority = 0;
+// 			if (check_infile(current_token->value, manager) == -1)
+// 				return (-1);
+// 			cmd->infile = ft_strdup(current_token->value);
+// 		}
+// 		else if (current_token->type == REDIR_HEREDOC)
+// 		{
+// 			cmd->heredoc_priority = 1;
+// 			if (check_heredoc(manager) == - 1)
+// 				return (-1);
+// 			cmd->lim = ft_strdup(current_token->value);
+// 		}
+// 		current_token = current_token->next;
+// 	}
+// 	return (0);
+// }
 
 int	redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 {
@@ -43,18 +78,13 @@ int	redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 				return (-1);
 			cmd->infile = ft_strdup(current_token->value);
 		}
-		else if (current_token->type == REDIR_HEREDOC)
-		{
-			cmd->heredoc_priority = 1;
-			if (check_heredoc(manager) == - 1)
-				return (-1);
-			cmd->lim = ft_strdup(current_token->value);
-		}
+		else if (current_token->type == REDIR_HEREDOC
+					&& parse_lim(current_token, cmd, manager) == -1)
+			return (-1);
 		current_token = current_token->next;
 	}
 	return (0);
 }
-
 
 
 t_token	*cmd_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)

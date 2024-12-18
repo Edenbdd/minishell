@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/12 10:34:46 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/18 17:21:13 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,11 @@ int	execution(t_manager *manager, t_env *s_env)
 
 //Execution : Gestion du heredoc
 
-int handle_heredoc(t_manager *manager, t_cmd *current_cmd, int *previous_fd)
+int handle_heredoc(t_manager *manager, t_cmd *current_cmd, int *previous_fd, t_env *s_env)
 {
     if (current_cmd->lim)
     {
-        if (create_doc(manager, previous_fd, current_cmd->lim) == -1)
+        if (create_doc(manager, previous_fd, current_cmd, s_env) == -1)
             return (-1);
     }
     return (0);
@@ -127,29 +127,26 @@ int execution(t_manager *manager, t_env *s_env)
     current_cmd = manager->cmd_first;
     while (current_cmd)
     {
-        if (handle_heredoc(manager, current_cmd, &previous_fd) == -1)
-            return (-1);
-
-        id = setup_pipe_and_fork(current_cmd, manager);
+        if (handle_heredoc(manager, current_cmd, &previous_fd, s_env) == -1)
+        {
+			printf("do I exit here ?\n");
+		    return (-1);
+		}
+		id = setup_pipe_and_fork(current_cmd, manager);
         if (id == -1)
             return (-1);
-
         if (id == 0)
         {
             if (child_process(current_cmd, &previous_fd, s_env, manager) == -1)
                 return (-1);
         }
-
         if (close_fds(current_cmd, &previous_fd, manager) == -1)
             return (-1);
-
         current_cmd = current_cmd->next;
         unlink_heredoc(manager);
     }
     return (waiting(id));
 }
-
-
 
 
 

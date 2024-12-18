@@ -6,12 +6,14 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:12:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/13 14:18:41 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/18 16:12:39 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
+
+/*fonction handling the expansion, included in between quotes and in heredoc*/
 
 int	expand(t_token *token, t_env *s_env)
 {
@@ -69,9 +71,6 @@ char	*expand_exists(char *to_expand, t_env *s_env)
 }
 
 
-
-
-
 void	expand_dquote(t_token *current_token, t_env *s_env)
 {
 	char	*str;
@@ -96,4 +95,30 @@ void	expand_dquote(t_token *current_token, t_env *s_env)
 		i++;
 	}
 	current_token->value = str;
+}
+
+//potentiellement fusionner avec une fonction derivee de expand_dquote
+char	*expand_heredoc(char *current_line, t_env *s_env)
+{
+	int		i;
+	char	*expansion;
+	char 	*to_expand;
+	i = 0;
+
+	while (current_line && current_line[i])
+	{
+		if (current_line[i] == '$' && isalnum(current_line[i + 1]) 
+			&& !ft_is_space(current_line[i + 1]))
+		{
+			i++;
+			to_expand = get_toexpand(current_line, i);
+			expansion = expand_exists(to_expand, s_env);
+			if (expansion)
+				current_line = replace_expand(current_line, i - 1, expansion);
+			else
+				current_line = cut_expand(current_line, i - 1);
+		}
+		i++;
+	}
+	return (current_line);
 }

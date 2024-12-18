@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/13 18:26:26 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/18 13:00:19 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int handle_parsing_errors(t_manager *manager, char *line)
         return (parsing_error(manager, 3));
     if (only_space_symbols(line))
         return (-1);
-    if ((count_quotes(manager, line, 34, 39) == -1) || (count_quotes(manager, line, 39, 34) % 2 == -1))
+    if ((count_quotes(manager, line, 34, 39) == -1) || (count_quotes(manager, line, 39, 34) == -1))
         return (-1);
     return (0);
 }
@@ -123,7 +123,6 @@ int parsing(t_manager *manager, char *line)
     manager->word = NULL;
     if (handle_parsing_errors(manager, line) == -1)
         return (-1);
-
     while (line[i]) 
 	{
         manager->type = 0;

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/13 20:18:22 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/18 13:01:46 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,18 +53,18 @@ int	main(int argc, char **argv, char **env)
 			free_manager(&manager);
 			continue ;
 		}
-		// printf("display de la liste token\n");
-		// token_display(manager.token_first);
+		printf("display de la liste token\n");
+		token_display(manager.token_first);
 		if (fill_cmd(&manager, first_env) == -1)
 		{
 			exitcode = manager.exit_status;
 			free_manager(&manager);
 			continue;
 		}
-		// printf("check if the expand worked: [%s]\n", manager.cmd_first->args[1]);
-		// printf("exit status [%d]\n", manager.env_first->exit_status);
-		// printf("display de la liste cmd\n");
-		// cmd_display(manager.cmd_first);
+		printf("check if the expand worked: [%s]\n", manager.cmd_first->args[1]);
+		printf("exit status [%d]\n", manager.exit_status);
+		printf("display de la liste cmd\n");
+		cmd_display(manager.cmd_first);
 		execution(&manager, first_env);
 		exitcode = manager.exit_status;
 		free_manager(&manager);

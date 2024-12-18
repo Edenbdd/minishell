@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:06:55 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/07 16:40:37 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/18 17:24:59 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,35 +56,88 @@ int	check_outfile(char *outfile, t_manager *manager)
 }
 
 //gere la creation du fichier temporaire heredoc et le met dans previous_fd
-int	create_doc(t_manager *manager, int *previous_fd, char *lim)
+
+int	create_doc(t_manager *manager, int *previous_fd,  t_cmd *current_cmd, t_env *s_env)
+{
+	*previous_fd = open("heredoc_tmp", O_RDWR | O_CREAT | O_TRUNC, 0644);
+	if (*previous_fd == -1)
+	{
+		printf("exit possible 1\n");
+		return (open_close_error(manager, 1));
+	}
+	if (create_doc_loop(previous_fd, manager, current_cmd, s_env) == -1)
+	{	
+		printf("exit possible 2\n");
+		return (-1);
+	}
+	if (close(*previous_fd) == -1)
+	{ 
+		printf("exit possible 3\n");
+		return (open_close_error(manager, 1));
+	}
+	*previous_fd = open("heredoc_tmp", O_RDWR | O_CREAT, 0644);
+	if (*previous_fd == -1)
+	{
+		printf("exit possible 4\n");
+		return (open_close_error(manager, 1));
+	}
+	return (0);
+}
+int		create_doc_loop(int *previous_fd, t_manager *manager, t_cmd *current_cmd, t_env *s_env)
 {
 	char	*current_line;
 	char	*tmp;
 
-	(void)manager; //sera utiliser pour les sorties d erreur (protection)
-	*previous_fd = open("heredoc_tmp", O_RDWR | O_CREAT | O_TRUNC, 0644);
-	if (*previous_fd == -1)
-		return (open_close_error(manager, 1));
-	tmp = ft_strjoin(lim, "\n"); //PROTEGER LE JOIN
+	tmp = ft_strjoin(current_cmd->lim, "\n");
+	if (!tmp)
+		return (open_close_error(manager, 6));
 	while (1)
 	{
 		write(1, ">", 1);
 		current_line = get_next_line(STDIN_FILENO);
 		if (!current_line
 			|| !ft_strncmp(current_line, tmp, ft_strlen(current_line)))
-		{
-			free(tmp);
-			free(current_line);
-			break ;
-		}
-		write(*previous_fd, current_line, ft_strlen(current_line));
-		//PROTEGER LE WRITE ?
+			return (printf ("exit A\n"), free(tmp), free(current_line), 0);
+		if (!current_cmd->heredoc_quotes)
+			current_line = expand_heredoc(current_line, s_env);
+		if (write(*previous_fd, current_line, ft_strlen(current_line)) == -1)
+			return (printf ("exit B\n"), open_close_error(manager, 5));
 		free(current_line);
 	}
-	if (close(*previous_fd) == -1) 
-		return (open_close_error(manager, 1));
-	*previous_fd = open("heredoc_tmp", O_RDWR | O_CREAT, 0644);
-	if (*previous_fd == -1)
-		return (open_close_error(manager, 1));
 	return (0);
 }
+//Fonction originale en commentaire
+// int	create_doc(t_manager *manager, int *previous_fd, char *lim)
+// {
+// 	char	*current_line;
+// 	char	*tmp;
+
+// 	(void)manager; //sera utiliser pour les sorties d erreur (protection)
+// 	*previous_fd = open("heredoc_tmp", O_RDWR | O_CREAT | O_TRUNC, 0644);
+// 	if (*previous_fd == -1)
+// 		return (open_close_error(manager, 1));
+// 	tmp = ft_strjoin(lim, "\n"); //PROTEGER LE JOIN
+// 	if (!tmp)
+// 		return (open_close_error(manager, 6));
+// 	while (1)
+// 	{
+// 		write(1, ">", 1);
+// 		current_line = get_next_line(STDIN_FILENO);
+// 		if (!current_line
+// 			|| !ft_strncmp(current_line, tmp, ft_strlen(current_line)))
+// 		{
+// 			free(tmp);
+// 			free(current_line);
+// 			break ;
+// 		}
+// 		if (write(*previous_fd, current_line, ft_strlen(current_line)) == -1) //ajuster la protection
+// 			return (open_close_error(manager, 5));
+// 		free(current_line);
+// 	}
+// 	if (close(*previous_fd) == -1) 
+// 		return (open_close_error(manager, 1));
+// 	*previous_fd = open("heredoc_tmp", O_RDWR | O_CREAT, 0644);
+// 	if (*previous_fd == -1)
+// 		return (open_close_error(manager, 1));
+// 	return (0);
+// }

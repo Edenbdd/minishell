@@ -6,7 +6,7 @@
 #    By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/15 09:42:50 by smolines          #+#    #+#              #
-#    Updated: 2024/12/07 15:00:30 by aubertra         ###   ########.fr        #
+#    Updated: 2024/12/18 17:11:53 by aubertra         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,6 +46,7 @@ SRCS 			= 	main.c\
 					oplist_manager.c\
 					oplist_token.c\
 					parsing_dir.c\
+					parsing_heredoc.c\
 					parsing_space_operator.c\
 					parsing_utils.c\
 					parsing_utils2.c\

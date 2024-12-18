@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/13 20:17:05 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/18 17:11:09 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ struct s_cmd
 	char	*infile;
 	char	*lim;
 	int		heredoc_priority;
+	int		heredoc_quotes;
 	char	*outfile;
 	int		append;
 	int		pfd[2];
@@ -148,7 +149,8 @@ int			handle_output_redirection(t_cmd *cmd);
 int			child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manager);
 
 //exec
-int			handle_heredoc(t_manager *manager, t_cmd *current_cmd, int *previous_fd);
+int 		handle_heredoc(t_manager *manager, t_cmd *current_cmd, 
+							int *previous_fd, t_env *s_env);
 int			setup_pipe_and_fork(t_cmd *current_cmd, t_manager *manager);
 int			close_fds(t_cmd *current_cmd, int *previous_fd, t_manager *manager);
 int			execution(t_manager *manager, t_env *s_env);
@@ -165,11 +167,11 @@ void		replexpand_copy(char *str, char *result, int pos, char *expansion);
 char		*replace_expand(char *str, int pos, char *expansion);
 
 //expand
-int	expand(t_token *token, t_env *s_env);
+int		expand(t_token *token, t_env *s_env);
 char	*get_toexpand(char *str, int i);
 char	*expand_exists(char *to_expand, t_env *s_env);
 void	expand_dquote(t_token *current_token, t_env *s_env);
-
+char	*expand_heredoc(char *current_line, t_env *s_env);
 
 //fill_cmd_args
 int			count_args(t_token *current);
@@ -204,7 +206,10 @@ void		free_cmd_args(char **args);
 int			check_heredoc(t_manager *manager);
 int			check_infile(char *infile, t_manager *manager);
 int			check_outfile(char *outfile, t_manager *manager);
-int			create_doc(t_manager *manager, int *previous_fd, char *lim);
+int			create_doc(t_manager *manager, int *previous_fd, 
+						t_cmd *current_cmd, t_env *s_env);
+int			create_doc_loop(int *previous_fd, t_manager *manager, 
+						t_cmd *current_cmd, t_env *s_env);
 
 //oplist_manager
 t_manager	*init_manager(t_manager *manager, t_env first_env, int exitcode);
@@ -230,6 +235,12 @@ t_cmd		*cmd_last(t_cmd *cmd);
 //parsing_dir
 int			is_a_dir(char *line, int i);
 int			handle_dir(t_manager *manager, char *line, int i, t_token *current);
+
+//parsing_heredoc
+int			get_size_lim(char *limiter);
+char		*fill_lim(char *limiter, t_manager *manager, int i);
+int			parse_lim(t_token *current_token, t_cmd *cmd, t_manager *manager);
+
 
 //parsing space_operator
 int			is_symbols(char c);
