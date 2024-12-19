@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:58:50 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/19 11:44:49 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/19 14:37:54 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,11 @@ int	handle_redir(t_manager *manager, char *line, int i)
 	else
 		return (-1);
 	return (i);
-}
-*/
+}*/
 
 /*handle secondary type of the files or the following quotes, fill
 manager->word accordingly*/
+/*A SCINDER ET A COMPLETER*/
 int handle_secondary_type(t_manager *manager, char *line, int i)
 {
 	printf("sec type is %d\n", manager->sec_type);
@@ -59,7 +59,7 @@ int handle_secondary_type(t_manager *manager, char *line, int i)
 	{
 		printf("going in handle sec type\n");
 		if (manager->type == REDIR_HEREDOC)
-			return (heredoc_quotes(line, i, manager));
+			return (heredoc_quotes(line, i - 1, manager));
 		else
 			return (handle_quote(line, i - 1, manager));
 	}
@@ -77,6 +77,11 @@ int handle_secondary_type(t_manager *manager, char *line, int i)
 			printf("still coming here\n");
 	    	return (regular_word(manager, line, i));
 		}
+	}
+	else if (manager->sec_type == ENV_VAR)
+	{
+		if (manager->type == REDIR_HEREDOC)
+			return (heredoc_quotes(line, i - 1, manager));
 	}
 	else if (manager->sec_type == PIPE)
         return (parsing_error_op(manager, 4, '|', 0));
@@ -96,10 +101,13 @@ It will fill manager->word and return i's position after the word*/
 int handle_redir(t_manager *manager, char *line, int i)
 {
     manager->sec_type = 0;
+	printf("in handle redir word is [%s]\n", manager->word);
     if (manager->type == REDIR_IN && line[i] == '>')
         return (parsing_error(manager, 2));
-    if (manager->type == REDIR_OUT && line[i] == '<')
+    else if (manager->type == REDIR_OUT && line[i] == '<')
         return (parsing_error_op(manager, 4, '<', 0));
+	else if (manager->type == REDIR_HEREDOC && only_space(&line[i]))
+		return (parsing_error(manager, 2));
     while (line[i] && ft_is_space(line[i]))
 	{
         i++;

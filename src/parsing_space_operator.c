@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   parsing_space_operator.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/13 18:26:26 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/19 14:26:56 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,17 @@ int	only_space_symbols(char *str)
 	while (*str)
 	{
 		if (!ft_is_space(*str) && !is_symbols(*str))
+			return (0);
+		str++;	
+	}
+	return (1);
+}
+
+int	only_space(char *str)
+{
+	while (*str)
+	{
+		if (!ft_is_space(*str))
 			return (0);
 		str++;	
 	}

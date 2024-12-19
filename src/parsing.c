@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/19 11:28:02 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/19 14:41:42 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int process_token(t_manager *manager, char *line, int i)
         		if (manager->type == REDIR_APPEND || manager->type == REDIR_HEREDOC)
             		i++;
 				int tmp = handle_redir(manager, line, i);
-        		printf("tmp is %d so char is [%c]\n", tmp, line[tmp]);
+        		printf("tmp is %d\n", tmp);
 				return (tmp);
 			} 
 	else if (manager->type == PIPE)
@@ -137,6 +137,7 @@ int parsing(t_manager *manager, char *line)
 	        return (printf("token issue?\n"), free(manager->word), -1);
         token_add_back(&(manager->token_first), token_new(prec_space, manager));
         free(manager->word);
+		manager->word = NULL;
     }
     return (0);
 }

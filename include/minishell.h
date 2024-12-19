@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/19 10:05:27 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/19 14:25:47 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,6 +244,7 @@ int			heredoc_quotes(char *line, int i, t_manager *manager);
 
 
 //parsing space_operator
+int			only_space(char *str);
 int			is_symbols(char c);
 int			only_space_symbols(char *str);
 int			is_operators(t_manager *manager, char *line, int i);

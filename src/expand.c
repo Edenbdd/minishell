@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:12:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/18 16:12:39 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/19 13:54:47 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ char	*expand_heredoc(char *current_line, t_env *s_env)
 	char 	*to_expand;
 	i = 0;
 
-	while (current_line && current_line[i])
+	while (current_line && current_line[i] && current_line[i] != '\n')
 	{
 		if (current_line[i] == '$' && isalnum(current_line[i + 1]) 
 			&& !ft_is_space(current_line[i + 1]))
@@ -116,7 +116,14 @@ char	*expand_heredoc(char *current_line, t_env *s_env)
 			if (expansion)
 				current_line = replace_expand(current_line, i - 1, expansion);
 			else
+			{
 				current_line = cut_expand(current_line, i - 1);
+				if (!current_line)
+				{
+					current_line = ft_strdup("\n");
+					i = 0;
+				}
+			}	
 		}
 		i++;
 	}

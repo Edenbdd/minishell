@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/18 19:46:26 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/19 14:09:23 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,15 @@ int execution(t_manager *manager, t_env *s_env)
         if (handle_heredoc(manager, 
 			current_cmd, &previous_fd, s_env) == -1)
 		    return (-1);
+		if (current_cmd->lim && !current_cmd->args)
+		{
+			current_cmd = current_cmd->next;
+			unlink_heredoc(manager);
+			close(3);
+			close(4);	
+			id = 0;
+			continue;
+		}
 		id = setup_pipe_and_fork(current_cmd, manager);
         if (id == -1)
             return (-1);
