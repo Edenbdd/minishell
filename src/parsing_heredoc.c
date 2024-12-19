@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:17:44 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/18 19:35:30 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:11:18 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,18 +81,40 @@ int	parse_lim(t_token *current_token, t_cmd *cmd, t_manager *manager)
 	if (check_heredoc(manager) == - 1)
 		return (-1);
 	limiter = ft_strdup(current_token->value);
-	// printf("a parser [%s]\n", limiter); // debug, a virer par la suite
 	if (count_quotes(manager, limiter, 34, 39) == -1 //check nb de quotes impair
 		|| count_quotes(manager, limiter, 39, 34) == -1)
         return (-1);
 	if (count_quotes(manager, limiter, 34, 39) > 0 //check nb de quotes impair
 		|| count_quotes(manager, limiter, 39, 34) > 0)
-		cmd->heredoc_quotes = 1;
+		cmd->heredoc_quotes++;
 	i = 0;
 	cmd->lim = fill_lim(limiter, manager, i);
 	if (!cmd->lim)
 		return (-1);
 	free(limiter);
-    // printf("at the end of parse_lim, cmd->lim is [%s]\n", cmd->lim);
+    printf("at the end of parse_lim, cmd->lim is [%s]\n", cmd->lim);
 	return (0);
+}
+
+int	heredoc_quotes(char *line, int i, t_manager *manager)
+{
+	int		j;
+	char	*limiter;
+
+	j = 0;
+	while (line[i + j] && !ft_is_space(line[i + j]))
+		j++;
+	limiter = (char *)malloc(sizeof(char) * (j + 1));
+	if (!limiter)
+		return (-1);
+	j = 0;
+	while (line[i + j] && !ft_is_space(line[i + j]))
+	{	
+		limiter[j] = line[i + j];
+		j++;
+	}
+	limiter[j] = '\0';
+	manager->word = limiter;
+    printf("at the end of heredoc quotes, word is [%s]\n", manager->word);
+	return (i + j + 1);
 }

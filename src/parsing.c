@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/18 19:56:21 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/19 10:21:12 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int skip_spaces(char *line, int i, int *prec_space)
 int process_token(t_manager *manager, char *line, int i) 
 {
     if (manager->type == DOUBLE_QUOTE || manager->type == SIMPLE_QUOTE)
-        return (printf("going to handle quote\n"), handle_quote(line, i, manager));
+        return (handle_quote(line, i, manager));
     else if (manager->type == REDIR_IN || manager->type == REDIR_OUT ||
              manager->type == REDIR_APPEND || manager->type == REDIR_HEREDOC) 
 			{

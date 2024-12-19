@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:58:50 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/18 18:45:44 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:04:47 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,18 @@ int	handle_redir(t_manager *manager, char *line, int i)
 }
 */
 
-//handle redir : gestion des types secondaires
+/*handle secondary type of the files or the following quotes, fill
+manager->word accordingly*/
 int handle_secondary_type(t_manager *manager, char *line, int i)
 {
 	// printf("sec type is %d\n", manager->sec_type);
     if (manager->sec_type == DOUBLE_QUOTE || manager->sec_type == SIMPLE_QUOTE)
 	{
-		// printf("char is [%c] and i is %d\n", line[i], i);
-		return (handle_quote(line, i - 1, manager));
+		printf("going in handle sec type\n");
+		if (manager->type == REDIR_HEREDOC)
+			return (heredoc_quotes(line, i - 1, manager));
+		else
+			return (handle_quote(line, i - 1, manager));
 	}
 	else if (manager->sec_type == CMD_ARG)
         return (regular_word(manager, line, i));
@@ -73,7 +77,9 @@ int handle_secondary_type(t_manager *manager, char *line, int i)
         return (parsing_error_op(manager, 4, '<', '<'));
     return -1;
 }
-
+/*Handle redirection operators errors & get the following word 
+which is a file or a limiter with handle_secondary_type. 
+It will fill manager->word and return i's position after the word*/
 int handle_redir(t_manager *manager, char *line, int i)
 {
     manager->sec_type = 0;
