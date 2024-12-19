@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/18 15:17:24 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/19 17:24:26 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,20 @@ int	redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 		}
 		else if (current_token->type == REDIR_IN)
 		{
-			cmd->heredoc_priority = 0;
+			cmd->heredoc_count = 0;
 			if (check_infile(current_token->value, manager) == -1)
 				return (-1);
 			cmd->infile = ft_strdup(current_token->value);
 		}
-		else if (current_token->type == REDIR_HEREDOC
-					&& parse_lim(current_token, cmd, manager) == -1)
-			return (-1);
+		else if (current_token->type == REDIR_HEREDOC)
+		{
+			printf("I come in the redir heredoc\n");
+			if (cmd->heredoc_count > 0)
+				break;
+			if (parse_lim(current_token, cmd, manager) == -1)
+				return (-1);	
+			cmd->heredoc_count++;
+		}
 		current_token = current_token->next;
 	}
 	return (0);
@@ -91,11 +97,14 @@ t_token	*cmd_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 {
 	while (current_token)
 	{
+		printf("in cmd loop herecount %d\n", cmd->heredoc_count);
 		if (current_token->type == CMD_ARG
 			|| current_token->type == DOUBLE_QUOTE
 			|| current_token->type == SIMPLE_QUOTE)
 				current_token = fill_args(current_token, cmd, manager);
-		if (!current_token || current_token->type == PIPE)
+		printf("after fill args current value is [%s]\n", current_token->value);
+		if (!current_token || current_token->type == PIPE
+			|| cmd->heredoc_count > 0)
 			break;
 		current_token = current_token->next;
 	}
@@ -113,15 +122,24 @@ int	fill_cmd(t_manager *manager, t_env *s_env)
 	cmd_node_count = 0;
 	while (current_token)
 	{
+		printf("TOKEN TO CMD LOOP\n");
 		if (expand_loop(current_token, s_env, manager) == -1)
 			return (-1);
 		cmd = cmd_new();
+		printf("before redir token is [%s]\n", current_token->value);
 		if (redir_loop(current_token, cmd, manager) == -1)
 			return (-1);
+		printf("after redir loop token is [%s] and herecount is %d\n", current_token->value, cmd->heredoc_count);
 		current_token = cmd_loop(current_token, cmd, manager);
+		if (current_token)
+			printf("after cmd loop token is [%s]\n", current_token->value);
+		else
+			printf("end of current token\n");
 		create_cmd_list(cmd, cmd_node_count, manager);
-		if (current_token && current_token->type == PIPE)
+		if (current_token && (current_token->type == PIPE 
+			|| current_token->type == REDIR_HEREDOC))
 		{
+			printf("I come here\n");
 			current_token = current_token->next;
 			cmd_node_count++;
 		}

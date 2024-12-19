@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   exec_child.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/13 20:17:52 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/19 16:46:25 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manager
 
 int handle_input_redirection(t_cmd *cmd, int *previous_fd)
 {
-    if (cmd->infile && !cmd->heredoc_priority)
+    if (cmd->infile && !cmd->heredoc_count)
         *previous_fd = open(cmd->infile, O_RDONLY);
     dup2(*previous_fd, STDIN_FILENO);
     return 0;
@@ -82,7 +82,7 @@ int child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manager
     char *path;
     char **env_arr;
 
-    if (cmd->infile || cmd->index != 0 || cmd->heredoc_priority)
+    if (cmd->infile || cmd->index != 0 || cmd->heredoc_count)
         handle_input_redirection(cmd, previous_fd);
     if (cmd->outfile || (cmd->index + 1) != manager->size_cmd)
     {

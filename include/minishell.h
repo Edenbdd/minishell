@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/19 15:25:42 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/19 16:45:53 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ struct s_cmd
 	char	**args;
 	char	*infile;
 	char	*lim;
-	int		heredoc_priority;
+	int		heredoc_count;
 	int		heredoc_quotes;
 	char	*outfile;
 	int		append;

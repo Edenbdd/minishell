@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:17:44 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/19 15:44:58 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/19 16:46:59 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	parse_lim(t_token *current_token, t_cmd *cmd, t_manager *manager)
 	char	*limiter;
 	int		i;
 
-	cmd->heredoc_priority = 1;
+	cmd->heredoc_count++;
 	if (check_heredoc(manager) == - 1)
 		return (-1);
 	limiter = ft_strdup(current_token->value);
