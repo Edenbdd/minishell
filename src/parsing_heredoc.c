@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:17:44 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/19 11:44:15 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/19 15:44:58 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ int	get_size_lim(char *limiter)
 		if (limiter[i] == '\'' || limiter[i] == '"')
 			i++;
 		else if (limiter[i + 1] && limiter[i] == '$' 
-			&& (limiter[i + 1] == '\'' || limiter[i + 1] == '"'))
+			&& (limiter[i + 1] == '\'' || limiter[i + 1] == '"') 
+			&& !quotes_before(limiter, i - 1))
 			i += 2;
 		else
 		{
@@ -39,6 +40,17 @@ int	get_size_lim(char *limiter)
 	}
 	return (count_char);	
 }
+int		quotes_before(char *str, int i)
+{
+	while (i >= 0)
+	{
+		if (str[i] == '"')
+			return (1);
+		i--;
+	}
+	return (0);
+}
+
 /*Fill the limiter*/
 char	*fill_lim(char *limiter, t_manager *manager, int i)
 {
@@ -57,7 +69,8 @@ char	*fill_lim(char *limiter, t_manager *manager, int i)
 		if (limiter[i] == '\'' || limiter[i] == '"')
 			i++;
 		else if (limiter[i + 1] && limiter[i] == '$' 
-			&& (limiter[i + 1] == '\'' || limiter[i + 1] == '"'))
+			&& (limiter[i + 1] == '\'' || limiter[i + 1] == '"') 
+			&& !quotes_before(limiter, i - 1))
 			i += 2;
 		else
 		{

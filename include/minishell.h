@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/19 14:25:47 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/19 15:25:42 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,6 +237,7 @@ int			is_a_dir(char *line, int i);
 int			handle_dir(t_manager *manager, char *line, int i, t_token *current);
 
 //parsing_heredoc
+int			quotes_before(char *str, int i);
 int			get_size_lim(char *limiter);
 char		*fill_lim(char *limiter, t_manager *manager, int i);
 int			parse_lim(t_token *current_token, t_cmd *cmd, t_manager *manager);
