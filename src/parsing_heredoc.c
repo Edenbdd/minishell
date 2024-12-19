@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:17:44 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/19 11:11:18 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:44:15 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,11 +102,13 @@ int	heredoc_quotes(char *line, int i, t_manager *manager)
 	char	*limiter;
 
 	j = 0;
+	printf("starting char is [%c]\n", line[i + j]);
 	while (line[i + j] && !ft_is_space(line[i + j]))
 		j++;
 	limiter = (char *)malloc(sizeof(char) * (j + 1));
 	if (!limiter)
 		return (-1);
+	printf("j is %d\n", j);
 	j = 0;
 	while (line[i + j] && !ft_is_space(line[i + j]))
 	{	

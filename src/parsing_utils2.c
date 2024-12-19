@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:58:50 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/19 11:04:47 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:44:49 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,18 +54,31 @@ int	handle_redir(t_manager *manager, char *line, int i)
 manager->word accordingly*/
 int handle_secondary_type(t_manager *manager, char *line, int i)
 {
-	// printf("sec type is %d\n", manager->sec_type);
+	printf("sec type is %d\n", manager->sec_type);
     if (manager->sec_type == DOUBLE_QUOTE || manager->sec_type == SIMPLE_QUOTE)
 	{
 		printf("going in handle sec type\n");
 		if (manager->type == REDIR_HEREDOC)
-			return (heredoc_quotes(line, i - 1, manager));
+			return (heredoc_quotes(line, i, manager));
 		else
 			return (handle_quote(line, i - 1, manager));
 	}
 	else if (manager->sec_type == CMD_ARG)
-        return (regular_word(manager, line, i));
-    else if (manager->sec_type == PIPE)
+	{
+		if (manager->type == REDIR_HEREDOC &&
+			(count_quotes(manager, &line[i], '\'', '"') > 0
+			|| count_quotes(manager, &line[i], '"', '\'') > 0))
+		{
+			printf("coming here\n");
+			return (heredoc_quotes(line, i, manager));
+		}
+		else
+		{
+			printf("still coming here\n");
+	    	return (regular_word(manager, line, i));
+		}
+	}
+	else if (manager->sec_type == PIPE)
         return (parsing_error_op(manager, 4, '|', 0));
     else if (manager->sec_type == REDIR_OUT)
         return (parsing_error_op(manager, 4, '>', 0));
@@ -88,9 +101,14 @@ int handle_redir(t_manager *manager, char *line, int i)
     if (manager->type == REDIR_OUT && line[i] == '<')
         return (parsing_error_op(manager, 4, '<', 0));
     while (line[i] && ft_is_space(line[i]))
+	{
         i++;
+	}
+	printf("r we at h ? [%c] with i %d\n", line[i], i);
     i = verif_operator(manager, line, i, &(manager->sec_type));
-    return (handle_secondary_type(manager, line, i));
+	int ret = handle_secondary_type(manager, line, i);
+	printf("ret in handle redir from handle sec type is [%d]\n", ret);
+    return (ret);
 }
 
 int	handle_pipe(t_manager *manager, char *line, int i)
