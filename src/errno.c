@@ -67,7 +67,7 @@ int	errno_len(int errnb)
 
 ///////////////////////////
 //recuperer un token "mot"
-int	expand_errno(t_manager *manager)
+int	expand_errno(t_manager *manager, int i)
 {
 	int		j;
 	int 	len_errno;
@@ -84,5 +84,5 @@ int	expand_errno(t_manager *manager)
 
 	printf("errno str : [%s]\n", manager->word);
 	printf("taille errno : [%d]\n", len_errno);
-	return (len_errno);
+	return (i + 1);
 }
