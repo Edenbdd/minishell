@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/19 16:45:53 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/20 11:26:36 by smolines         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -134,6 +134,11 @@ char		**convert_env(t_env *s_env);
 char		*get_content(char *str);
 t_env		*handle_env(char **env);
 int			envsize(t_env *lst);
+
+//errno
+int			errno_to_str(int errno_value, char* err_str);
+char		*errno_inorder(char* err_str, int i);
+int			expand_errno(t_manager *manager);
 
 //error
 int			parsing_error(t_manager *manager, int code);
