@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/19 16:46:25 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/20 14:17:32 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,5 @@ int child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manager
     env_arr = convert_env(s_env);
     if (execve(path, cmd->args, env_arr) == -1)
         return (open_close_error(manager, 2));
-
     return (0);
 }

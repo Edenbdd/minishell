@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/19 17:24:26 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:08:59 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 		else if (current_token->type == REDIR_HEREDOC)
 		{
 			printf("I come in the redir heredoc\n");
-			if (cmd->heredoc_count > 0)
+			if (cmd->heredoc_count > 1)
 				break;
 			if (parse_lim(current_token, cmd, manager) == -1)
 				return (-1);	
@@ -102,9 +102,12 @@ t_token	*cmd_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 			|| current_token->type == DOUBLE_QUOTE
 			|| current_token->type == SIMPLE_QUOTE)
 				current_token = fill_args(current_token, cmd, manager);
-		printf("after fill args current value is [%s]\n", current_token->value);
+		if (current_token)
+			printf("after fill args current value is [%s]\n", current_token->value);
+		else
+			printf("after fill args current token is at the end\n");
 		if (!current_token || current_token->type == PIPE
-			|| cmd->heredoc_count > 0)
+			|| cmd->heredoc_count > 1)
 			break;
 		current_token = current_token->next;
 	}

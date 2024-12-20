@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/20 11:26:36 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/20 14:11:53 by aubertra         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -204,7 +204,7 @@ void		free_env(t_env *env);
 //free
 int			closing(t_cmd *cmd, int *previous_fd, t_manager *manager);
 void		free_path(char **paths);
-void		unlink_heredoc(t_manager *manager);
+int			unlink_heredoc(t_manager *manager);
 void		free_cmd_args(char **args);
 
 //handle_files

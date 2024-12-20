@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/18 18:09:09 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:20:43 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ return (-1);
 
 int open_close_error(t_manager *manager, int code)
 {
+	(void)manager; // see if we need it later
 	if (code == 1)
 		write (2, "bash: open or close error\n", 26);
 	else if (code == 2)
@@ -88,8 +89,6 @@ int open_close_error(t_manager *manager, int code)
 		write (2, "bash: join error\n", 17);
 	else if (code == 7)
 		write (2, "bash: malloc error\n", 18);	
-	if (manager)
-		free_manager(manager);
 	return (-1);
 }
 

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   free_manager.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 12:00:56 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/11 15:43:07 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:59:16 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ void	free_manager(t_manager *manager)
 		free_cmd(manager->cmd_first);
 	if (manager->export_first)
 		free_export(manager->export_first);
+	manager = NULL;
 }
 
 void	free_env(t_env *env)

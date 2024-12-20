@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/19 17:31:28 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:20:21 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,16 @@ int	main(int argc, char **argv, char **env)
 			free_manager(&manager);
 			continue;
 		}
-		// printf("check if the expand worked: [%s]\n", manager.cmd_first->args[1]);
-		// printf("exit status [%d]\n", manager.exit_status);
+		printf("check if the expand worked: [%s]\n", manager.cmd_first->args[1]);
+		printf("exit status [%d]\n", manager.exit_status);
 		printf("display de la liste cmd\n");
 		cmd_display(manager.cmd_first);
-		execution(&manager, first_env);
+		if (execution(&manager, first_env) == -1)
+		{
+			exitcode = manager.exit_status;
+			free_manager(&manager);
+			continue;
+		}
 		exitcode = manager.exit_status;
 		free_manager(&manager);
 		break;
