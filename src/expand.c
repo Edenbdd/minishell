@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:12:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/20 18:21:38 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/20 18:37:35 by smolines         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -28,6 +28,9 @@ int	expand(t_manager *manager, t_token *token, t_env *s_env)
 		if (*(token)->value == '?')	
 		{
 //			printf("\033[34mdans expand - expand\033[0m\n");
+			if (expand_errno(manager, token->value) == NULL)
+				return (open_close_error(manager, 8));
+			free(token->value);
 			token->value = expand_errno(manager, token->value);
 			found_something = 1;
 		}	
