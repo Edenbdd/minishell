@@ -1,29 +1,37 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:12:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/19 13:54:47 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/20 16:51:47 by smolines         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minishell.h"
 #include "libft.h"
 
 /*fonction handling the expansion, included in between quotes and in heredoc*/
 
-int	expand(t_token *token, t_env *s_env)
+int	expand(t_manager *manager, t_token *token, t_env *s_env)
 {
 	t_env	*current;
 	int		found_something;
 
 	found_something = 0;
 	current = s_env;
+	printf("\033[34mAU DEBUT dans expand - expand\033[0m\n");
 	while (current)
 	{
+		if (*(token)->value == '?')	
+		{
+			printf("\033[34mdans expand - expand\033[0m\n");
+			token->value = expand_errno(manager, token->value);
+			found_something = 1;
+		}	
+		
 		if (!ft_strcmp(token->value, current->field))
 		{
 			free(token->value);

@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/20 14:11:53 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/20 17:36:08 by smolines         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -136,9 +136,10 @@ t_env		*handle_env(char **env);
 int			envsize(t_env *lst);
 
 //errno
-int			errno_to_str(int errno_value, char* err_str);
+char		*errno_to_str(int errno_value, char *err_str);
 char		*errno_inorder(char* err_str, int i);
-int			expand_errno(t_manager *manager);
+char 		*expand_errno(t_manager *manager, char *expand_word);
+
 
 //error
 int			parsing_error(t_manager *manager, int code);
@@ -172,11 +173,12 @@ void		replexpand_copy(char *str, char *result, int pos, char *expansion);
 char		*replace_expand(char *str, int pos, char *expansion);
 
 //expand
-int		expand(t_token *token, t_env *s_env);
+int		expand(t_manager *manager, t_token *token, t_env *s_env);
 char	*get_toexpand(char *str, int i);
 char	*expand_exists(char *to_expand, t_env *s_env);
 void	expand_dquote(t_token *current_token, t_env *s_env);
 char	*expand_heredoc(char *current_line, t_env *s_env);
+
 
 //fill_cmd_args
 int			count_args(t_token *current);

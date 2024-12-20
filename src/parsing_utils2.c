@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:58:50 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/20 12:34:30 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/20 17:26:23 by smolines         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -154,12 +154,13 @@ int handle_env_pars(t_manager *manager, char *line, int i)
 		manager->type = CMD_ARG;
 		manager->word = ft_strdup("$\0");
 	}
-	else if (line[i - 1] == '$' && (line[i] == '?'))
-	{
-		printf("je suis dans handle envs pars errno\n");
-		i = expand_errno(manager);
-	}
-	else 
+	//  else if (line[i - 1] == '$' && (line[i] == '?'))
+	//  {
+	// // 	printf("je suis dans handle envs pars errno\n");
+	// // 	i = expand_errno(manager, i);
+	// //i = i + 1;
+	//  }
+	// else 
 		i = regular_word(manager, line, i);
 	return (i);
 }

@@ -47,22 +47,26 @@ int	expand_loop(t_token *current_token, t_env *s_env, t_manager *manager)
 }
 */
 
+
 // expand loop / gestion du type env_var 
 int exploop_env_var(t_token *current_token, t_env *s_env, t_manager *manager)
 {
-    if (!expand(current_token, s_env))
-    {
+//     printf("\033[34mcoucou je suis dans fill cmd expand - exloop_env_var\033[0m\n");
+    if (!expand(manager, current_token, s_env))
+	{
+//     printf("\033[34mcoucou je suis dans fill cmd expand - exloop_env_var\033[0m\n");
         current_token->value = NULL;
-        if (current_token->next == NULL && current_token->prev == NULL)
+		if (current_token->next == NULL && current_token->prev == NULL)
             return (-1);
     }
     else
     {
-        current_token->type = is_operators(manager, current_token->value, 0);
-        if (current_token->type == DIR)
-            return (handle_dir(manager, NULL, 0, current_token));
-    }
-    return (0);
+//		printf("\033[34mcoucou je suis dans fill cmd expand - exloop_env_var - ELSE\033[0m\n");
+		current_token->type = is_operators(manager, current_token->value, 0);
+		if (current_token->type == DIR)
+			return (handle_dir(manager, NULL, 0, current_token));
+	}
+	return (0);
 }
 
 // expand loop : gestion du type double quote
@@ -83,8 +87,12 @@ int expand_loop(t_token *current_token, t_env *s_env, t_manager *manager)
     {
         if (current_token->type == ENV_VAR)
         {
+            // printf("\033[34mcoucou je suis dans fill cmd expand - expand-exloop\033[0m\n");
             if (exploop_env_var(current_token, s_env, manager) == -1)
+            {
+                    // printf("\033[34met la je return\033[0m\n");
                 return (-1);
+            }
         }
         else
         {
