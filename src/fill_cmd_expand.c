@@ -87,7 +87,7 @@ int expand_loop(t_token *current_token, t_env *s_env, t_manager *manager)
     {
         if (current_token->type == ENV_VAR)
         {
-            // printf("\033[34mcoucou je suis dans fill cmd expand - expand-exloop\033[0m\n");
+             printf("\033[34mcoucou je suis dans fill cmd expand - expand-loop\033[0m\n");
             if (exploop_env_var(current_token, s_env, manager) == -1)
             {
                     // printf("\033[34met la je return\033[0m\n");
