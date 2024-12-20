@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:10:09 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/20 17:43:12 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/20 18:21:54 by smolines         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -67,15 +67,15 @@ int	errno_len(int errnb)
 }
 
 
+
 ///////////////////////////
 //recuperer un token "mot"
 char *expand_errno(t_manager *manager, char *expand_word)
 {
-	int		j;
 	int 	len_errno;
 
-	j = 0;
-
+	if ((manager->exit_status < 0) || (manager->exit_status > 128))
+		return (NULL);
 	// printf("\033[32mmanager->exit_status : %d\033[0m\n", manager->exit_status);
 	// printf("\033[32expand word exit_status : %s\033[0m\n", expand_word);
 	
@@ -85,12 +85,11 @@ char *expand_errno(t_manager *manager, char *expand_word)
 	// 	return (NULL);
 	
 	expand_word = ft_itoa(manager->exit_status);	
-	
 	// expand_word =	errno_to_str(manager->exit_status, expand_word);
 	// expand_word = errno_inorder(expand_word, len_errno);
 
-	printf("\033[32mexpand errno : [%s]\033[0m\n", expand_word);
-	printf("\033[32mtaille errno : [%d]\033[0m\n", len_errno);
+//	printf("\033[32mexpand errno : [%s]\033[0m\n", expand_word);
+//	printf("\033[32mtaille errno : [%d]\033[0m\n", len_errno);
 	return (expand_word);
 }
 
