@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/20 14:11:53 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/20 17:27:42 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ struct s_token
 	char	*value;
 	int		type;
 	int		space; //1 if precedant char is space, 0 otherwise
+	int		cmd_done;
 	t_token	*next;
 	t_token	*prev;
 };

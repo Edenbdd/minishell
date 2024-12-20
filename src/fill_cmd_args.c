@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand.c                                           :+:      :+:    :+:   */
+/*   fill_cmd_args.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:12:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/13 14:18:41 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/20 17:34:39 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ t_token *fill_args_values(t_token *current, char **args, int cmd_count)
         i++;
     }
     args[i] = NULL;
+    printf("in fill args arg 0 is [%s]\n", args[0]);
     return current;
 }
 
@@ -93,6 +94,6 @@ t_token *fill_args(t_token *current, t_cmd *cmd, t_manager *manager)
     cmd_count = count_args(current);
     cmd->args = allocate_args(cmd_count);
     if (!cmd->args)
-        return NULL;
+        return (NULL);
     return fill_args_values(current, cmd->args, cmd_count);
 }

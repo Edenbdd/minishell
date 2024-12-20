@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/20 14:20:32 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/20 18:29:56 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,11 @@ int setup_pipe_and_fork(t_cmd *current_cmd, t_manager *manager)
 
 int close_fds(t_cmd *current_cmd, int *previous_fd, t_manager *manager)
 {
-    if (current_cmd->pfd[1] != -1)
+	// if (!current_cmd)
+	// 	printf("no current cmd in close fds ?\n");
+	// if (!current_cmd->pfd[1])
+	// 	printf("no current cmd in close fds ?\n");
+	if (current_cmd->pfd[1] != -1)
     {
         if (close(current_cmd->pfd[1]) == -1)
             return (open_close_error(manager, 1));
@@ -110,18 +114,11 @@ int close_fds(t_cmd *current_cmd, int *previous_fd, t_manager *manager)
     if ((current_cmd->index >= 1 || current_cmd->heredoc_count > 0) 
 			&& *previous_fd != -1)
     {
-		printf("prev is %d\n", *previous_fd);
+		// printf("prev is %d\n", *previous_fd);
         if (close(*previous_fd) == -1)
             return (open_close_error(manager, 1));
 	}
     *previous_fd = current_cmd->pfd[0];
-	//  if (current_cmd->pfd[0] != -1) je peux pas fermer le pfd[0] jsp pq ????
-    // {
-	// 	printf("closing the 0");
-    //     if (close(current_cmd->pfd[0]) == -1)
-    //         return (open_close_error(manager, 1));
-	// 	current_cmd->pfd[0] = -1;
-	// }
     return (0);
 }
 
@@ -141,16 +138,17 @@ int execution(t_manager *manager, t_env *s_env)
         if (handle_heredoc(manager, 
 			current_cmd, &previous_fd, s_env) == -1)
 		    return (-1);
-		printf("after handle heredoc prev is %d\n", previous_fd);
-		printf("in the execution of heredoc count %d\n", current_cmd->heredoc_count);
-		if (current_cmd->lim 
-			&& current_cmd->heredoc_count > 1)
+		// printf("after handle heredoc prev is %d\n", previous_fd);
+		// printf("in the execution of heredoc count %d\n", current_cmd->heredoc_count);
+		if (current_cmd->heredoc_count > 1 || 
+			 (current_cmd->heredoc_count == 1))
 		{
-			printf("I come into the if lim and if heredoc count\n");
-			current_cmd = current_cmd->next;
+			//  && !ft_strcmp(current_cmd->args[0], "\n")
+			// printf("I come into the if lim and if heredoc count\n");
 			if (close_fds(current_cmd, &previous_fd, manager) == -1)
             	return (-1);
 			id = 0;
+			current_cmd = current_cmd->next;
 			continue;
 		}
 		id = setup_pipe_and_fork(current_cmd, manager);
@@ -168,11 +166,11 @@ int execution(t_manager *manager, t_env *s_env)
 	if (previous_fd != -1)
 	{
 		if (close(previous_fd) == -1)
-			return (printf("prev close error\n"), -1);
+			return (-1);
 	}
 	if (unlink_heredoc(manager) == -1)
 		return (-1);
-	printf("I go into the waiting\n");
+	// printf("I go into the waiting\n");
     return (waiting(id));
 }
 
@@ -183,6 +181,7 @@ int	waiting(int id_last)
 	int	status;
 	int	retcode;
 
+	retcode = 0;
 	while (ECHILD != errno)
 	{
 		if (waitpid(-1, &status, 0) == id_last)

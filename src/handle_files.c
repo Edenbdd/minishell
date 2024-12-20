@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:06:55 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/18 18:02:11 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/20 16:58:28 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,13 @@ int		create_doc_loop(int *previous_fd, t_manager *manager, t_cmd *current_cmd, t
 			|| !ft_strncmp(current_line, tmp, ft_strlen(current_line)))
 			return (free(tmp), free(current_line), 0);
 		if (!current_cmd->heredoc_quotes)
-			current_line = expand_heredoc(current_line, s_env);
+		{
+			char *tmp2 = ft_strdup(current_line);
+			free(current_line);
+			current_line = expand_heredoc(tmp2, s_env);
+			// printf("after expand heredoc, current_line is [%s]\n", current_line);
+			free(tmp2);
+		}
 		if (write(*previous_fd, current_line, ft_strlen(current_line)) == -1)
 			return (open_close_error(manager, 5));
 		free(current_line);

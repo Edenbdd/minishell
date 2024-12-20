@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   parsing_utils2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:58:50 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/20 12:34:30 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/20 14:49:30 by aubertra         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 //Parsing utils function dealing with redirections token
 
@@ -54,10 +54,10 @@ manager->word accordingly*/
 /*A SCINDER ET A COMPLETER*/
 int handle_secondary_type(t_manager *manager, char *line, int i)
 {
-	printf("sec type is %d\n", manager->sec_type);
+	// printf("sec type is %d\n", manager->sec_type);
     if (manager->sec_type == DOUBLE_QUOTE || manager->sec_type == SIMPLE_QUOTE)
 	{
-		printf("going in handle sec type\n");
+		// printf("going in handle sec type\n");
 		if (manager->type == REDIR_HEREDOC)
 			return (heredoc_quotes(line, i - 1, manager));
 		else
@@ -69,12 +69,12 @@ int handle_secondary_type(t_manager *manager, char *line, int i)
 			(count_quotes(manager, &line[i], '\'', '"') > 0
 			|| count_quotes(manager, &line[i], '"', '\'') > 0))
 		{
-			printf("coming here\n");
+			// printf("coming here\n");
 			return (heredoc_quotes(line, i, manager));
 		}
 		else
 		{
-			printf("still coming here\n");
+			// printf("still coming here\n");
 	    	return (regular_word(manager, line, i));
 		}
 	}
@@ -101,7 +101,7 @@ It will fill manager->word and return i's position after the word*/
 int handle_redir(t_manager *manager, char *line, int i)
 {
     manager->sec_type = 0;
-	printf("in handle redir word is [%s]\n", manager->word);
+	// printf("in handle redir word is [%s]\n", manager->word);
     if (manager->type == REDIR_IN && line[i] == '>')
         return (parsing_error(manager, 2));
     else if (manager->type == REDIR_OUT && line[i] == '<')
@@ -112,10 +112,10 @@ int handle_redir(t_manager *manager, char *line, int i)
 	{
         i++;
 	}
-	printf("r we at h ? [%c] with i %d\n", line[i], i);
+	// printf("r we at h ? [%c] with i %d\n", line[i], i);
     i = verif_operator(manager, line, i, &(manager->sec_type));
 	int ret = handle_secondary_type(manager, line, i);
-	printf("ret in handle redir from handle sec type is [%d]\n", ret);
+	// printf("ret in handle redir from handle sec type is [%d]\n", ret);
     return (ret);
 }
 
@@ -156,7 +156,7 @@ int handle_env_pars(t_manager *manager, char *line, int i)
 	}
 	else if (line[i - 1] == '$' && (line[i] == '?'))
 	{
-		printf("je suis dans handle envs pars errno\n");
+		// printf("je suis dans handle envs pars errno\n");
 		i = expand_errno(manager);
 	}
 	else 

@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   errno.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:10:09 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/20 12:38:56 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/20 14:48:17 by aubertra         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 // pour gerer $?
 
@@ -82,7 +82,7 @@ int	expand_errno(t_manager *manager)
 	j =	errno_to_str(manager->exit_status, manager->word);
 	manager->word = errno_inorder(manager->word, j);
 
-	printf("errno str : [%s]\n", manager->word);
-	printf("taille errno : [%d]\n", len_errno);
+	// printf("errno str : [%s]\n", manager->word);
+	// printf("taille errno : [%d]\n", len_errno);
 	return (len_errno);
 }

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/20 13:20:21 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/20 16:57:50 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	main(int argc, char **argv, char **env)
 			free_manager(&manager);
 			continue ;
 		}
-		printf("display de la liste token\n");
+		printf("\033[31mdisplay de la liste token\033[0m\n");
 		token_display(manager.token_first);
 		if (fill_cmd(&manager, first_env) == -1)
 		{
@@ -58,9 +58,9 @@ int	main(int argc, char **argv, char **env)
 			free_manager(&manager);
 			continue;
 		}
-		printf("check if the expand worked: [%s]\n", manager.cmd_first->args[1]);
+		// printf("check if the expand worked: [%s]\n", manager.cmd_first->args[1]);
 		printf("exit status [%d]\n", manager.exit_status);
-		printf("display de la liste cmd\n");
+		printf("\033[31mdisplay de la liste cmd\033[0m\n");
 		cmd_display(manager.cmd_first);
 		if (execution(&manager, first_env) == -1)
 		{
@@ -70,7 +70,7 @@ int	main(int argc, char **argv, char **env)
 		}
 		exitcode = manager.exit_status;
 		free_manager(&manager);
-		break;
+		// break;
 	}
 	printf("we exit\n");
 	free_env(first_env);

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 22:30:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/13 17:08:53 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/20 17:28:01 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ t_token	*token_new(int prec_space, t_manager *manager)
 	new_token->space = prec_space;
 	new_token->next = NULL;
 	new_token->prev = NULL;
+	new_token->cmd_done = 0;
 	return (new_token);
 }
 

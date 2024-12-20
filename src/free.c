@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 12:00:56 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/20 14:18:41 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/20 14:48:57 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	closing(t_cmd *cmd, int *previous_fd, t_manager *manager)
 	}
 	if (*previous_fd != -1)
 	{
-		printf("for cmd [%s] I close prev %d\n", cmd->args[0], *previous_fd);
+		// printf("for cmd [%s] I close prev %d\n", cmd->args[0], *previous_fd);
 		if (close(*previous_fd) == -1)
 			return (open_close_error(manager, 1));
 	}

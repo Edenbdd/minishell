@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/20 13:08:59 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/20 18:23:32 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@
 
 int	redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 {
-	while (current_token && current_token->type != PIPE)
+	while (current_token && current_token->type != PIPE
+			&& !(cmd->heredoc_count > 0 && current_token->type == REDIR_HEREDOC))
 	{
 		if (current_token->type == REDIR_APPEND)
 		{
@@ -95,9 +96,10 @@ int	redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 
 t_token	*cmd_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 {
+	current_token->cmd_done = 1;
 	while (current_token)
 	{
-		printf("in cmd loop herecount %d\n", cmd->heredoc_count);
+		// printf("in cmd loop herecount %d\n", cmd->heredoc_count);
 		if (current_token->type == CMD_ARG
 			|| current_token->type == DOUBLE_QUOTE
 			|| current_token->type == SIMPLE_QUOTE)
@@ -107,7 +109,7 @@ t_token	*cmd_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 		else
 			printf("after fill args current token is at the end\n");
 		if (!current_token || current_token->type == PIPE
-			|| cmd->heredoc_count > 1)
+			|| cmd->heredoc_count >= 1) //j avais mis >1, voir si ca pose pb 
 			break;
 		current_token = current_token->next;
 	}
@@ -120,12 +122,12 @@ int	fill_cmd(t_manager *manager, t_env *s_env)
 	t_token	*current_token;
 	t_cmd	*cmd;
 	int		cmd_node_count;
-
+	
 	current_token = manager->token_first;
 	cmd_node_count = 0;
 	while (current_token)
 	{
-		printf("TOKEN TO CMD LOOP\n");
+		printf("\033[0;34mTOKEN TO CMD LOOP\033[0m\n");
 		if (expand_loop(current_token, s_env, manager) == -1)
 			return (-1);
 		cmd = cmd_new();
@@ -139,13 +141,16 @@ int	fill_cmd(t_manager *manager, t_env *s_env)
 		else
 			printf("end of current token\n");
 		create_cmd_list(cmd, cmd_node_count, manager);
+		cmd_node_count++; //moved here
 		if (current_token && (current_token->type == PIPE 
-			|| current_token->type == REDIR_HEREDOC))
+			|| (current_token->type == REDIR_HEREDOC
+			&& current_token->cmd_done == 1)))
 		{
-			printf("I come here\n");
+			printf("I come here to skip to the next token\n");
 			current_token = current_token->next;
-			cmd_node_count++;
+			//cmd_node_count++; was here before but moved on top, may create bug
 		}
+		printf("cmd created: arg[0] [%s], lim [%s]\n", cmd->args[0], cmd->lim);
 	}
 	return (0);
 }

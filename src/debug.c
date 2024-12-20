@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:19 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/20 13:02:47 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/20 16:52:10 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	cmd_display(t_cmd *cmd)
 		return ;
 	while (cmd)
 	{
-		printf("is the bug here \n");
+		// printf("is the bug here \n");
 		printf("arg[0]: [%s]-- infile: [%s]-- lim: [%s] -- append: [%d]-- outfile:[%s]\n",cmd->args[0], cmd->infile,  cmd->lim, cmd->append, cmd->outfile);
 		cmd = cmd->next;
 	}
