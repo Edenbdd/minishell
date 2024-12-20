@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/20 14:49:45 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/20 19:16:08 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,9 @@ int token_error(t_manager *manager) //a revoir/check
 			return (parsing_error_op(manager, 4, '|', 0)); //ok
 	while (token_tour)
 	{
+		if (token_tour->next && token_tour->type == REDIR_HEREDOC &&
+			token_tour->next->type == REDIR_HEREDOC)
+			manager->heredoc_line = 1;
 		if ((token_tour->type == REDIR_IN && !token_tour->value)
 		|| (token_tour->type == REDIR_OUT && token_tour->value == NULL)
 		|| (token_tour->type == REDIR_HEREDOC && token_tour->value == NULL)

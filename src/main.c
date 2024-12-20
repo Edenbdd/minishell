@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/20 16:57:50 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/20 19:38:50 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	main(int argc, char **argv, char **env)
 		line = readline("$>");
 		//ajouter protection + signaux plus tard
 		if (!line)
+			break;
+		else if (!ft_strncmp(line, "\n", 1))
 			continue;
 		if (*line)
 			add_history(line);
@@ -64,6 +66,7 @@ int	main(int argc, char **argv, char **env)
 		cmd_display(manager.cmd_first);
 		if (execution(&manager, first_env) == -1)
 		{
+			printf("exec error\n");
 			exitcode = manager.exit_status;
 			free_manager(&manager);
 			continue;
@@ -72,7 +75,7 @@ int	main(int argc, char **argv, char **env)
 		free_manager(&manager);
 		// break;
 	}
-	printf("we exit\n");
+	write(2, "we exit\n", 8);
 	free_env(first_env);
 	return (0);
 }

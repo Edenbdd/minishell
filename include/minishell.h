@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/20 17:27:42 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/20 19:58:31 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ typedef struct s_manager
 	int			size_cmd;
 	t_export	*export_first;
 	int 		exit_status;
+	int			heredoc_line;
 	t_env		*env_first;
 } t_manager;
 
@@ -161,6 +162,7 @@ int			setup_pipe_and_fork(t_cmd *current_cmd, t_manager *manager);
 int			close_fds(t_cmd *current_cmd, int *previous_fd, t_manager *manager);
 int			execution(t_manager *manager, t_env *s_env);
 int			waiting(int id_last);
+t_cmd		*heredoc_line(t_cmd *current_cmd, int *previous_fd, t_manager *manager);
 
 //expand_cut
 int			get_cut_length(char *str, int pos);
@@ -184,6 +186,7 @@ int			count_args(t_token *current);
 char		**allocate_args(int cmd_count);
 t_token		*fill_args_values(t_token *current, char **args, int cmd_count);
 t_token		*fill_args(t_token *current, t_cmd *cmd, t_manager *manager);
+
 
 //fill_cmd_expand
 int			exploop_env_var(t_token *current_token, t_env *s_env, t_manager *manager);

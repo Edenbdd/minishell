@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/20 18:23:32 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/20 19:49:12 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,14 @@ t_token	*cmd_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 		else
 			printf("after fill args current token is at the end\n");
 		if (!current_token || current_token->type == PIPE
-			|| cmd->heredoc_count >= 1) //j avais mis >1, voir si ca pose pb 
+			|| cmd->heredoc_count > 1) //j avais mis >1, voir si ca pose pb 
 			break;
+		else if (current_token->type == REDIR_HEREDOC && current_token->next &&
+				current_token->next->type == REDIR_HEREDOC)
+		{
+			current_token = current_token->next;
+			break;
+		}
 		current_token = current_token->next;
 	}
 	return (current_token);
