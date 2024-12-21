@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/20 13:20:43 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/21 14:38:20 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ int parsing_error(t_manager *manager, int code)
 return (-1);
 }
 
-
 int access_error(t_manager *manager, int code, char *str)
 {
 		if (code == 5)
@@ -91,7 +90,6 @@ int open_close_error(t_manager *manager, int code)
 		write (2, "bash: malloc error\n", 18);	
 	return (-1);
 }
-
 
 int cmd_error(t_manager *manager, int code, char *cmd)
 {

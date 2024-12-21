@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:17:44 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/21 13:37:57 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/21 14:29:10 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,8 @@ int	get_size_lim(char *limiter)
 	}
 	return (count_char);	
 }
-int		quotes_before(char *str, int i)
-{
-	while (i >= 0)
-	{
-		if (str[i] == '"')
-			return (1);
-		i--;
-	}
-	return (0);
-}
 
+/*TO SPLIT !!!!!*/
 /*Fill the limiter*/
 char	*fill_lim(char *limiter, t_manager *manager, int i)
 {
@@ -66,29 +57,27 @@ char	*fill_lim(char *limiter, t_manager *manager, int i)
 	count_char = 0;
 	while (limiter[i])
 	{
-		if (limiter[i] != '$' && limiter[i] != '\'' && limiter[i] != '"')
+		
+		if (limiter[i] == '\'' || limiter[i] == '"')
+			i++;
+		else if (limiter[i] == '$')
 		{
-			clean_lim[count_char] = limiter[i];
-			i++;
-			count_char++;
-		}
-		else if (limiter[i - 1] && limiter[i - 1] == '$' && limiter[i] == '$')
-		{
-			clean_lim[count_char] = limiter[i];
-			i++;
-			count_char++;
-		}
-		else if (limiter[i + 1] && (limiter[i + 1] == '$' && limiter[i] == '$'))
-		{
-			clean_lim[count_char] = limiter[i];
-			i++;
-			count_char++;
-		}
-		else if (limiter[i] == '\'' || limiter[i] == '"')
-			i++;
-		else if (limiter[i + 1] && limiter[i] == '$' 
+			if (limiter[i + 1] && limiter[i + 1] == '$')
+			{
+				clean_lim[count_char] = limiter[i];
+				i++;
+				count_char++;
+			}
+			else if (limiter[i - 1] && limiter[i - 1] == '$')
+			{
+				clean_lim[count_char] = limiter[i];
+				i++;
+				count_char++;
+			}
+			else if (limiter[i + 1] && limiter[i] == '$' 
 			&& (limiter[i + 1] == '\'' || limiter[i + 1] == '"'))
-			i += 2;
+				i += 2;
+		}
 		else
 		{
 			clean_lim[count_char] = limiter[i];
@@ -97,7 +86,6 @@ char	*fill_lim(char *limiter, t_manager *manager, int i)
 		}
 	}
 	clean_lim[count_char] = '\0';
-	// printf("clean lim is [%s] with i %d char malloc\n", clean_lim, i);
 	return (clean_lim);
 }
 
@@ -113,10 +101,10 @@ int	parse_lim(t_token *current_token, t_cmd *cmd, t_manager *manager)
 	limiter = ft_strdup(current_token->value);
 	if (!limiter)
 		return (-1);
-	if (count_quotes(manager, limiter, 34, 39) == -1 //check nb de quotes impair
+	if (count_quotes(manager, limiter, 34, 39) == -1
 		|| count_quotes(manager, limiter, 39, 34) == -1)
         return (-1);
-	if (count_quotes(manager, limiter, 34, 39) > 0 //check nb de quotes impair
+	if (count_quotes(manager, limiter, 34, 39) > 0
 		|| count_quotes(manager, limiter, 39, 34) > 0)
 		cmd->heredoc_quotes++;
 	i = 0;
@@ -124,23 +112,21 @@ int	parse_lim(t_token *current_token, t_cmd *cmd, t_manager *manager)
 	if (!cmd->lim)
 		return (-1);
 	free(limiter);
-    printf("at the end of parse_lim, cmd->lim is [%s]\n", cmd->lim);
 	return (0);
 }
 
+/*Filling the herdoc lim (like a regular word but until next space)*/
 int	heredoc_quotes(char *line, int i, t_manager *manager)
 {
 	int		j;
 	char	*limiter;
 
 	j = 0;
-	// printf("starting char is [%c]\n", line[i + j]);
 	while (line[i + j] && !ft_is_space(line[i + j]))
 		j++;
 	limiter = (char *)malloc(sizeof(char) * (j + 1));
 	if (!limiter)
 		return (-1);
-	// printf("j is %d\n", j);
 	j = 0;
 	while (line[i + j] && !ft_is_space(line[i + j]))
 	{	
@@ -149,6 +135,5 @@ int	heredoc_quotes(char *line, int i, t_manager *manager)
 	}
 	limiter[j] = '\0';
 	manager->word = limiter;
-    // printf("at the end of heredoc quotes, word is [%s]\n", manager->word);
 	return (i + j + 1);
 }

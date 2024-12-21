@@ -6,13 +6,11 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:36 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/06 16:03:35 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/21 14:36:37 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// Fichier pour gerer la verification de l env et sa copie en liste chainee
-// manipulable easly dans la structure s_env qui doit etre lie au manager 
-//par la suite
+/*Copy of the env in linked list*/
 
 #include "minishell.h"
 #include "libft.h"
@@ -47,7 +45,7 @@ t_env	*handle_env(char **env)
 	i = 0;
 	if (!env)
 	{
-		printf("why did you do env -i ?\n");
+		printf("no env ?\n"); //Need to handle error here !
 		return (NULL);
 	}
 	while (env[i])
@@ -95,7 +93,6 @@ char	**convert_env(t_env *s_env)
 		current = current->next;
 	}
 	env_arr[i] = NULL;
-	// print_env(env_arr);
 	return (env_arr);
 }
 

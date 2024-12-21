@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/20 19:58:31 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/21 15:01:20 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,12 +148,12 @@ int			parsing_error_op(t_manager *manager, int code, char operator, char dble_op
 int			access_error(t_manager *manager, int code, char *str);
 int			cmd_error(t_manager *manager, int code, char *cmd);
 int			open_close_error(t_manager *manager, int code);
-//int dir_error(t_manager *manager, int code, char *word);
 
 //exec_child
 int			handle_input_redirection(t_cmd *cmd, int *previous_fd);
 int			handle_output_redirection(t_cmd *cmd);
-int			child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manager);
+int 		child_process(t_cmd *cmd, int *previous_fd, 
+							t_manager *manager, char **to_execute);
 
 //exec
 int 		handle_heredoc(t_manager *manager, t_cmd *current_cmd, 
@@ -162,7 +162,11 @@ int			setup_pipe_and_fork(t_cmd *current_cmd, t_manager *manager);
 int			close_fds(t_cmd *current_cmd, int *previous_fd, t_manager *manager);
 int			execution(t_manager *manager, t_env *s_env);
 int			waiting(int id_last);
-t_cmd		*heredoc_line(t_cmd *current_cmd, int *previous_fd, t_manager *manager);
+
+//exec_heredoc_line
+char		**copy_arr(char **to_copy);
+t_cmd		*heredoc_line(t_cmd *current_cmd, int *previous_fd, 
+							t_manager *manager);
 
 //expand_cut
 int			get_cut_length(char *str, int pos);
@@ -253,7 +257,7 @@ int			parse_lim(t_token *current_token, t_cmd *cmd, t_manager *manager);
 int			heredoc_quotes(char *line, int i, t_manager *manager);
 
 
-//parsing space_operator
+//parsing space_operator !! TO DIVIDE
 int			only_space(char *str);
 int			is_symbols(char c);
 int			only_space_symbols(char *str);
