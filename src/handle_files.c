@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:06:55 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/20 16:58:28 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/21 12:18:44 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,15 @@ int	check_outfile(char *outfile, t_manager *manager)
 
 int	create_doc(t_manager *manager, int *previous_fd,  t_cmd *current_cmd, t_env *s_env)
 {
+	if (*previous_fd != -1)
+	{
+		printf("closing previous_fd\n");
+		if (close(*previous_fd) == -1)
+		{
+			printf("pb closing prev in create doc\n");
+			return (-1);
+		}
+	}
 	*previous_fd = open("heredoc_tmp", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (*previous_fd == -1)
 	{
@@ -81,6 +90,8 @@ int	create_doc(t_manager *manager, int *previous_fd,  t_cmd *current_cmd, t_env 
 		// printf("exit possible 4\n");
 		return (open_close_error(manager, 1));
 	}
+	else
+		printf("opening the heredoc\n");
 	return (0);
 }
 int		create_doc_loop(int *previous_fd, t_manager *manager, t_cmd *current_cmd, t_env *s_env)

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:17:44 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/20 17:46:39 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/21 13:37:57 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,28 @@ char	*fill_lim(char *limiter, t_manager *manager, int i)
 	count_char = 0;
 	while (limiter[i])
 	{
-		if (limiter[i] == '\'' || limiter[i] == '"')
+		if (limiter[i] != '$' && limiter[i] != '\'' && limiter[i] != '"')
+		{
+			clean_lim[count_char] = limiter[i];
+			i++;
+			count_char++;
+		}
+		else if (limiter[i - 1] && limiter[i - 1] == '$' && limiter[i] == '$')
+		{
+			clean_lim[count_char] = limiter[i];
+			i++;
+			count_char++;
+		}
+		else if (limiter[i + 1] && (limiter[i + 1] == '$' && limiter[i] == '$'))
+		{
+			clean_lim[count_char] = limiter[i];
+			i++;
+			count_char++;
+		}
+		else if (limiter[i] == '\'' || limiter[i] == '"')
 			i++;
 		else if (limiter[i + 1] && limiter[i] == '$' 
-			&& (limiter[i + 1] == '\'' || limiter[i + 1] == '"') 
-			&& !quotes_before(limiter, i - 1))
+			&& (limiter[i + 1] == '\'' || limiter[i + 1] == '"'))
 			i += 2;
 		else
 		{
@@ -94,6 +111,8 @@ int	parse_lim(t_token *current_token, t_cmd *cmd, t_manager *manager)
 	if (check_heredoc(manager) == - 1)
 		return (-1);
 	limiter = ft_strdup(current_token->value);
+	if (!limiter)
+		return (-1);
 	if (count_quotes(manager, limiter, 34, 39) == -1 //check nb de quotes impair
 		|| count_quotes(manager, limiter, 39, 34) == -1)
         return (-1);

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 12:00:56 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/20 14:48:57 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/21 12:41:07 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,11 @@ void	free_cmd_args(char **args)
 	i = 0;
 	while (args[i])
 	{
+		printf("will free [%s]\n", args[i]);
 		free(args[i]);
 		i++;
 	}
 	free(args);
+	printf("free args all done\n");
 }
 

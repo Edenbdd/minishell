@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/20 19:38:50 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/21 12:37:04 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	main(int argc, char **argv, char **env)
 		free_manager(&manager);
 		// break;
 	}
-	write(2, "we exit\n", 8);
+	// write(2, "we exit\n", 8);
 	free_env(first_env);
 	return (0);
 }
