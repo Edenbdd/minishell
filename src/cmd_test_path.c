@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:12:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/21 14:33:26 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/23 12:58:06 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ char *create_and_check_path(char *path, char *cmd, t_manager *manager, char **pa
     to_test = join_path(path, cmd, manager, paths);
     if (to_test == NULL)
         return (NULL);
-    if (access(to_test, F_OK) == 0) // Le fichier existe
+    if (access(to_test, F_OK) == 0)
     {
-        if (access(to_test, X_OK) == 0) // Le fichier est exécutable
+        if (access(to_test, X_OK) == 0)
             return (to_test);
     }
     free(to_test);

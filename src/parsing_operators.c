@@ -6,14 +6,14 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/21 14:53:01 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/23 13:47:00 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 
-//recuperer un token "operator"
+//Identify the operator
 int	is_operators(t_manager *manager, char *line, int i)
 {
 	if (line[i] == '<' && line[i + 1] == '<')
@@ -36,26 +36,25 @@ int	is_operators(t_manager *manager, char *line, int i)
 		return (ENV_VAR);
 	if (is_a_dir(line, i))
 		return (DIR);
-	return (CMD_ARG); // is 0
+	return (CMD_ARG);
 }
 
-//checker les operateurs non geres
+//Check for operators that we won't handle
 int check_operator_err(t_manager *manager, char *line, int i)
 {
-//si >>> et plus regarder les messages d'erreur specifiques. idem autres operateurs
 	if ((line[i] == '&' && line[i + 1] == '&')
 		|| (line[i] == ';') 
 		|| (line[i] == '#') 
 		|| (line[i] == '\\')
 		)
-			return (parsing_error_op(manager, 4, line[i], 0)); //ok
+			return (parsing_error_op(manager, 4, line[i], 0));
 	if ((line[i] == '<' && line[i + 1] == '<' && line[i + 2] == '<')
 		|| (line[i] == '>' && line[i + 1] == '>' && line[i + 2] == '>'))
-			return (parsing_error_op(manager, 4, line[i], line[i + 1])); //ok
+			return (parsing_error_op(manager, 4, line[i], line[i + 1]));
 	return (0);
 }
 
-//recuperer les doubles operateurs
+//Handle double operators
 int	verif_operator(t_manager *manager, char *line, int i, int *type)
 {
 	int	result;

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/21 14:59:59 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/23 14:34:53 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include "libft.h"
 
 //Execution : Gestion du heredoc
-
 int handle_heredoc(t_manager *manager, t_cmd *current_cmd, int *previous_fd, t_env *s_env)
 {
     if (current_cmd->lim)
@@ -28,41 +27,39 @@ int handle_heredoc(t_manager *manager, t_cmd *current_cmd, int *previous_fd, t_e
 }
 
 //Execution : Gestion des pipes et fork
-
 int setup_pipe_and_fork(t_cmd *current_cmd, t_manager *manager)
 {
     if (manager->size_cmd > 1 || manager->heredoc_line == 1)
     {
         if (pipe(current_cmd->pfd) == -1)
-            return (open_close_error(manager, 3));
+            return (system_function_error(manager, 3));
     }
     int id = fork();
     if (id == -1)
-        return (open_close_error(manager, 4));
+        return (system_function_error(manager, 4));
     return id;
 }
 
 //Execution : Gestion de la fermeture des fichiers
-
 int close_fds(t_cmd *current_cmd, int *previous_fd, t_manager *manager)
 {
 	if (current_cmd->pfd[1] != -1)
     {
         if (close(current_cmd->pfd[1]) == -1)
-            return (open_close_error(manager, 1));
+            return (system_function_error(manager, 1));
 		current_cmd->pfd[1] = -1;
     }
     if ((current_cmd->index >= 1 || current_cmd->heredoc_count > 0) 
 			&& *previous_fd != -1)
     {
         if (close(*previous_fd) == -1)
-            return (open_close_error(manager, 1));
+            return (system_function_error(manager, 1));
 	}
     *previous_fd = current_cmd->pfd[0];
     return (0);
 }
 
-// execution
+// A recouper
 int execution(t_manager *manager, t_env *s_env)
 {
     t_cmd 	*current_cmd;
@@ -73,44 +70,24 @@ int execution(t_manager *manager, t_env *s_env)
     current_cmd = manager->cmd_first;
     while (current_cmd)
     {
-		if (!manager->heredoc_line)
-		{
-        	if (handle_heredoc(manager, 
-				current_cmd, &previous_fd, s_env) == -1)
-		    	return (-1);
-		}
-		if (current_cmd->heredoc_count == 1  //a exterioriser
-			 && !ft_strcmp(current_cmd->args[0], "\n"))
-		{
-			if (close_fds(current_cmd, &previous_fd, manager) == -1)
-				return (-1);
-			id = 0;
-			current_cmd = current_cmd->next;
+		id = exec_heredoc(manager, s_env, &previous_fd, current_cmd);
+		if (id == -1)
+			return (-1);
+		else if(id == 0)
 			continue;
-		}
-		if (manager->heredoc_line == 1) // a exterioriser
-		{
-			current_cmd = heredoc_line(current_cmd, &previous_fd, manager);
-			id = 0;
-			manager->heredoc_line = 0;
-			continue;
-		}
 		id = setup_pipe_and_fork(current_cmd, manager);
         if (id == -1)
             return (-1);
-        if (id == 0)
-        {
-            if (child_process(current_cmd, &previous_fd, manager, NULL) == -1)
-                return (-1);
-        }
+        if (id == 0 
+			&& child_process(current_cmd, &previous_fd, manager, NULL) == -1)
+            return (-1);
         if (close_fds(current_cmd, &previous_fd, manager) == -1)
             return (-1);
         current_cmd = current_cmd->next;
     }
-	if (previous_fd != -1 && close(previous_fd) == -1)
+	if ((previous_fd != -1 && close(previous_fd) == -1)
+		|| unlink_heredoc(manager) == -1)
 			return (-1);
-	if (unlink_heredoc(manager) == -1)
-		return (-1);
     return (waiting(id));
 }
 
@@ -136,3 +113,51 @@ int	waiting(int id_last)
 	}
 	return (retcode);
 }
+
+/*Function before being cut into 2 in case of bug*/
+// execution
+// int execution(t_manager *manager, t_env *s_env)
+// {
+//     t_cmd 	*current_cmd;
+//     int 	id;
+//     int 	previous_fd;
+    
+// 	previous_fd = -1;
+//     current_cmd = manager->cmd_first;
+//     while (current_cmd)
+//     {
+// 		if (!manager->heredoc_line && 
+// 			handle_heredoc(manager, current_cmd, &previous_fd, s_env) == -1)
+// 		    	return (-1);
+// 		if (current_cmd->heredoc_count == 1  //a exterioriser
+// 			 && !ft_strcmp(current_cmd->args[0], "\n"))
+// 		{
+// 			if (close_fds(current_cmd, &previous_fd, manager) == -1)
+// 				return (-1);
+// 			id = 0;
+// 			current_cmd = current_cmd->next;
+// 			continue;
+// 		}
+// 		if (manager->heredoc_line == 1) // a exterioriser
+// 		{
+// 			current_cmd = heredoc_line(current_cmd, &previous_fd, manager);
+// 			id = 0;
+// 			manager->heredoc_line = 0;
+// 			continue;
+// 		}
+// 		id = setup_pipe_and_fork(current_cmd, manager);
+//         if (id == -1)
+//             return (-1);
+//         if (id == 0 
+// 			&& child_process(current_cmd, &previous_fd, manager, NULL) == -1)
+//             return (-1);
+//         if (close_fds(current_cmd, &previous_fd, manager) == -1)
+//             return (-1);
+//         current_cmd = current_cmd->next;
+//     }
+// 	if (previous_fd != -1 && close(previous_fd) == -1)
+// 			return (-1);
+// 	if (unlink_heredoc(manager) == -1)
+// 		return (-1);
+//     return (waiting(id));
+// }

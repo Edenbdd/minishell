@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 12:00:56 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/21 12:41:07 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/23 13:40:36 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,27 +27,27 @@ void	free_path(char **paths)
 	}
 	free(paths);
 }
+/*Replaced by close_fds*/
+// int	closing(t_cmd *cmd, int *previous_fd, t_manager *manager)
+// {
+// 	if (cmd->pfd[1] != -1)
+// 	{
+// 		if (close(cmd->pfd[1]) == -1)
+// 			return (system_function_error(manager, 1));
+// 	}
+// 	if (cmd->pfd[0] != -1)
+// 	{
+// 		if (close(cmd->pfd[0]) == -1)
+// 			return (system_function_error(manager, 1));
+// 	}
+// 	if (*previous_fd != -1)
+// 	{
+// 		if (close(*previous_fd) == -1)
+// 			return (system_function_error(manager, 1));
+// 	}
+// 	return (0);
+// }
 
-int	closing(t_cmd *cmd, int *previous_fd, t_manager *manager)
-{
-	if (cmd->pfd[1] != -1)
-	{
-		if (close(cmd->pfd[1]) == -1)
-			return (open_close_error(manager, 1));
-	}
-	if (cmd->pfd[0] != -1)
-	{
-		if (close(cmd->pfd[0]) == -1)
-			return (open_close_error(manager, 1));
-	}
-	if (*previous_fd != -1)
-	{
-		// printf("for cmd [%s] I close prev %d\n", cmd->args[0], *previous_fd);
-		if (close(*previous_fd) == -1)
-			return (open_close_error(manager, 1));
-	}
-	return (0);
-}
 
 int	unlink_heredoc(t_manager *manager)
 {
@@ -67,11 +67,9 @@ void	free_cmd_args(char **args)
 	i = 0;
 	while (args[i])
 	{
-		printf("will free [%s]\n", args[i]);
 		free(args[i]);
 		i++;
 	}
 	free(args);
-	printf("free args all done\n");
 }
 

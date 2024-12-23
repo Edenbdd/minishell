@@ -6,7 +6,7 @@
 #    By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/15 09:42:50 by smolines          #+#    #+#              #
-#    Updated: 2024/12/21 14:54:37 by aubertra         ###   ########.fr        #
+#    Updated: 2024/12/23 14:04:17 by aubertra         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,11 +36,12 @@ SRCS 			= 	main.c\
 					exec_heredoc_line.c\
 					expand.c\
 					expand_cut.c\
+					expand_heredoc.c\
 					expand_replace.c\
 					fill_cmd.c\
 					fill_cmd_expand.c\
 					fill_cmd_args.c\
-					free_manager.c\
+					free_struct.c\
 					free.c\
 					handle_files.c\
 					oplist_cmd.c\
@@ -50,7 +51,7 @@ SRCS 			= 	main.c\
 					parsing_dir.c\
 					parsing_heredoc.c\
 					parsing_operators.c\
-					parsing_operators_utils.c\
+					parsing_spaces_symbols.c\
 					parsing_utils.c\
 					parsing_utils2.c\
 					parsing.c\

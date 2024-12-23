@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 14:44:09 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/21 14:59:41 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/23 15:27:45 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,33 @@
 
 #include "minishell.h"
 #include "libft.h"
+
+int	exec_heredoc(t_manager *manager, t_env *s_env, int *previous_fd, t_cmd *current_cmd)
+{
+	int	err_flag;
+
+	err_flag = 0;
+	if (!manager->heredoc_line && 
+		handle_heredoc(manager, current_cmd, previous_fd, s_env) == -1)
+		return (-1);
+	if (current_cmd->heredoc_count == 1
+		&& !ft_strcmp(current_cmd->args[0], "\n"))
+	{
+		if (close_fds(current_cmd, previous_fd, manager) == -1)
+			return (-1);
+		current_cmd = current_cmd->next;
+		return (0);
+	}
+	if (manager->heredoc_line == 1)
+	{
+		current_cmd = heredoc_line(current_cmd, previous_fd, manager, &err_flag);
+		if (err_flag == -1)
+			return (-1);
+		manager->heredoc_line = 0;
+		return (0);
+	}
+	return (1);
+}
 
 char	**copy_arr(char **to_copy)
 {
@@ -37,18 +64,11 @@ char	**copy_arr(char **to_copy)
 	result[i] = NULL;
 	return (result);
 }
-
-t_cmd	*heredoc_line(t_cmd *current_cmd, int *previous_fd, t_manager *manager)
+t_cmd	*heredoc_loop(t_cmd *current_cmd, int *previous_fd, t_manager *manager, char **to_execute)
 {
-	char 	*path;
-	char	**env_arr;
-	int		id;
-	char 	**to_execute;
 	t_cmd	*save_last;
-
-	if (ft_strcmp(current_cmd->args[0], "\n"))
-		to_execute = copy_arr(current_cmd->args);
-	while (current_cmd && current_cmd->lim 
+	
+	while (current_cmd && current_cmd->lim
 			&& (!ft_strcmp(to_execute[0], current_cmd->args[0])
 			|| !ft_strcmp(current_cmd->args[0], "\n")))
 	{
@@ -58,45 +78,32 @@ t_cmd	*heredoc_line(t_cmd *current_cmd, int *previous_fd, t_manager *manager)
 		save_last = current_cmd;
 		current_cmd = current_cmd->next;
 	}
-	current_cmd = save_last;
+	return (save_last);
+}
+
+
+t_cmd	*heredoc_line(t_cmd *current_cmd, int *previous_fd, t_manager *manager, int *err_flag)
+{
+	int		id;
+	char 	**to_execute;
+
+	if (ft_strcmp(current_cmd->args[0], "\n"))
+		to_execute = copy_arr(current_cmd->args);
+	else
+		to_execute = NULL;
+	current_cmd = heredoc_loop(current_cmd, previous_fd, manager, to_execute);
+	if (!current_cmd)
+		return (*err_flag = -1, NULL);
 	id = setup_pipe_and_fork(current_cmd, manager);
-        if (id == -1)
-            return (-1);
-    if (id == 0)
-    {
-        if (child_process(current_cmd, &previous_fd, manager, to_execute) == -1)
-            return (-1);
-    }
-    //CHILD PROCESS A AJUSTER POUR FIT A CE DEROULER
-	if (id == 0)
-	{
-		if (dup2(*previous_fd, STDIN_FILENO) == -1)
-			return (NULL);
-		if (current_cmd->outfile)
-		{
-			if (current_cmd->append == 1 && current_cmd->outfile)
-        		current_cmd->pfd[1] = open(current_cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
-    		else if (current_cmd->outfile)
-        		current_cmd->pfd[1] = open(current_cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    		dup2(current_cmd->pfd[1], STDOUT_FILENO);
-		}
-		close_fds(current_cmd, previous_fd, manager);
-		path = find_path(to_execute[0], manager->env_first, manager);
-   		if (path == NULL)
-		{
-			cmd_error(manager, 6, to_execute[0]);
-			free_cmd_args(to_execute);
-			return (NULL);
-		}
-		env_arr = convert_env(manager->env_first);
-    	if (execve(path, to_execute, env_arr) == -1)
-        	return (NULL);
-	}
-    //UNTIL HERE!
+    if (id == -1)
+		return (*err_flag = -1, NULL);
+    if (id == 0
+		&& child_process(current_cmd, previous_fd, manager, to_execute) == -1)
+    		return (*err_flag = -1, NULL);
 	free_cmd_args(to_execute);
 	close_fds(current_cmd, previous_fd, manager);
 	current_cmd = current_cmd->next;
 	wait(NULL);
-    manager->heredoc_line = 0; //reset pour la suite
+    manager->heredoc_line = 0;
 	return (current_cmd);
 }

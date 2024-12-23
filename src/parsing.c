@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/21 14:55:23 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/23 14:50:23 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,10 @@ int handle_parsing_errors(t_manager *manager, char *line)
         return (parsing_error(manager, 3));
     if (only_space_symbols(line))
         return (-1);
-    if ((count_quotes(manager, line, 34, 39) == -1) || (count_quotes(manager, line, 39, 34) == -1))
+    if ((count_quotes(manager, line, 34, 39) == -1) 
+		|| (count_quotes(manager, line, 39, 34) == -1))
         return (-1);
     return (0);
-}
-
-// parsing : Traite les espaces dans la ligne
-int skip_spaces(char *line, int i, int *prec_space) 
-{
-    *prec_space = 0;
-    while (line[i] && ft_is_space(line[i])) {
-        (*prec_space)++;
-        i++;
-    }
-    return i;
 }
 
 // parsing : Gère les parties de chaine en fonction du type
@@ -44,11 +34,9 @@ int process_token(t_manager *manager, char *line, int i)
     else if (manager->type == REDIR_IN || manager->type == REDIR_OUT ||
              manager->type == REDIR_APPEND || manager->type == REDIR_HEREDOC) 
 			{
-				// printf("how many time do I come here ?\n");
         		if (manager->type == REDIR_APPEND || manager->type == REDIR_HEREDOC)
             		i++;
 				int tmp = handle_redir(manager, line, i);
-        		// printf("tmp is %d\n", tmp);
 				return (tmp);
 			} 
 	else if (manager->type == PIPE)
@@ -87,37 +75,44 @@ int parsing(t_manager *manager, char *line)
     }
     return (0);
 }
+/*token_error utils*/
+int		check_redir(t_token *token_tour, t_manager *manager)
+{
+	if ((token_tour->type == REDIR_IN && !token_tour->value)
+		|| (token_tour->type == REDIR_OUT && token_tour->value == NULL)
+		|| (token_tour->type == REDIR_HEREDOC && token_tour->value == NULL)
+		|| (token_tour->type == REDIR_APPEND && token_tour->value == NULL))
+	{
+		if ((token_tour->next && token_tour->next->type == PIPE) 
+			|| (token_tour->prev && token_tour->prev->type == PIPE))
+			return (parsing_error_op(manager, 4, '|', 0));
+		else 
+			return (parsing_error(manager, 2));
+	}
+	return (0);
+}
 
 //parsing_condition
-int token_error(t_manager *manager) //a revoir/check
+int token_error(t_manager *manager)
 {
 	t_token *token_tour;
 	t_token last_token;
 	
 	token_tour = manager->token_first;
 	if (manager->token_first->type == PIPE)
-		return (parsing_error_op(manager, 4, '|', 0)); //ok
+		return (parsing_error_op(manager, 4, '|', 0));
 	last_token = *(token_last(manager->token_first));
 	if (last_token.type == PIPE) 
-			return (parsing_error_op(manager, 4, '|', 0)); //ok
+			return (parsing_error_op(manager, 4, '|', 0));
 	while (token_tour)
 	{
 		if (token_tour->next && token_tour->type == REDIR_HEREDOC &&
 			token_tour->next->type == REDIR_HEREDOC)
 			manager->heredoc_line = 1;
-		if ((token_tour->type == REDIR_IN && !token_tour->value)
-		|| (token_tour->type == REDIR_OUT && token_tour->value == NULL)
-		|| (token_tour->type == REDIR_HEREDOC && token_tour->value == NULL)
-		|| (token_tour->type == REDIR_APPEND && token_tour->value == NULL))
-		{
-			if ((token_tour->next && token_tour->next->type == PIPE) 
-				|| (token_tour->prev && token_tour->prev->type == PIPE))
-				return (parsing_error_op(manager, 4, '|', 0)); //ok
-			else 
-				return (parsing_error(manager, 2)); //ok
-		}
+		if (check_redir(token_tour, manager) == -1)
+			return (-1);
 		if ((token_tour->next) && (token_tour->type == PIPE && token_tour->next->type == PIPE))
-			return (parsing_error_op(manager, 4, '|', 0)); //ok
+			return (parsing_error_op(manager, 4, '|', 0));
 	token_tour = token_tour->next;
 	}
 	return (0);

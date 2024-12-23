@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/21 15:01:46 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/23 15:32:12 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,16 @@
 
 //child process : Gestion des redirections d'entrée
 
-int handle_input_redirection(t_cmd *cmd, int *previous_fd)
+int handle_input_redirection(t_cmd *cmd, int *previous_fd, t_manager *manager)
 {
-    if (cmd->infile && !cmd->heredoc_count)
+    if (cmd->infile && !cmd->heredoc_count && !manager->heredoc_line)
         *previous_fd = open(cmd->infile, O_RDONLY);
-    dup2(*previous_fd, STDIN_FILENO);
-    return 0;
+    if (*previous_fd != -1)
+    {
+        if (dup2(*previous_fd, STDIN_FILENO) == -1)
+            return (system_function_error(manager, 8));
+    }
+    return (0);
 }
 
 //child process : Gestion des redirections de sortie
@@ -34,9 +38,26 @@ int handle_output_redirection(t_cmd *cmd)
     else if (cmd->outfile)
         cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (cmd->pfd[1] == -1)
-        return -1;
+        return (-1);
     dup2(cmd->pfd[1], STDOUT_FILENO);
-    return 0;
+    return (0);
+}
+int path_execution_heredocline(t_manager *manager, char **to_execute)
+{
+    char *path;
+    char **env_arr;  
+
+    path = find_path(to_execute[0], manager->env_first, manager);
+    if (!path)
+    {
+        cmd_error(manager, 6, to_execute[0]);
+        free_cmd_args(to_execute);
+        return (-1);
+    }
+    env_arr = convert_env(manager->env_first);
+    if (execve(path, to_execute, env_arr) == -1)
+        return (-1);
+    return (0);
 }
 
 
@@ -44,21 +65,25 @@ int child_process(t_cmd *cmd, int *previous_fd, t_manager *manager, char **to_ex
 {
     char *path;
     char **env_arr;
-
-    if (cmd->infile || cmd->index != 0 || cmd->heredoc_count)
-        handle_input_redirection(cmd, previous_fd);
+    
+    if (cmd->infile || cmd->index != 0 || cmd->heredoc_count || manager->heredoc_line)
+        handle_input_redirection(cmd, previous_fd, manager);
     if (cmd->outfile || (cmd->index + 1) != manager->size_cmd)
     {
         if (handle_output_redirection(cmd) == -1)
-            return (open_close_error(manager, 1));
+            return (system_function_error(manager, 1));
     }
-    if (closing(cmd, previous_fd, manager) == -1)
+    if (close_fds(cmd, previous_fd, manager) == -1)
         return (-1);
+    if (to_execute &&
+            path_execution_heredocline(manager, to_execute) == -1)
+        return (system_function_error(manager, 2));
     path = find_path(cmd->args[0], manager->env_first, manager);
     if (path == NULL)
         return (cmd_error(manager, 6, cmd->args[0]));
     env_arr = convert_env(manager->env_first);
     if (execve(path, cmd->args, env_arr) == -1)
-        return (open_close_error(manager, 2));
+        return (system_function_error(manager, 2));
     return (0);
 }
+

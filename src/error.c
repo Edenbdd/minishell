@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/21 14:38:20 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/23 13:03:24 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int access_error(t_manager *manager, int code, char *str)
 return (-1);
 }
 
-int open_close_error(t_manager *manager, int code)
+int system_function_error(t_manager *manager, int code)
 {
 	(void)manager; // see if we need it later
 	if (code == 1)
@@ -88,6 +88,8 @@ int open_close_error(t_manager *manager, int code)
 		write (2, "bash: join error\n", 17);
 	else if (code == 7)
 		write (2, "bash: malloc error\n", 18);	
+	else if (code == 8)
+		write (2, "bash: dup2 error\n", 16);	
 	return (-1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:19 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/21 14:34:53 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/23 12:58:45 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "libft.h"
 
 void		print_env(char **env_arr)
- {
+{
  	int	i;
 
  	i = 0;
@@ -25,7 +25,7 @@ void		print_env(char **env_arr)
  		printf("%s\n", env_arr[i]);
  		i++;
  	}
- }
+}
 
 void	token_display(t_token *token)
 {
