@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/23 14:18:53 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/26 19:58:13 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,11 @@ int	redir_in_out(t_token *current_token, t_cmd *cmd, t_manager *manager)
 	if (current_token->type == REDIR_OUT)
 	{
 		cmd->append = 0;
-		if (check_outfile(current_token->value, manager) == -1)
-			return (-1);
+		if (cmd->outfile)
+				free(cmd->outfile);
 		cmd->outfile = ft_strdup(current_token->value);
+		if (check_outfile(current_token->value, manager, cmd) == -1)
+			return (-1);
 	}
 	else if (current_token->type == REDIR_IN)
 	{
@@ -41,10 +43,12 @@ int	redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 	{
 		if (current_token->type == REDIR_APPEND)
 		{
-			cmd->append = 1;
-			if (check_outfile(current_token->value, manager) == -1)
-				return (-1);
+			cmd->append = 1; 
+			if (cmd->outfile)
+				free(cmd->outfile);
 			cmd->outfile = ft_strdup(current_token->value);
+			if (check_outfile(current_token->value, manager, cmd) == -1)
+				return (-1);
 		}
 		else if ((current_token->type == REDIR_IN 
 				|| current_token->type == REDIR_OUT)

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:06:55 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/23 13:41:42 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/26 19:38:33 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,18 @@ int	check_infile(char *infile, t_manager *manager)
 	return (0);
 }
 
-int	check_outfile(char *outfile, t_manager *manager)
+int	check_outfile(char *outfile, t_manager *manager, t_cmd *cmd)
 {
 	(void)manager;
-
 	if (outfile && !access(outfile, F_OK) 
 		&& access(outfile, W_OK) == -1)
 			return (access_error(manager, 5, outfile));
+	if (cmd->append == 1 && cmd->outfile)
+        cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
+    else if (cmd->outfile)
+	{
+        cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	}
 	return (0);
 }
 

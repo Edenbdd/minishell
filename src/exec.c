@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/23 14:34:53 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/26 20:01:12 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,23 @@ int setup_pipe_and_fork(t_cmd *current_cmd, t_manager *manager)
 //Execution : Gestion de la fermeture des fichiers
 int close_fds(t_cmd *current_cmd, int *previous_fd, t_manager *manager)
 {
-	if (current_cmd->pfd[1] != -1)
+	int i;
+    struct stat buf;
+
+    //see if this is better than the previous method -> seems great right now
+    i = 3;
+    while (i <= 1000)
     {
-        if (close(current_cmd->pfd[1]) == -1)
-            return (system_function_error(manager, 1));
-		current_cmd->pfd[1] = -1;
+        if (i != *previous_fd && !fstat(i, &buf))
+            close(i);
+        i++;
     }
+    // if (current_cmd->pfd[1] != -1)
+    // {
+    //     if (close(current_cmd->pfd[1]) == -1)
+    //         return (system_function_error(manager, 1));
+	// 	current_cmd->pfd[1] = -1;
+    // }
     if ((current_cmd->index >= 1 || current_cmd->heredoc_count > 0) 
 			&& *previous_fd != -1)
     {
@@ -59,7 +70,7 @@ int close_fds(t_cmd *current_cmd, int *previous_fd, t_manager *manager)
     return (0);
 }
 
-// A recouper
+// A recouper a nouveau !
 int execution(t_manager *manager, t_env *s_env)
 {
     t_cmd 	*current_cmd;

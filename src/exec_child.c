@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/23 15:32:12 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/26 19:35:33 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,12 @@ int handle_input_redirection(t_cmd *cmd, int *previous_fd, t_manager *manager)
 
 int handle_output_redirection(t_cmd *cmd)
 {
-    if (cmd->append == 1 && cmd->outfile)
-        cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
-    else if (cmd->outfile)
-        cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    //Maybe all of this should be commented then ?
+    // if (cmd->append == 1 && cmd->outfile)
+    //     cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
+    // else if (cmd->outfile)
+    //     cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    //Until here ?
     if (cmd->pfd[1] == -1)
         return (-1);
     dup2(cmd->pfd[1], STDOUT_FILENO);

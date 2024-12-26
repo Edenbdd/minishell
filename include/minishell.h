@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/23 15:22:35 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/26 19:36:36 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <limits.h>
 # include <fcntl.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <sys/time.h>
 # include <errno.h> 
 # include <readline/readline.h>
@@ -229,7 +230,7 @@ void		free_cmd_args(char **args);
 //handle_files
 int			check_heredoc(t_manager *manager);
 int			check_infile(char *infile, t_manager *manager);
-int			check_outfile(char *outfile, t_manager *manager);
+int			check_outfile(char *outfile, t_manager *manager, t_cmd *cmd);
 int			create_doc(t_manager *manager, int *previous_fd, 
 						t_cmd *current_cmd, t_env *s_env);
 int			create_doc_loop(int *previous_fd, t_manager *manager, 
