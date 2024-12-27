@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/23 13:03:24 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/27 10:45:50 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,18 @@ return (-1);
 
 int access_error(t_manager *manager, int code, char *str)
 {
-		if (code == 5)
+	write(2, "bash: ",6);
+	ft_putstr_fd(str, 2);
+	if (code == 5)
 	{
-		write(2, "bash: ",6);
-		ft_putstr_fd(str, 2);
-		write (2, ": Permission denied\n",20);
+		write (2, ": Permission denied\n", 20);
 		manager->exit_status = 1;
+		return (-1);
+	}
+	if (code == 6)
+	{
+		write(2, ": No such file or directory\n", 28);
+		manager->exit_status = 127;			
 		return (-1);
 	}
 return (-1);

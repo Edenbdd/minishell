@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:06:55 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/26 19:38:33 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/27 10:43:00 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,10 @@ int	check_heredoc(t_manager *manager)
 
 int	check_infile(char *infile, t_manager *manager)
 {
-	(void)manager;
-
 	if (infile)
 	{
 		if (access(infile, F_OK) == -1)
-			return (access_error(manager, 5, infile));
+			return (access_error(manager, 6, infile)); //pb gestion d erreur ici !
 		if (access(infile, R_OK) == -1)
 			return (access_error(manager, 5, infile));
 	}
@@ -42,10 +40,9 @@ int	check_infile(char *infile, t_manager *manager)
 
 int	check_outfile(char *outfile, t_manager *manager, t_cmd *cmd)
 {
-	(void)manager;
-	if (outfile && !access(outfile, F_OK) 
+	if (outfile && !access(outfile, F_OK)
 		&& access(outfile, W_OK) == -1)
-			return (access_error(manager, 5, outfile));
+		return (access_error(manager, 5, outfile));
 	if (cmd->append == 1 && cmd->outfile)
         cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
     else if (cmd->outfile)

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/26 19:58:13 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/27 10:44:19 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	redir_in_out(t_token *current_token, t_cmd *cmd, t_manager *manager)
 	}
 	return (0);
 }
-
+//a recouper
 int	redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 {
 	while (current_token && current_token->type != PIPE

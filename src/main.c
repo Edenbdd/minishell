@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/27 09:17:47 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/27 10:28:26 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,12 @@ int	main(int argc, char **argv, char **env)
 		{
 			exitcode = manager.exit_status;
 			free_manager(&manager);
-			// printf("parsing error");
+			printf("parsing error");
 			continue;
 		}
 		if (token_error(&manager) == -1)
 		{
-			// printf("Token_error exit\n");
+			printf("Token_error exit\n");
 			exitcode = manager.exit_status;
 			free_manager(&manager);
 			continue ;
@@ -58,6 +58,7 @@ int	main(int argc, char **argv, char **env)
 		{
 			exitcode = manager.exit_status;
 			free_manager(&manager);
+			printf("cmd error\n");
 			continue;
 		}
 		printf("check if the expand worked: [%s]\n", manager.cmd_first->args[1]);

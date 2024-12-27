@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:12:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/23 13:38:13 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/27 10:07:09 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,12 @@ int count_args(t_token *current)
     {
         cmd_count++;
         current = current->next;
+        //skip redir et son file           
+        while (current && (current->type == REDIR_IN
+			|| current->type == REDIR_OUT
+			|| current->type == REDIR_HEREDOC
+			|| current->type == REDIR_APPEND))
+            current = current->next;
     }
     return (cmd_count);
 }
@@ -51,6 +57,11 @@ t_token *fill_args_values(t_token *current, char **args, int cmd_count)
     {
         args[i] = ft_strdup(current->value);
         current = current->next;
+        while (current && (current->type == REDIR_IN
+			|| current->type == REDIR_OUT
+			|| current->type == REDIR_HEREDOC
+			|| current->type == REDIR_APPEND))
+            current = current->next;
         i++;
     }
     args[i] = NULL;
@@ -63,7 +74,7 @@ t_token *fill_args(t_token *current, t_cmd *cmd, t_manager *manager)
     int cmd_count;
 
     (void)manager;
-    cmd_count = count_args(current);
+    cmd_count = count_args(current); //missleading name ! maybe args_count ?
     cmd->args = allocate_args(cmd_count);
     if (!cmd->args)
         return (NULL);
