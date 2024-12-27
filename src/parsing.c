@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/23 14:50:23 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/27 09:17:23 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,11 @@ int parsing(t_manager *manager, char *line)
 /*token_error utils*/
 int		check_redir(t_token *token_tour, t_manager *manager)
 {
-	if ((token_tour->type == REDIR_IN && !token_tour->value)
-		|| (token_tour->type == REDIR_OUT && token_tour->value == NULL)
-		|| (token_tour->type == REDIR_HEREDOC && token_tour->value == NULL)
-		|| (token_tour->type == REDIR_APPEND && token_tour->value == NULL))
+	if ((!token_tour->value || only_space(token_tour->value))
+		&& (token_tour->type == REDIR_IN
+			|| token_tour->type == REDIR_OUT
+			|| token_tour->type == REDIR_HEREDOC
+			|| token_tour->type == REDIR_APPEND))
 	{
 		if ((token_tour->next && token_tour->next->type == PIPE) 
 			|| (token_tour->prev && token_tour->prev->type == PIPE))

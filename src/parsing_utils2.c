@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:58:50 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/23 14:40:47 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/27 09:15:02 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,9 @@ int handle_secondary_type(t_manager *manager, char *line, int i)
 /*Handle redirection operators errors & get the following word 
 which is a file or a limiter with handle_secondary_type. 
 It will fill manager->word and return i's position after the word*/
+
+/*check d erreur repetitif par rapport a token_error ??
+a simplifier*/
 int handle_redir(t_manager *manager, char *line, int i)
 {
 	int	ret;
