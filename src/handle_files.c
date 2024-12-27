@@ -5,27 +5,56 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/05 14:06:55 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/27 10:43:00 by aubertra         ###   ########.fr       */
+/*   Created: 2024/12/27 12:16:47 by aubertra          #+#    #+#             */
+/*   Updated: 2024/12/27 16:53:17 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-//Check & handles infiles and outfiles access included heredoc creation
 
 #include "minishell.h"
 #include "libft.h"
 
-int	check_heredoc(t_manager *manager)
+char	*get_cut_path(char *path)
 {
-	(void)manager; //see if needed for the error handling ?
-	if (!access("heredoc_tmp", F_OK))
+	char	*result;
+	int		i;
+	int		count;
+
+	i = ft_strlen(path) - 1;
+	// printf("path is [%s]\n with len %d\n", path, i);
+	while (path[i] && path[i] != '/')
+		i--;
+	i--;
+	count = 0;
+	while (count <= i)
+		count++;
+	// printf("count is %d\n", count);
+	result = (char *)malloc(sizeof(char) * count + 1);
+	if (!result)
+		return (NULL);
+	i = 0;
+	while (i < count)
 	{
-		if (access("heredoc_tmp", R_OK | W_OK))
-			return (access_error(manager, 5, "heredoc"));
+		result[i] = path[i];
+		i++;
 	}
-	return (0);
+	result[i] = '\0';
+	// printf("at the end of get cut path esult is [%s]\n", result);
+	return (result);
 }
 
+int	handle_redir_path(t_manager *manager, char *path, t_cmd *cmd)
+{
+	(void)cmd; // lets see if its ok without it
+	char	cwd[1024]; //idk why so much ?
+	char	*cut_path;
+
+	getcwd(cwd, sizeof(cwd));
+	// printf("ici is: [%s]\n", cwd);
+	cut_path = get_cut_path(path);
+	if (access(cut_path, F_OK) == -1)
+		return (access_error(manager, 6, path));
+    return (0);
+}
 int	check_infile(char *infile, t_manager *manager)
 {
 	if (infile)
@@ -40,60 +69,29 @@ int	check_infile(char *infile, t_manager *manager)
 
 int	check_outfile(char *outfile, t_manager *manager, t_cmd *cmd)
 {
-	if (outfile && !access(outfile, F_OK)
+	int	is_path;
+	
+	verif_operator(manager, outfile, 0, &is_path);
+	// printf("im check outfile is path is %d\n", is_path);
+	if (outfile && !access(outfile, F_OK) //exist mais pemission denied
 		&& access(outfile, W_OK) == -1)
-		return (access_error(manager, 5, outfile));
+			return (access_error(manager, 5, outfile));
+	if (outfile && access(outfile, F_OK ) && is_path == DIREC) //doesnt exist et path
+	{
+		// printf("I should come here in check outfile\n");
+		if (handle_redir_path(manager, outfile, cmd) == -1)
+			return (-1);
+	}
 	if (cmd->append == 1 && cmd->outfile)
+	{
         cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
-    else if (cmd->outfile)
+		// printf("afte open 1 pfd 1 is %d\n", cmd->pfd[1]);
+	}
+	else if (cmd->outfile)
 	{
         cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	}
-	return (0);
-}
+		// printf("afte open 2 pfd 1 is %d\n", cmd->pfd[1]);
 
-//handle heredoc temporary file creation and open in it previous_fd
-int	create_doc(t_manager *manager, int *previous_fd,  t_cmd *current_cmd, t_env *s_env)
-{
-	if (*previous_fd != -1 && close(*previous_fd) == -1)
-			return (-1);
-	*previous_fd = open("heredoc_tmp", O_RDWR | O_CREAT | O_TRUNC, 0644);
-	if (*previous_fd == -1)
-		return (system_function_error(manager, 1));
-	if (create_doc_loop(previous_fd, manager, current_cmd, s_env) == -1)
-		return (-1);
-	if (close(*previous_fd) == -1)
-		return (system_function_error(manager, 1));
-	*previous_fd = open("heredoc_tmp", O_RDWR | O_CREAT, 0644);
-	if (*previous_fd == -1)
-		return (system_function_error(manager, 1));
-	return (0);
-}
-int		create_doc_loop(int *previous_fd, t_manager *manager, t_cmd *current_cmd, t_env *s_env)
-{
-	char	*current_line;
-	char	*tmp;
-
-	tmp = ft_strjoin(current_cmd->lim, "\n");
-	if (!tmp)
-		return (system_function_error(manager, 6));
-	while (1)
-	{
-		write(1, ">", 1);
-		current_line = get_next_line(STDIN_FILENO);
-		if (!current_line
-			|| !ft_strncmp(current_line, tmp, ft_strlen(current_line)))
-			return (free(tmp), free(current_line), 0);
-		if (!current_cmd->heredoc_quotes)
-		{
-			char *tmp2 = ft_strdup(current_line);
-			free(current_line);
-			current_line = expand_heredoc(tmp2, s_env);
-			free(tmp2);
-		}
-		if (write(*previous_fd, current_line, ft_strlen(current_line)) == -1)
-			return (system_function_error(manager, 5));
-		free(current_line);
 	}
 	return (0);
 }

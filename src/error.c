@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/27 10:45:50 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/27 16:25:24 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@ int	parsing_error_op(t_manager *manager, int code, char operator, char dble_op)
 {
 	if (code == 4)
 	{
+		printf("i come hee how many time ?\n");
 		if (dble_op)
 		{
 			write(2, "bash: ",6);
-			write (2, "syntax error near unexpected token ",36);
+			write (2, "syntax error near unexpected token ", 36);
 			write (2,&operator,1);
 			write (2,&dble_op,1);
 			write (2,"\n",1);
@@ -28,7 +29,7 @@ int	parsing_error_op(t_manager *manager, int code, char operator, char dble_op)
 		else 
 		{
 			write(2, "bash: ",6);
-			write (2, "syntax error near unexpected token ",36);
+			write (2, "syntax error near unexpected token " ,36);
 			write (2,&operator,1);
 			write (2,"\n",1);
 		}
@@ -66,15 +67,18 @@ int access_error(t_manager *manager, int code, char *str)
 	{
 		write (2, ": Permission denied\n", 20);
 		manager->exit_status = 1;
-		return (-1);
 	}
-	if (code == 6)
+	else if (code == 6)
 	{
 		write(2, ": No such file or directory\n", 28);
 		manager->exit_status = 127;			
-		return (-1);
 	}
-return (-1);
+	else if (code == 7)
+	{
+		write(2, ": Is a directory\n", 17);
+		manager->exit_status = 126;			
+	}
+	return (-1);
 }
 
 int system_function_error(t_manager *manager, int code)
@@ -95,7 +99,9 @@ int system_function_error(t_manager *manager, int code)
 	else if (code == 7)
 		write (2, "bash: malloc error\n", 18);	
 	else if (code == 8)
-		write (2, "bash: dup2 error\n", 16);	
+		write (2, "bash: dup2 error\n", 16);
+	else if (code == 9)
+		write (2, "bash: opendir error\n", 19);
 	return (-1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 09:47:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/23 13:47:54 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/27 16:33:01 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,11 @@ int	regular_word(t_manager *manager, char *line, int i)
 	int	j;
 
 	j = 0;
+	// if (is_operators(manager, line, i) == -1) is it necessay ???
+	// 	return (-1);
 	while (line[i + j] && !ft_is_space(line[i]) 
 			&& (!is_operators(manager, line, i)
-			|| is_operators(manager, line, i) == DIR))
+			|| is_operators(manager, line, i) == DIREC))
 		j++;
 	manager->word = (char *)malloc(sizeof(char) * (j + 1));
 	if (!manager->word)
@@ -59,7 +61,7 @@ int	regular_word(t_manager *manager, char *line, int i)
 	j = 0;
 	while (line[i] && !ft_is_space(line[i]) 
 			&& (!is_operators(manager, line, i)
-			|| is_operators(manager, line, i) == DIR))
+			|| is_operators(manager, line, i) == DIREC))
 	{
 		manager->word[j] = line[i];
 		j++;

@@ -26,8 +26,10 @@ int exploop_env_var(t_token *current_token, t_env *s_env, t_manager *manager)
     else
     {
         current_token->type = is_operators(manager, current_token->value, 0);
-        if (current_token->type == DIR)
+        if (current_token->type == DIREC)
             return (handle_dir(manager, NULL, 0, current_token));
+        else if (current_token->type == -1)
+            return (-1);
     }
     return (0);
 }

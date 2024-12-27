@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/26 19:35:33 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/27 17:02:07 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int child_process(t_cmd *cmd, int *previous_fd, t_manager *manager, char **to_ex
     char *path;
     char **env_arr;
     
+    path = NULL;
     if (cmd->infile || cmd->index != 0 || cmd->heredoc_count || manager->heredoc_line)
         handle_input_redirection(cmd, previous_fd, manager);
     if (cmd->outfile || (cmd->index + 1) != manager->size_cmd)
@@ -80,9 +81,12 @@ int child_process(t_cmd *cmd, int *previous_fd, t_manager *manager, char **to_ex
     if (to_execute &&
             path_execution_heredocline(manager, to_execute) == -1)
         return (system_function_error(manager, 2));
-    path = find_path(cmd->args[0], manager->env_first, manager);
-    if (path == NULL)
+    if (cmd->args && cmd->args[0])
+        path = find_path(cmd->args[0], manager->env_first, manager);
+    if (path == NULL && cmd->args && cmd->args[0])
         return (cmd_error(manager, 6, cmd->args[0]));
+    else if (path == NULL)
+        return (cmd_error(manager, 6, NULL));
     env_arr = convert_env(manager->env_first);
     if (execve(path, cmd->args, env_arr) == -1)
         return (system_function_error(manager, 2));

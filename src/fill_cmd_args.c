@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:12:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/27 10:07:09 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/27 16:56:36 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int count_args(t_token *current)
     while (current && (current->type == CMD_ARG
                 || current->type == DOUBLE_QUOTE
                 || current->type == SIMPLE_QUOTE
-                || current->type == DIR)) 
+                || current->type == DIREC)) 
     {
         cmd_count++;
         current = current->next;
@@ -65,7 +65,7 @@ t_token *fill_args_values(t_token *current, char **args, int cmd_count)
         i++;
     }
     args[i] = NULL;
-    return current;
+    return (current);
 }
 
 // Fonction principale pour remplir les arguments d'une commande
@@ -78,5 +78,5 @@ t_token *fill_args(t_token *current, t_cmd *cmd, t_manager *manager)
     cmd->args = allocate_args(cmd_count);
     if (!cmd->args)
         return (NULL);
-    return fill_args_values(current, cmd->args, cmd_count);
+    return (fill_args_values(current, cmd->args, cmd_count));
 }

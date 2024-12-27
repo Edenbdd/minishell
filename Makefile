@@ -6,7 +6,7 @@
 #    By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/15 09:42:50 by smolines          #+#    #+#              #
-#    Updated: 2024/12/23 14:04:17 by aubertra         ###   ########.fr        #
+#    Updated: 2024/12/27 12:38:52 by aubertra         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,7 @@ SRCS 			= 	main.c\
 					fill_cmd_args.c\
 					free_struct.c\
 					free.c\
+					handle_heredoc_files.c\
 					handle_files.c\
 					oplist_cmd.c\
 					oplist_env.c\

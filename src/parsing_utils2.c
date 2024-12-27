@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:58:50 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/27 10:02:23 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/27 14:21:56 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,14 @@ int	sec_type_quotes_cmd(t_manager *manager, char *line, int i)
 		else
 			return (handle_quote(line, i - 1, manager));
 	}
-	else
-	{
-		if (manager->type == REDIR_HEREDOC &&
-			(count_quotes(manager, &line[i], '\'', '"') > 0
-			|| count_quotes(manager, &line[i], '"', '\'') > 0))
+	if (manager->type == REDIR_HEREDOC &&
+		(count_quotes(manager, &line[i], '\'', '"') > 0
+		|| count_quotes(manager, &line[i], '"', '\'') > 0))
 			return (heredoc_quotes(line, i, manager));
-		else
-	    	return (regular_word(manager, line, i));
-	}
+	else
+		return (regular_word(manager, line, i));
 }
+
 
 /*handle secondary type of the files or the following quotes, fill
 manager->word accordingly*/
@@ -55,6 +53,11 @@ int handle_secondary_type(t_manager *manager, char *line, int i)
         return (parsing_error_op(manager, 4, '<', 0));
     else if (manager->sec_type == REDIR_HEREDOC)
         return (parsing_error_op(manager, 4, '<', '<'));
+	else if (manager->sec_type == DIREC)
+	{
+		// printf("type is %d\n", manager->sec_type);
+		return (regular_word(manager, line, i)); //see if thats ok o if we need smthg else
+	}
     return (-1);
 }
 /*Handle redirection operators errors & get the following word 
@@ -78,6 +81,7 @@ int handle_redir(t_manager *manager, char *line, int i)
         i++;
     i = verif_operator(manager, line, i, &(manager->sec_type));
 	ret = handle_secondary_type(manager, line, i);
+	// printf("ret is %d\n", ret);
     return (ret);
 }
 

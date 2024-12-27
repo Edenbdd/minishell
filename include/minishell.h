@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/26 19:36:36 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/27 14:07:28 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <errno.h> 
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <dirent.h>
 
 // Token type enumeration
 typedef enum e_token_type
@@ -41,7 +42,7 @@ typedef enum e_token_type
     REDIR_HEREDOC, // For '<<'
     ENV_VAR, // For environment variables start with $
 	EXIT_STAT, // for $?
-	DIR,
+	DIREC, //if /
 	ECHO,
 	CD,
 	PWD,
