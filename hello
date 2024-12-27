@@ -1,8 +1,0 @@
-exec error
-$>hola
-[31mdisplay de la liste token[0m
-token value :[hola] -- type : [0]
-exit status [127]
-[31mdisplay de la liste cmd[0m
-exec error
-$>$>
