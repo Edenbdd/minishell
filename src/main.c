@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/27 16:56:40 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/27 17:21:41 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,13 @@ int	main(int argc, char **argv, char **env)
 	(void)argv;
 	first_env = handle_env(env);
 	exitcode = 0;
+	line = NULL;
 	while (1)
 	{
+		if (line)
+			free(line);
 		init_manager(&manager, *first_env, exitcode);
-		line = readline("$>");
+		line = readline("$>"); //bug ??
 		//ajouter protection + signaux plus tard
 		if (!line)
 			break;
@@ -64,17 +67,16 @@ int	main(int argc, char **argv, char **env)
 		// printf("check if the expand worked: [%s]\n", manager.cmd_first->args[1]);
 		printf("exit status [%d]\n", manager.exit_status);
 		printf("\033[31mdisplay de la liste cmd\033[0m\n");
-		// cmd_display(manager.cmd_first);
+		cmd_display(manager.cmd_first);
 		if (execution(&manager, first_env) == -1)
 		{
-			printf("exec error\n");
 			exitcode = manager.exit_status;
 			free_manager(&manager);
 			continue;
 		}
 		exitcode = manager.exit_status;
 		free_manager(&manager);
-		// break;
+		break;
 	}
 	free_env(first_env);
 	return (0);
