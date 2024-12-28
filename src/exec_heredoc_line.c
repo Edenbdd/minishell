@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 14:44:09 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/23 15:27:45 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/28 16:06:13 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	exec_heredoc(t_manager *manager, t_env *s_env, int *previous_fd, t_cmd *curr
 	if (current_cmd->heredoc_count == 1
 		&& !ft_strcmp(current_cmd->args[0], "\n"))
 	{
-		if (close_fds(current_cmd, previous_fd, manager) == -1)
+		if (close_fds(current_cmd, previous_fd, manager, 1) == -1)
 			return (-1);
 		current_cmd = current_cmd->next;
 		return (0);
@@ -101,7 +101,7 @@ t_cmd	*heredoc_line(t_cmd *current_cmd, int *previous_fd, t_manager *manager, in
 		&& child_process(current_cmd, previous_fd, manager, to_execute) == -1)
     		return (*err_flag = -1, NULL);
 	free_cmd_args(to_execute);
-	close_fds(current_cmd, previous_fd, manager);
+	close_fds(current_cmd, previous_fd, manager, 1);
 	current_cmd = current_cmd->next;
 	wait(NULL);
     manager->heredoc_line = 0;

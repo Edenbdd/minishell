@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/28 15:15:08 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/28 16:03:03 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int setup_pipe_and_fork(t_cmd *current_cmd, t_manager *manager)
 }
 
 //Execution : Gestion de la fermeture des fichiers
-int close_fds(t_cmd *current_cmd, int *previous_fd, t_manager *manager)
+int close_fds(t_cmd *current_cmd, int *previous_fd, t_manager *manager, int id)
 {
 	int i;
     struct stat buf;
@@ -58,8 +58,16 @@ int close_fds(t_cmd *current_cmd, int *previous_fd, t_manager *manager)
     i = 3;
     while (i <= 1000)
     {
-        if (i != *previous_fd && !fstat(i, &buf))
-            close(i);
+        if (id == 0)
+        {
+            if (!fstat(i, &buf))
+                close(i);
+        }
+        else
+        {
+            if (i != *previous_fd && !fstat(i, &buf))
+                close(i);
+        }
         i++;
     }
     return (0);
@@ -88,7 +96,7 @@ int execution(t_manager *manager, t_env *s_env)
         if (id == 0 
 			&& child_process(current_cmd, &previous_fd, manager, NULL) == -1)
             return (-1);
-        if (close_fds(current_cmd, &previous_fd, manager) == -1)
+        if (close_fds(current_cmd, &previous_fd, manager, id) == -1)
             return (system_function_error(manager, 1));
         current_cmd = current_cmd->next;
     }

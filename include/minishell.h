@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/27 14:07:28 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/28 16:02:46 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,8 @@ int 		path_execution_heredocline(t_manager *manager, char **to_execute);
 int 		handle_heredoc(t_manager *manager, t_cmd *current_cmd, 
 							int *previous_fd, t_env *s_env);
 int			setup_pipe_and_fork(t_cmd *current_cmd, t_manager *manager);
-int			close_fds(t_cmd *current_cmd, int *previous_fd, t_manager *manager);
+int 		close_fds(t_cmd *current_cmd, int *previous_fd, t_manager *manager, 
+						int id);
 int			execution(t_manager *manager, t_env *s_env);
 int			waiting(int id_last);
 

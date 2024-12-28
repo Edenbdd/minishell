@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/28 15:14:07 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/28 16:02:51 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 
 int handle_input_redirection(t_cmd *cmd, int *previous_fd, t_manager *manager)
 {
-    if (cmd->infile && !cmd->heredoc_count && !manager->heredoc_line)
+    if (cmd->infile && !cmd->heredoc_count 
+        && !manager->heredoc_line)
         *previous_fd = open(cmd->infile, O_RDONLY);
     if (*previous_fd != -1)
     {
@@ -30,7 +31,6 @@ int handle_input_redirection(t_cmd *cmd, int *previous_fd, t_manager *manager)
 }
 
 //child process : Gestion des redirections de sortie
-
 int handle_output_redirection(t_cmd *cmd)
 {
     // printf("for pid [%d] pdf1 is [%d]\n", getpid(), cmd->pfd[1]);
@@ -39,6 +39,7 @@ int handle_output_redirection(t_cmd *cmd)
     dup2(cmd->pfd[1], STDOUT_FILENO);
     return (0);
 }
+
 int path_execution_heredocline(t_manager *manager, char **to_execute)
 {
     char *path;
@@ -57,7 +58,7 @@ int path_execution_heredocline(t_manager *manager, char **to_execute)
     return (0);
 }
 
-
+//A RECOUPER
 int child_process(t_cmd *cmd, int *previous_fd, t_manager *manager, char **to_execute)
 {
     char *path;
@@ -71,7 +72,7 @@ int child_process(t_cmd *cmd, int *previous_fd, t_manager *manager, char **to_ex
         if (handle_output_redirection(cmd) == -1)
             return (system_function_error(manager, 1));
     }
-    if (close_fds(cmd, previous_fd, manager) == -1)
+    if (close_fds(cmd, previous_fd, manager, 0) == -1)
         return (system_function_error(manager, 1));
     if (to_execute &&
             path_execution_heredocline(manager, to_execute) == -1)
