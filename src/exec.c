@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/26 20:01:12 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/28 15:15:08 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,19 +47,7 @@ int close_fds(t_cmd *current_cmd, int *previous_fd, t_manager *manager)
     struct stat buf;
 
     //see if this is better than the previous method -> seems great right now
-    i = 3;
-    while (i <= 1000)
-    {
-        if (i != *previous_fd && !fstat(i, &buf))
-            close(i);
-        i++;
-    }
-    // if (current_cmd->pfd[1] != -1)
-    // {
-    //     if (close(current_cmd->pfd[1]) == -1)
-    //         return (system_function_error(manager, 1));
-	// 	current_cmd->pfd[1] = -1;
-    // }
+    // printf("prev is %d\n", *previous_fd);
     if ((current_cmd->index >= 1 || current_cmd->heredoc_count > 0) 
 			&& *previous_fd != -1)
     {
@@ -67,23 +55,31 @@ int close_fds(t_cmd *current_cmd, int *previous_fd, t_manager *manager)
             return (system_function_error(manager, 1));
 	}
     *previous_fd = current_cmd->pfd[0];
+    i = 3;
+    while (i <= 1000)
+    {
+        if (i != *previous_fd && !fstat(i, &buf))
+            close(i);
+        i++;
+    }
     return (0);
 }
 
-// A recouper a nouveau !
+// A RECOUPER !!!
 int execution(t_manager *manager, t_env *s_env)
 {
     t_cmd 	*current_cmd;
     int 	id;
     int 	previous_fd;
-    
+    struct stat buf;
+
 	previous_fd = -1;
     current_cmd = manager->cmd_first;
     while (current_cmd)
     {
 		id = exec_heredoc(manager, s_env, &previous_fd, current_cmd);
 		if (id == -1)
-			return (-1);
+            return (-1);
 		else if(id == 0)
 			continue;
 		id = setup_pipe_and_fork(current_cmd, manager);
@@ -93,12 +89,14 @@ int execution(t_manager *manager, t_env *s_env)
 			&& child_process(current_cmd, &previous_fd, manager, NULL) == -1)
             return (-1);
         if (close_fds(current_cmd, &previous_fd, manager) == -1)
-            return (-1);
+            return (system_function_error(manager, 1));
         current_cmd = current_cmd->next;
     }
-	if ((previous_fd != -1 && close(previous_fd) == -1)
-		|| unlink_heredoc(manager) == -1)
-			return (-1);
+	if (previous_fd != -1 && close(previous_fd) == -1 
+        && !fstat(previous_fd, &buf))  
+        return (system_function_error(manager, 1));
+    if (unlink_heredoc(manager) == -1)
+        return (system_function_error(manager, 1));
     return (waiting(id));
 }
 

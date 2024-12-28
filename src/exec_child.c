@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/27 17:02:07 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/28 15:14:07 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,7 @@ int handle_input_redirection(t_cmd *cmd, int *previous_fd, t_manager *manager)
 
 int handle_output_redirection(t_cmd *cmd)
 {
-    //Maybe all of this should be commented then ?
-    // if (cmd->append == 1 && cmd->outfile)
-    //     cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
-    // else if (cmd->outfile)
-    //     cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    //Until here ?
+    // printf("for pid [%d] pdf1 is [%d]\n", getpid(), cmd->pfd[1]);
     if (cmd->pfd[1] == -1)
         return (-1);
     dup2(cmd->pfd[1], STDOUT_FILENO);
@@ -77,7 +72,7 @@ int child_process(t_cmd *cmd, int *previous_fd, t_manager *manager, char **to_ex
             return (system_function_error(manager, 1));
     }
     if (close_fds(cmd, previous_fd, manager) == -1)
-        return (-1);
+        return (system_function_error(manager, 1));
     if (to_execute &&
             path_execution_heredocline(manager, to_execute) == -1)
         return (system_function_error(manager, 2));
@@ -85,7 +80,7 @@ int child_process(t_cmd *cmd, int *previous_fd, t_manager *manager, char **to_ex
         path = find_path(cmd->args[0], manager->env_first, manager);
     if (path == NULL && cmd->args && cmd->args[0])
         return (cmd_error(manager, 6, cmd->args[0]));
-    else if (path == NULL)
+    if (path == NULL)
         return (cmd_error(manager, 6, NULL));
     env_arr = convert_env(manager->env_first);
     if (execve(path, cmd->args, env_arr) == -1)

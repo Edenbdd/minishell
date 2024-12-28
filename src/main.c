@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/27 17:21:41 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/28 14:29:32 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,14 @@ int	main(int argc, char **argv, char **env)
 		cmd_display(manager.cmd_first);
 		if (execution(&manager, first_env) == -1)
 		{
+			printf("execution error\n");
 			exitcode = manager.exit_status;
 			free_manager(&manager);
 			continue;
 		}
 		exitcode = manager.exit_status;
 		free_manager(&manager);
-		break;
+		// break;
 	}
 	free_env(first_env);
 	return (0);
