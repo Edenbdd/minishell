@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/27 16:27:46 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/29 15:09:10 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,7 @@ int check_operator_err(t_manager *manager, char *line, int i)
 		|| (line[i] == '#') 
 		|| (line[i] == '\\')
 		)
-	{
-		printf("is it ici?\n");
 		return (parsing_error_op(manager, 4, line[i], 0));
-	}
 	if ((line[i] == '<' && line[i + 1] == '<' && line[i + 2] == '<')
 		|| (line[i] == '>' && line[i + 1] == '>' && line[i + 2] == '>'))
 			return (parsing_error_op(manager, 4, line[i], line[i + 1]));
@@ -65,10 +62,10 @@ int	verif_operator(t_manager *manager, char *line, int i, int *type)
 	result = is_operators(manager, line, i);
 	if 	(result == -1)
 			return (-1);
-	else if (result)
+	else if (result != -1)
 	{
 		*type = result;
-		if (result != DIREC && result != PIPE)
+		if (result != DIREC && result != PIPE && result != CMD_ARG)
 			i++;
 	}
 	return (i);

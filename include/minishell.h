@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/29 13:35:25 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/29 14:57:14 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,13 +148,13 @@ int			expand_errno(t_manager *manager);
 int			parsing_error(t_manager *manager, int code);
 int			parsing_error_op(t_manager *manager, int code, char operator, char dble_op);
 int			access_error(t_manager *manager, int code, char *str);
-int			cmd_error(t_manager *manager, int code, char *cmd);
+int			cmd_error(t_manager *manager, char *cmd);
 int 		system_function_error(t_manager *manager, int code);
 
 
 //exec_child
 int			handle_input_redirection(t_cmd *cmd, int *previous_fd, t_manager *manager);
-int			handle_output_redirection(t_cmd *cmd);
+int			handle_output_redirection(t_cmd *cmd, t_manager *manager);
 int 		child_process(t_cmd *cmd, int *previous_fd, 
 							t_manager *manager, char **to_execute);
 int 		path_execution_heredocline(t_manager *manager, char **to_execute);
@@ -232,7 +232,7 @@ void		free_cmd_args(char **args);
 //handle_files
 int			check_heredoc(t_manager *manager);
 int			check_infile(char *infile, t_manager *manager);
-int			check_outfile(char *outfile, t_manager *manager, t_cmd *cmd);
+int			check_outfile(char *outfile, t_manager *manager, t_cmd *cmd, int flag_exec);
 int			create_doc(t_manager *manager, int *previous_fd, 
 						t_cmd *current_cmd, t_env *s_env);
 int			create_doc_loop(int *previous_fd, t_manager *manager, 

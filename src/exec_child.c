@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/29 13:35:47 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/29 14:57:38 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,10 @@ int handle_input_redirection(t_cmd *cmd, int *previous_fd, t_manager *manager)
 }
 
 //child process : Gestion des redirections de sortie
-int handle_output_redirection(t_cmd *cmd)
+int handle_output_redirection(t_cmd *cmd, t_manager *manager)
 {
     // printf("for pid [%d] pdf1 is [%d]\n", getpid(), cmd->pfd[1]);
+    check_outfile(cmd->outfile, manager, cmd, 1);
     if (cmd->pfd[1] == -1)
         return (-1);
     dup2(cmd->pfd[1], STDOUT_FILENO);
@@ -48,7 +49,7 @@ int path_execution_heredocline(t_manager *manager, char **to_execute)
     path = find_path(to_execute[0], manager->env_first, manager);
     if (!path)
     {
-        cmd_error(manager, 6, to_execute[0]);
+        cmd_error(manager, to_execute[0]);
         free_cmd_args(to_execute);
         return (-1);
     }
@@ -69,7 +70,7 @@ int child_process(t_cmd *cmd, int *previous_fd, t_manager *manager, char **to_ex
         handle_input_redirection(cmd, previous_fd, manager);
     if (cmd->outfile || (cmd->index + 1) != manager->size_cmd)
     {
-        if (handle_output_redirection(cmd) == -1)
+        if (handle_output_redirection(cmd, manager) == -1)
             return (system_function_error(manager, 1));
     }
     if (close_fds(cmd, previous_fd, manager, 0) == -1)
@@ -80,9 +81,9 @@ int child_process(t_cmd *cmd, int *previous_fd, t_manager *manager, char **to_ex
     if (cmd->args && cmd->args[0])
         path = find_path(cmd->args[0], manager->env_first, manager);
     if (path == NULL && cmd->args && cmd->args[0])
-        return (cmd_error(manager, 6, cmd->args[0]));
+        return (cmd_error(manager, cmd->args[0]));
     if (path == NULL)
-        return (cmd_error(manager, 6, NULL));
+        return (cmd_error(manager, NULL));
     env_arr = convert_env(manager->env_first);
     if (execve(path, cmd->args, env_arr) == -1)
         return (system_function_error(manager, 2));

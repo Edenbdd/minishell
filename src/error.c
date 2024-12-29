@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/29 12:30:09 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/29 15:09:43 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ int	parsing_error_op(t_manager *manager, int code, char operator, char dble_op)
 {
 	if (code == 4)
 	{
-		printf("i come hee how many time ?\n");
 		if (dble_op)
 		{
 			write(2, "bash: ",6);
@@ -105,14 +104,14 @@ int system_function_error(t_manager *manager, int code)
 	return (-1);
 }
 
-int cmd_error(t_manager *manager, int code, char *cmd)
+int cmd_error(t_manager *manager, char *cmd)
 {
-	if (code == 6)
+	if (cmd)
 	{
 		write(2, "bash: ",6);
 		ft_putstr_fd(cmd, 2);
 		write (2, ": command not found\n", 20);
-		manager->exit_status = 127;			
+		manager->exit_status = 127;
 	}
 	free_env(manager->env_first);
 	free_manager(manager);

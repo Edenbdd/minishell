@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/27 15:59:25 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/29 15:10:13 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int process_token(t_manager *manager, char *line, int i)
         		if (manager->type == REDIR_APPEND || manager->type == REDIR_HEREDOC)
             		i++;
 				tmp = handle_redir(manager, line, i);
-				// printf("tmp is %d\n", tmp);
 				return (tmp);
 			} 
 	else if (manager->type == PIPE)
