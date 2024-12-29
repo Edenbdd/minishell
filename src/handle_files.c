@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 12:16:47 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/29 15:10:42 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/29 18:12:52 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ int	handle_redir_path(t_manager *manager, char *path, t_cmd *cmd)
 	char	*cut_path;
 
 	getcwd(cwd, sizeof(cwd));
-	// printf("ici is: [%s]\n", cwd);
 	cut_path = get_cut_path(path);
 	if (access(cut_path, F_OK) == -1)
 		return (access_error(manager, 6, path));

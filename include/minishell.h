@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/29 15:21:32 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/29 18:23:31 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,7 @@ char	*expand_heredoc(char *current_line, t_env *s_env);
 //fill_cmd_args
 int			count_args(t_token *current);
 char		**allocate_args(int cmd_count);
-t_token		*fill_args_values(t_token *current, char **args, int cmd_count);
+t_token		*fill_args_values(t_token *current, char **args, int cmd_count, t_manager *manager);
 t_token		*fill_args(t_token *current, t_cmd *cmd, t_manager *manager);
 
 

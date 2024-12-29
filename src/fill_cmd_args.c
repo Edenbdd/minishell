@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:12:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/27 16:56:36 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/29 18:25:51 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char    **allocate_args(int cmd_count)
 }
 
 // Remplit le tableau d'arguments de la commande
-t_token *fill_args_values(t_token *current, char **args, int cmd_count) 
+t_token *fill_args_values(t_token *current, char **args, int cmd_count, t_manager *manager) 
 {
     int i;
     
@@ -59,7 +59,8 @@ t_token *fill_args_values(t_token *current, char **args, int cmd_count)
         current = current->next;
         while (current && (current->type == REDIR_IN
 			|| current->type == REDIR_OUT
-			|| current->type == REDIR_HEREDOC
+		    || (current->type == REDIR_HEREDOC 
+            && manager->heredoc_line == 0)
 			|| current->type == REDIR_APPEND))
             current = current->next;
         i++;
@@ -78,5 +79,5 @@ t_token *fill_args(t_token *current, t_cmd *cmd, t_manager *manager)
     cmd->args = allocate_args(cmd_count);
     if (!cmd->args)
         return (NULL);
-    return (fill_args_values(current, cmd->args, cmd_count));
+    return (fill_args_values(current, cmd->args, cmd_count, manager));
 }

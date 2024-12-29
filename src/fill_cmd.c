@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/29 14:45:17 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/29 18:32:20 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,10 @@ int	redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 				break;
 			if (parse_lim(current_token, cmd, manager) == -1)
 				return (-1);	
-			cmd->heredoc_count++;
+			cmd->heredoc_count++; //maybe this should be commented ??
+			if (cmd->heredoc_count > 1 && manager->heredoc_line 
+				&& current_token->type == REDIR_HEREDOC)
+				break;
 		}
 		current_token = current_token->next;
 	}
@@ -71,6 +74,7 @@ int	redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 t_token	*cmd_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 {
 	current_token->cmd_done = 1;
+	
 	while (current_token)
 	{
 		if (current_token->type == CMD_ARG
@@ -78,9 +82,9 @@ t_token	*cmd_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 			|| current_token->type == SIMPLE_QUOTE)
 				current_token = fill_args(current_token, cmd, manager);
 		if (!current_token || current_token->type == PIPE
-			|| cmd->heredoc_count > 1)
+			|| (cmd->heredoc_count > 1 && manager->heredoc_line == 0))
 			break;
-		else if (current_token->type == REDIR_HEREDOC && current_token->next &&
+		if (current_token->type == REDIR_HEREDOC && current_token->next &&
 				current_token->next->type == REDIR_HEREDOC)
 		{
 			current_token = current_token->next;
@@ -102,11 +106,13 @@ int	fill_cmd(t_manager *manager, t_env *s_env)
 	cmd_node_count = 0;
 	while (current_token)
 	{
+		printf("start of the loop current is %s\n", current_token->value);
 		if (expand_loop(current_token, s_env, manager) == -1)
 			return (-1);
 		cmd = cmd_new();
 		if (redir_loop(current_token, cmd, manager) == -1)
 			return (-1);
+		printf("after redir loop current is %s\n", current_token->value);
 		current_token = cmd_loop(current_token, cmd, manager);
 		create_cmd_list(cmd, cmd_node_count, manager);
 		cmd_node_count++; //moved here
@@ -114,7 +120,6 @@ int	fill_cmd(t_manager *manager, t_env *s_env)
 			|| (current_token->type == REDIR_HEREDOC
 			&& current_token->cmd_done == 1)))
 			current_token = current_token->next;
-			//cmd_node_count++; was here before but moved on top, may create bug
 	}
 	return (0);
 }
