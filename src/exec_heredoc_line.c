@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 14:44:09 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/28 16:06:13 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/29 15:58:29 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ int	exec_heredoc(t_manager *manager, t_env *s_env, int *previous_fd, t_cmd *curr
 		&& !ft_strcmp(current_cmd->args[0], "\n"))
 	{
 		if (close_fds(current_cmd, previous_fd, manager, 1) == -1)
-			return (-1);
-		current_cmd = current_cmd->next;
+			return (system_function_error(manager, 1));
 		return (0);
 	}
 	if (manager->heredoc_line == 1)

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/28 16:03:03 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/29 15:58:06 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int handle_heredoc(t_manager *manager, t_cmd *current_cmd, int *previous_fd, t_e
 {
     if (current_cmd->lim)
     {
+        printf("coming in the if and current_lim is [%s]\n", current_cmd->lim);
         if (create_doc(manager, previous_fd, current_cmd, s_env) == -1)
             return (-1);
     }
@@ -89,8 +90,11 @@ int execution(t_manager *manager, t_env *s_env)
 		if (id == -1)
             return (-1);
 		else if(id == 0)
-			continue;
-		id = setup_pipe_and_fork(current_cmd, manager);
+        {
+            current_cmd = current_cmd->next;
+        	continue;
+        }
+        id = setup_pipe_and_fork(current_cmd, manager);
         if (id == -1)
             return (-1);
         if (id == 0 

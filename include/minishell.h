@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/29 14:57:14 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/29 15:21:32 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ int			expand_errno(t_manager *manager);
 int			parsing_error(t_manager *manager, int code);
 int			parsing_error_op(t_manager *manager, int code, char operator, char dble_op);
 int			access_error(t_manager *manager, int code, char *str);
-int			cmd_error(t_manager *manager, char *cmd);
+int			cmd_error(t_manager *manager, char *cmd, int exec_flag);
 int 		system_function_error(t_manager *manager, int code);
 
 

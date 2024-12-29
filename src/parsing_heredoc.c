@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:17:44 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/23 15:28:39 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/29 15:35:17 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	check_lim(char *limiter, int i)
 	{
 		if (limiter[i + 1] && limiter[i + 1] == '$')
 			return (1);
-		else if (limiter[i - 1] && limiter[i - 1] == '$')
+		else if (i > 0 && limiter[i - 1] && limiter[i - 1] == '$')
 			return (1);
 		else if (limiter[i + 1] && limiter[i] == '$' 
 		&& (limiter[i + 1] == '\'' || limiter[i + 1] == '"'))

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/29 15:09:43 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/29 15:22:21 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,18 +104,21 @@ int system_function_error(t_manager *manager, int code)
 	return (-1);
 }
 
-int cmd_error(t_manager *manager, char *cmd)
+int cmd_error(t_manager *manager, char *cmd, int exec_flag)
 {
-	if (cmd)
+	if (exec_flag == 0)
 	{
 		write(2, "bash: ",6);
 		ft_putstr_fd(cmd, 2);
 		write (2, ": command not found\n", 20);
 		manager->exit_status = 127;
 	}
-	free_env(manager->env_first);
-	free_manager(manager);
-	exit(127);
+	if (exec_flag == 1)
+	{
+		free_env(manager->env_first);
+		free_manager(manager);
+		exit(127);
+	}
 	return (-1);
 }
 

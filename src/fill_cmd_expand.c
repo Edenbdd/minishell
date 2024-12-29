@@ -41,7 +41,7 @@ int exploop_dquote(t_token *current_token, t_env *s_env, t_manager *manager)
     {
         expand_dquote(current_token, s_env);
         if (current_token->value == NULL)
-            return (cmd_error(manager, NULL));
+            return (cmd_error(manager, NULL, 0));
     }
     return (0);
 }

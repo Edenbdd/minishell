@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/29 14:57:38 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/29 15:20:43 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int path_execution_heredocline(t_manager *manager, char **to_execute)
     path = find_path(to_execute[0], manager->env_first, manager);
     if (!path)
     {
-        cmd_error(manager, to_execute[0]);
+        cmd_error(manager, to_execute[0], 1);
         free_cmd_args(to_execute);
         return (-1);
     }
@@ -81,9 +81,9 @@ int child_process(t_cmd *cmd, int *previous_fd, t_manager *manager, char **to_ex
     if (cmd->args && cmd->args[0])
         path = find_path(cmd->args[0], manager->env_first, manager);
     if (path == NULL && cmd->args && cmd->args[0])
-        return (cmd_error(manager, cmd->args[0]));
+        return (cmd_error(manager, cmd->args[0], 1));
     if (path == NULL)
-        return (cmd_error(manager, NULL));
+        return (cmd_error(manager, NULL, 1));
     env_arr = convert_env(manager->env_first);
     if (execve(path, cmd->args, env_arr) == -1)
         return (system_function_error(manager, 2));
