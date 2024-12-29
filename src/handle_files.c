@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 12:16:47 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/27 16:53:17 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/29 14:38:16 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,26 +72,24 @@ int	check_outfile(char *outfile, t_manager *manager, t_cmd *cmd)
 	int	is_path;
 	
 	verif_operator(manager, outfile, 0, &is_path);
-	// printf("im check outfile is path is %d\n", is_path);
 	if (outfile && !access(outfile, F_OK) //exist mais pemission denied
 		&& access(outfile, W_OK) == -1)
 			return (access_error(manager, 5, outfile));
 	if (outfile && access(outfile, F_OK ) && is_path == DIREC) //doesnt exist et path
 	{
-		// printf("I should come here in check outfile\n");
 		if (handle_redir_path(manager, outfile, cmd) == -1)
 			return (-1);
 	}
 	if (cmd->append == 1 && cmd->outfile)
 	{
         cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		// printf("afte open 1 pfd 1 is %d\n", cmd->pfd[1]);
 	}
 	else if (cmd->outfile)
 	{
-        cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		// printf("afte open 2 pfd 1 is %d\n", cmd->pfd[1]);
-
+		ft_putstr_fd("opening outfile: ", 2);
+		ft_putstr_fd(cmd->outfile , 2);
+    	ft_putstr_fd("\n" , 2);
+		cmd->pfd[1] = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	}
 	return (0);
 }

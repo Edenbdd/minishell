@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/28 14:19:41 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/29 12:30:09 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,9 @@ int cmd_error(t_manager *manager, int code, char *cmd)
 		write (2, ": command not found\n", 20);
 		manager->exit_status = 127;			
 	}
+	free_env(manager->env_first);
+	free_manager(manager);
+	exit(127);
 	return (-1);
 }
 

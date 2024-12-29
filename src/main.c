@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/28 14:29:32 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/29 13:36:30 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	main(int argc, char **argv, char **env)
 	{
 		if (line)
 			free(line);
-		init_manager(&manager, *first_env, exitcode);
+		init_manager(&manager, first_env, exitcode);
 		line = readline("$>"); //bug ??
 		//ajouter protection + signaux plus tard
 		if (!line)

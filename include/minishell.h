@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/28 16:02:46 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/29 13:35:25 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,7 +239,7 @@ int			create_doc_loop(int *previous_fd, t_manager *manager,
 						t_cmd *current_cmd, t_env *s_env);
 
 //oplist_manager
-t_manager	*init_manager(t_manager *manager, t_env first_env, int exitcode);
+t_manager	*init_manager(t_manager *manager, t_env *first_env, int exitcode);
 
 //Operations sur liste token
 void		*token_add_new(t_token *new_token, t_token **token);
