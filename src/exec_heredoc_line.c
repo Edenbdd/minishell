@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 14:44:09 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/29 15:58:29 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/30 11:00:39 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,24 @@
 #include "minishell.h"
 #include "libft.h"
 
-int	exec_heredoc(t_manager *manager, t_env *s_env, int *previous_fd, t_cmd *current_cmd)
+int	exec_heredoc(t_manager *manager, t_env *s_env, int *previous_fd, t_cmd **current_cmd)
 {
 	int	err_flag;
 
 	err_flag = 0;
 	if (!manager->heredoc_line && 
-		handle_heredoc(manager, current_cmd, previous_fd, s_env) == -1)
+		handle_heredoc(manager, *current_cmd, previous_fd, s_env) == -1)
 		return (-1);
-	if (current_cmd->heredoc_count == 1
-		&& !ft_strcmp(current_cmd->args[0], "\n"))
+	if ((*current_cmd)->heredoc_count == 1
+		&& !ft_strcmp((*current_cmd)->args[0], "\n"))
 	{
-		if (close_fds(current_cmd, previous_fd, manager, 1) == -1)
+		if (close_fds(*current_cmd, previous_fd, manager, 1) == -1)
 			return (system_function_error(manager, 1));
 		return (0);
 	}
 	if (manager->heredoc_line == 1)
 	{
-		current_cmd = heredoc_line(current_cmd, previous_fd, manager, &err_flag);
+		*current_cmd = heredoc_line(*current_cmd, previous_fd, manager, &err_flag);
 		if (err_flag == -1)
 			return (-1);
 		manager->heredoc_line = 0;
@@ -96,6 +96,7 @@ t_cmd	*heredoc_line(t_cmd *current_cmd, int *previous_fd, t_manager *manager, in
 	id = setup_pipe_and_fork(current_cmd, manager);
     if (id == -1)
 		return (*err_flag = -1, NULL);
+	printf("to execute is [%s]\n", to_execute[0]);
     if (id == 0
 		&& child_process(current_cmd, previous_fd, manager, to_execute) == -1)
     		return (*err_flag = -1, NULL);

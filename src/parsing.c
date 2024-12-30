@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/29 18:16:30 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/30 10:56:32 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,10 +120,7 @@ int token_error(t_manager *manager)
 		count++;
 		if (token_tour->next && token_tour->type == REDIR_HEREDOC &&
 			token_tour->next->type == REDIR_HEREDOC)
-			{
 			manager->heredoc_line = 1;
-			printf("ICI\n");
-			}
 		if (check_redir(token_tour, manager) == -1)
 			return (-1);
 		if ((token_tour->next) && (token_tour->type == PIPE 

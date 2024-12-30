@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 22:30:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/23 13:42:17 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/30 10:36:03 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_cmd	*cmd_new(void)
 	new_cmd->args = NULL;
 	new_cmd->infile = NULL;
 	new_cmd->lim = NULL;
-	new_cmd->heredoc_count = -1;
+	new_cmd->heredoc_count = 0;
 	new_cmd->heredoc_quotes = 0;
 	new_cmd->outfile = NULL;
 	new_cmd->append = -1;	

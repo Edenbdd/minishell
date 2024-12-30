@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/29 15:58:06 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/30 10:57:57 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,13 @@ int execution(t_manager *manager, t_env *s_env)
     current_cmd = manager->cmd_first;
     while (current_cmd)
     {
-		id = exec_heredoc(manager, s_env, &previous_fd, current_cmd);
+		id = exec_heredoc(manager, s_env, &previous_fd, &current_cmd);
 		if (id == -1)
             return (-1);
 		else if(id == 0)
         {
-            current_cmd = current_cmd->next;
+            if (current_cmd)
+            {    current_cmd = current_cmd->next;}
         	continue;
         }
         id = setup_pipe_and_fork(current_cmd, manager);

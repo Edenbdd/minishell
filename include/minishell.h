@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/29 18:23:31 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/30 10:53:47 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ t_cmd		*heredoc_line(t_cmd *current_cmd, int *previous_fd,
 t_cmd		*heredoc_loop(t_cmd *current_cmd, int *previous_fd, 
 							t_manager *manager, char **to_execute);
 int			exec_heredoc(t_manager *manager, t_env *s_env, int *previous_fd, 
-							t_cmd *current_cmd);
+							t_cmd **current_cmd);
 
 
 //expand_cut
