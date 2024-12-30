@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:10:09 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/21 14:37:56 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/30 11:28:47 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,3 +83,4 @@ int	expand_errno(t_manager *manager, int i)
 // 	printf("errno str : [%s]\n", manager->word);
 // 	printf("taille errno : [%d]\n", len_errno);
 	return (i + 1);
+}

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/30 10:53:47 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/30 11:29:12 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ int			envsize(t_env *lst);
 //errno
 int			errno_to_str(int errno_value, char* err_str);
 char		*errno_inorder(char* err_str, int i);
-int			expand_errno(t_manager *manager);
+int			expand_errno(t_manager *manager, int i);
 
 //error
 int			parsing_error(t_manager *manager, int code);

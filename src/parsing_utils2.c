@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:58:50 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/29 15:10:10 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/30 11:29:40 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int handle_env_pars(t_manager *manager, char *line, int i)
 		manager->word = ft_strdup("$\0");
 	}
 	else if (line[i - 1] == '$' && (line[i] == '?'))
-		i = expand_errno(manager);
+		i = expand_errno(manager, i);
 	else 
 		i = regular_word(manager, line, i);
 	return (i);
