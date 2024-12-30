@@ -3,6 +3,9 @@
 		"libft.h": "c",
 		"minishell.h": "c",
 		"unistd.h": "c",
-		"stat.h": "c"
+		"stat.h": "c",
+		"handle_he": "cpp",
+		"history.h": "c",
+		"readline.h": "c"
 	}
 }

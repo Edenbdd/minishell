@@ -1,23 +1,23 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   errno.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:10:09 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/20 12:38:56 by smolines         ###   ########.fr       */
+/*   Updated: 2024/12/21 14:37:56 by aubertra         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
-// pour gerer $?
+/*Handling the errno variable $?*/
 
 #include "minishell.h"
 #include "libft.h"
 
 // stocker un entier errno dans une chaîne de caractères
 int	errno_to_str(int errno_value, char* err_str)
- {
+{
     int	i;
 
 	i = 0;
@@ -37,7 +37,7 @@ int	errno_to_str(int errno_value, char* err_str)
     }
     err_str[i] = '\0';
 	return (i);
- }
+}
 
 // Inverser la chaîne errno pour obtenir l'ordre correct
 char *errno_inorder(char* err_str, int i)
@@ -65,7 +65,6 @@ int	errno_len(int errnb)
 	return (2);
 }
 
-///////////////////////////
 //recuperer un token "mot"
 int	expand_errno(t_manager *manager, int i)
 {
@@ -81,8 +80,6 @@ int	expand_errno(t_manager *manager, int i)
 
 	j =	errno_to_str(manager->exit_status, manager->word);
 	manager->word = errno_inorder(manager->word, j);
-
-	printf("errno str : [%s]\n", manager->word);
-	printf("taille errno : [%d]\n", len_errno);
+// 	printf("errno str : [%s]\n", manager->word);
+// 	printf("taille errno : [%d]\n", len_errno);
 	return (i + 1);
-}

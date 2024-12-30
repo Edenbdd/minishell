@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/20 14:11:53 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/30 10:53:47 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,12 @@
 # include <limits.h>
 # include <fcntl.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <sys/time.h>
 # include <errno.h> 
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <dirent.h>
 
 // Token type enumeration
 typedef enum e_token_type
@@ -40,7 +42,7 @@ typedef enum e_token_type
     REDIR_HEREDOC, // For '<<'
     ENV_VAR, // For environment variables start with $
 	EXIT_STAT, // for $?
-	DIR,
+	DIREC, //if /
 	ECHO,
 	CD,
 	PWD,
@@ -60,6 +62,7 @@ struct s_token
 	char	*value;
 	int		type;
 	int		space; //1 if precedant char is space, 0 otherwise
+	int		cmd_done;
 	t_token	*next;
 	t_token	*prev;
 };
@@ -108,6 +111,7 @@ typedef struct s_manager
 	int			size_cmd;
 	t_export	*export_first;
 	int 		exit_status;
+	int			heredoc_line;
 	t_env		*env_first;
 } t_manager;
 
@@ -144,22 +148,35 @@ int			expand_errno(t_manager *manager);
 int			parsing_error(t_manager *manager, int code);
 int			parsing_error_op(t_manager *manager, int code, char operator, char dble_op);
 int			access_error(t_manager *manager, int code, char *str);
-int			cmd_error(t_manager *manager, int code, char *cmd);
-int			open_close_error(t_manager *manager, int code);
-//int dir_error(t_manager *manager, int code, char *word);
+int			cmd_error(t_manager *manager, char *cmd, int exec_flag);
+int 		system_function_error(t_manager *manager, int code);
+
 
 //exec_child
-int			handle_input_redirection(t_cmd *cmd, int *previous_fd);
-int			handle_output_redirection(t_cmd *cmd);
-int			child_process(t_cmd *cmd, int *previous_fd, t_env *s_env, t_manager *manager);
+int			handle_input_redirection(t_cmd *cmd, int *previous_fd, t_manager *manager);
+int			handle_output_redirection(t_cmd *cmd, t_manager *manager);
+int 		child_process(t_cmd *cmd, int *previous_fd, 
+							t_manager *manager, char **to_execute);
+int 		path_execution_heredocline(t_manager *manager, char **to_execute);
 
 //exec
 int 		handle_heredoc(t_manager *manager, t_cmd *current_cmd, 
 							int *previous_fd, t_env *s_env);
 int			setup_pipe_and_fork(t_cmd *current_cmd, t_manager *manager);
-int			close_fds(t_cmd *current_cmd, int *previous_fd, t_manager *manager);
+int 		close_fds(t_cmd *current_cmd, int *previous_fd, t_manager *manager, 
+						int id);
 int			execution(t_manager *manager, t_env *s_env);
 int			waiting(int id_last);
+
+//exec_heredoc_line
+char		**copy_arr(char **to_copy);
+t_cmd		*heredoc_line(t_cmd *current_cmd, int *previous_fd, 
+							t_manager *manager, int *err_flag);
+t_cmd		*heredoc_loop(t_cmd *current_cmd, int *previous_fd, 
+							t_manager *manager, char **to_execute);
+int			exec_heredoc(t_manager *manager, t_env *s_env, int *previous_fd, 
+							t_cmd **current_cmd);
+
 
 //expand_cut
 int			get_cut_length(char *str, int pos);
@@ -176,13 +193,17 @@ int		expand(t_token *token, t_env *s_env);
 char	*get_toexpand(char *str, int i);
 char	*expand_exists(char *to_expand, t_env *s_env);
 void	expand_dquote(t_token *current_token, t_env *s_env);
+
+//expand heredoc
+char    *expand_line(char *current_line, int *i, t_env  *s_env);
 char	*expand_heredoc(char *current_line, t_env *s_env);
 
 //fill_cmd_args
 int			count_args(t_token *current);
 char		**allocate_args(int cmd_count);
-t_token		*fill_args_values(t_token *current, char **args, int cmd_count);
+t_token		*fill_args_values(t_token *current, char **args, int cmd_count, t_manager *manager);
 t_token		*fill_args(t_token *current, t_cmd *cmd, t_manager *manager);
+
 
 //fill_cmd_expand
 int			exploop_env_var(t_token *current_token, t_env *s_env, t_manager *manager);
@@ -193,6 +214,7 @@ int			expand_loop(t_token *current_token, t_env *s_env, t_manager *manager);
 int			redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager);
 t_token		*cmd_loop(t_token *current_token, t_cmd *cmd, t_manager *manager);
 int			fill_cmd(t_manager *manager, t_env *s_env);
+int			redir_in_out(t_token *current_token, t_cmd *cmd, t_manager *manager);
 
 //free_manager
 void		free_token(t_token *token);
@@ -202,7 +224,7 @@ void		free_manager(t_manager *manager);
 void		free_env(t_env *env);
 
 //free
-int			closing(t_cmd *cmd, int *previous_fd, t_manager *manager);
+// int			closing(t_cmd *cmd, int *previous_fd, t_manager *manager);
 void		free_path(char **paths);
 int			unlink_heredoc(t_manager *manager);
 void		free_cmd_args(char **args);
@@ -210,14 +232,14 @@ void		free_cmd_args(char **args);
 //handle_files
 int			check_heredoc(t_manager *manager);
 int			check_infile(char *infile, t_manager *manager);
-int			check_outfile(char *outfile, t_manager *manager);
+int			check_outfile(char *outfile, t_manager *manager, t_cmd *cmd, int flag_exec);
 int			create_doc(t_manager *manager, int *previous_fd, 
 						t_cmd *current_cmd, t_env *s_env);
 int			create_doc_loop(int *previous_fd, t_manager *manager, 
 						t_cmd *current_cmd, t_env *s_env);
 
 //oplist_manager
-t_manager	*init_manager(t_manager *manager, t_env first_env, int exitcode);
+t_manager	*init_manager(t_manager *manager, t_env *first_env, int exitcode);
 
 //Operations sur liste token
 void		*token_add_new(t_token *new_token, t_token **token);
@@ -242,17 +264,20 @@ int			is_a_dir(char *line, int i);
 int			handle_dir(t_manager *manager, char *line, int i, t_token *current);
 
 //parsing_heredoc
-int			quotes_before(char *str, int i);
 int			get_size_lim(char *limiter);
+int			check_lim(char *limiter, int i);
 char		*fill_lim(char *limiter, t_manager *manager, int i);
 int			parse_lim(t_token *current_token, t_cmd *cmd, t_manager *manager);
 int			heredoc_quotes(char *line, int i, t_manager *manager);
 
 
-//parsing space_operator
+//parsing_spaces_symbols
 int			only_space(char *str);
 int			is_symbols(char c);
 int			only_space_symbols(char *str);
+int			skip_spaces(char *line, int i, int *prec_space);
+
+//parsing_operators
 int			is_operators(t_manager *manager, char *line, int i);
 int			check_operator_err(t_manager *manager, char *line, int i);
 int			verif_operator(t_manager *manager, char *line, int i, int *type);
@@ -266,14 +291,14 @@ int			count_quotes(t_manager *manager, char *line, char quote1, char quote2);
 int			handle_secondary_type(t_manager *manager, char *line, int i);
 int			handle_redir(t_manager *manager, char *line, int i);
 int			handle_pipe(t_manager *manager, char *line, int i);
-int			is_an_expand(char *line, int i);
 int			handle_env_pars(t_manager *manager, char *line, int i);
+int			sec_type_quotes_cmd(t_manager *manager, char *line, int i);
 
 //parsing
 int			handle_parsing_errors(t_manager *manager, char *line);
-int			skip_spaces(char *line, int i, int *prec_space);
 int			process_token(t_manager *manager, char *line, int i); 
 int			parsing(t_manager *manager, char *line);
 int			token_error(t_manager *manager);
+int			check_redir(t_token *token_tour, t_manager *manager);
 
 #endif

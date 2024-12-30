@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 22:30:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/19 17:30:17 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/30 10:36:03 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,18 @@
 //handle the creation and fills the cmd list
 void	create_cmd_list(t_cmd *new_cmd, int cmd_node_count, t_manager *manager)
 {
-	printf("creating a new cmd !\n");
 	new_cmd->index = cmd_node_count;
 	manager->size_cmd = cmd_node_count + 1;
 	if (!new_cmd->args && new_cmd->heredoc_count > 0)
 	{
-		new_cmd->args = allocate_args(0); 
+		new_cmd->args = allocate_args(1);
         new_cmd->args[0] = ft_strdup("\n");
         new_cmd->args[1] = NULL;
     }
 	if (cmd_node_count == 0) //save the first node in the manager
 		manager->cmd_first = new_cmd;
 	else
-		cmd_add_back(manager->cmd_first, new_cmd); //ajouter a la suite des cmd
+		cmd_add_back(manager->cmd_first, new_cmd); //add in the last position of cmd
 }
 
 //creer un nouveau cmd avec tout set a NULL
@@ -42,10 +41,9 @@ t_cmd	*cmd_new(void)
 	new_cmd->index = 0;
 	new_cmd->path = NULL;
 	new_cmd->args = NULL;
-	//new_cmd->redirs = NULL;
 	new_cmd->infile = NULL;
 	new_cmd->lim = NULL;
-	new_cmd->heredoc_count = -1;
+	new_cmd->heredoc_count = 0;
 	new_cmd->heredoc_quotes = 0;
 	new_cmd->outfile = NULL;
 	new_cmd->append = -1;	

@@ -17,56 +17,6 @@
 #include "libft.h"
 
 
-/*
-char	*replace_expand(char *str, int pos, char *expansion)
-{
-	char	*result;
-	int		i;
-	int		j;
-	int		k;
-	int		l;
-
-	i = 0;
-	j = 0;
-	while (str[j + i])
-	{	
-		if ((j + i) == pos)
-		{
-			while (str[i + j] && !ft_is_space(str[i + j]))
-				j++;
-		}
-		i++;
-	}
-	result = (char *)malloc(sizeof(char) * (i + ft_strlen(expansion) + 1));
-	if (!result)
-		return (NULL);
-	j = 0;
-	k = 0;
-	l = 0;
-	while (str[j])
-	{	
-		if (j == pos)
-		{
-			while (str[j] && !ft_is_space(str[j]))
-			{
-				j++;
-			}
-			while (expansion[k])
-			{
-				result[l] = expansion[k];
-				k++;
-				l++;
-			}
-		}
-		result[l] = str[j];
-		l++;
-		j++;
-	}
-	result[l] = '\0';
-	return (result);	
-}
-*/
-
 //replace expand : Fonction pour calculer la longueur de la chaîne résultante
 
 int replexpand_length(char *str, int pos, char *expansion)

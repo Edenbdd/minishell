@@ -1,48 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_space_operator.c                           :+:      :+:    :+:   */
+/*   parsing_operators.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/19 14:26:56 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/29 15:09:10 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 
-int	is_symbols(char c)
-{
-	if (c == ':' || c == '!')
-		return (1);
-	return (0);
-}
-
-int	only_space_symbols(char *str)
-{
-	while (*str)
-	{
-		if (!ft_is_space(*str) && !is_symbols(*str))
-			return (0);
-		str++;	
-	}
-	return (1);
-}
-
-int	only_space(char *str)
-{
-	while (*str)
-	{
-		if (!ft_is_space(*str))
-			return (0);
-		str++;	
-	}
-	return (1);
-}
-
-//recuperer un token "operator"
+//Identify the operator
 int	is_operators(t_manager *manager, char *line, int i)
 {
 	if (line[i] == '<' && line[i + 1] == '<')
@@ -64,27 +35,26 @@ int	is_operators(t_manager *manager, char *line, int i)
 	if (line[i] == '$')
 		return (ENV_VAR);
 	if (is_a_dir(line, i))
-		return (DIR);
-	return (CMD_ARG); // is 0
+		return (DIREC);
+	return (CMD_ARG);
 }
 
-//checker les operateurs non geres
+//Check for operators that we won't handle
 int check_operator_err(t_manager *manager, char *line, int i)
 {
-//si >>> et plus regarder les messages d'erreur specifiques. idem autres operateurs
 	if ((line[i] == '&' && line[i + 1] == '&')
 		|| (line[i] == ';') 
 		|| (line[i] == '#') 
 		|| (line[i] == '\\')
 		)
-			return (parsing_error_op(manager, 4, line[i], 0)); //ok
+		return (parsing_error_op(manager, 4, line[i], 0));
 	if ((line[i] == '<' && line[i + 1] == '<' && line[i + 2] == '<')
 		|| (line[i] == '>' && line[i + 1] == '>' && line[i + 2] == '>'))
-			return (parsing_error_op(manager, 4, line[i], line[i + 1])); //ok
+			return (parsing_error_op(manager, 4, line[i], line[i + 1]));
 	return (0);
 }
 
-//recuperer les doubles operateurs
+//Handle double operators
 int	verif_operator(t_manager *manager, char *line, int i, int *type)
 {
 	int	result;
@@ -92,10 +62,10 @@ int	verif_operator(t_manager *manager, char *line, int i, int *type)
 	result = is_operators(manager, line, i);
 	if 	(result == -1)
 			return (-1);
-	else if (result)
+	else if (result != -1)
 	{
 		*type = result;
-		if (result != DIR && result != PIPE)
+		if (result != DIREC && result != PIPE && result != CMD_ARG)
 			i++;
 	}
 	return (i);

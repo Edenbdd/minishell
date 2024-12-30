@@ -6,15 +6,14 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 09:47:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/19 10:12:40 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/29 15:20:27 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 
-//Utils de parsing lies au operators, quotes et regular word (cmd/arg)
-
+//Parsing utils for operators, quotes et regular word (cmd/arg)
 
 int	handle_quote(char *line, int i, t_manager *manager)
 {
@@ -29,7 +28,7 @@ int	handle_quote(char *line, int i, t_manager *manager)
 	while (line[i + j] && line[i] != separator)
 		j++;
 	if (j == 0)
-		return (cmd_error(manager, 6, ""));
+		return (cmd_error(manager, NULL, 0));
 	manager->word = (char *)malloc(sizeof(char) * (j + 1));
 	if (!manager->word)
 		return (-1);
@@ -44,15 +43,17 @@ int	handle_quote(char *line, int i, t_manager *manager)
 	return (i + 1);
 }
 
-//recuperer un token "mot"
+//Find a cmd_arg
 int	regular_word(t_manager *manager, char *line, int i)
 {
 	int	j;
 
 	j = 0;
+	// if (is_operators(manager, line, i) == -1) is it necessay ???
+	// 	return (-1);
 	while (line[i + j] && !ft_is_space(line[i]) 
 			&& (!is_operators(manager, line, i)
-			|| is_operators(manager, line, i) == DIR))
+			|| is_operators(manager, line, i) == DIREC))
 		j++;
 	manager->word = (char *)malloc(sizeof(char) * (j + 1));
 	if (!manager->word)
@@ -60,7 +61,7 @@ int	regular_word(t_manager *manager, char *line, int i)
 	j = 0;
 	while (line[i] && !ft_is_space(line[i]) 
 			&& (!is_operators(manager, line, i)
-			|| is_operators(manager, line, i) == DIR))
+			|| is_operators(manager, line, i) == DIREC))
 	{
 		manager->word[j] = line[i];
 		j++;
@@ -70,7 +71,7 @@ int	regular_word(t_manager *manager, char *line, int i)
 	return (i);
 }
 
-//compter les quotes hors other quotes
+//Counting the quotes 
 int	count_quotes(t_manager *manager, char *line, char quote1, char quote2)
 {
 	int dquote;
@@ -83,18 +84,9 @@ int	count_quotes(t_manager *manager, char *line, char quote1, char quote2)
 	{
 		if (line[i] == quote1)
 			dquote++;
-		// if (line[i] == quote2)
-		// 	{
-		// 		i++;
-		// 		while (line[i] && line[i] != quote2)
-		// 		i++;
-		// 	}
 		i++;
 	}
 	if (dquote % 2 != 0)
-	{
-		// printf("is it in count quotes?\n");
 		return (parsing_error_op(manager, 4, quote1, 0)); // OK comportement indefini de bash
-	}
 	return (dquote);
 }

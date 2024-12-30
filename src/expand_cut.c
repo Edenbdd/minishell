@@ -16,50 +16,6 @@
 #include "minishell.h"
 #include "libft.h"
 
-/*
-
-char	*cut_expand(char *str, int pos)
-{
-	char	*result;
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	while (str[j + i])
-	{
-		if ((j + i) == pos)
-		{
-			while (str[i + j] && !ft_is_space(str[i + j]))
-				j++;
-		}
-		if (j >= ft_strlen(str))
-			break;
-		i++;
-	}
-	if (j >= i)
-		return (NULL);
-	result = (char *)malloc(sizeof(char) * (i - j + 1));
-	if (!result)
-		return (NULL);
-	j = 0;
-	i = 0;
-	while (str[j])
-	{	
-		if (j == pos)
-		{
-			while (str[j] && !ft_is_space(str[j]))
-				j++;
-		}
-		result[i] = str[j];
-		i++;
-		j++;
-	}
-	result[j] = '\0';
-	return (result);	
-}
-*/
-
 //cut_expand : Calculer la longueur de la chaîne finale
 
 int get_cut_length(char *str, int pos)
@@ -79,7 +35,7 @@ int get_cut_length(char *str, int pos)
         i++;
     }
     if (j >= i)
-        return (-1); // Retourner une erreur si la coupe est invalide
+        return (-1);
     return (i - j);
 }
 

@@ -14,39 +14,6 @@
 #include "minishell.h"
 #include "libft.h"
 
-/*
-int	expand_loop(t_token *current_token, t_env *s_env, t_manager *manager)
-{
-	while (current_token && current_token->type != PIPE)
-	{
-		if (current_token->type == ENV_VAR)
-		{
-			if (!expand(current_token, s_env))
-			{
-				current_token->value = NULL;
-				if (current_token->next == NULL 
-					&& current_token->prev == NULL)
-					return (-1);
-			}
-			else
-			{
-				current_token->type = is_operators(manager, current_token->value, 0);
-				if (current_token->type == DIR)
-					return (handle_dir(manager, NULL, 0, current_token));
-			}
-		}
-		else if (current_token->type == DOUBLE_QUOTE)
-		{
-			expand_dquote(current_token, s_env);
-			if (current_token->value == NULL)
-				return (cmd_error(manager, 6, NULL));
-		}
-		current_token = current_token->next;
-	}
-	return (0);
-}
-*/
-
 // expand loop / gestion du type env_var 
 int exploop_env_var(t_token *current_token, t_env *s_env, t_manager *manager)
 {
@@ -59,8 +26,10 @@ int exploop_env_var(t_token *current_token, t_env *s_env, t_manager *manager)
     else
     {
         current_token->type = is_operators(manager, current_token->value, 0);
-        if (current_token->type == DIR)
+        if (current_token->type == DIREC)
             return (handle_dir(manager, NULL, 0, current_token));
+        else if (current_token->type == -1)
+            return (-1);
     }
     return (0);
 }
@@ -72,7 +41,7 @@ int exploop_dquote(t_token *current_token, t_env *s_env, t_manager *manager)
     {
         expand_dquote(current_token, s_env);
         if (current_token->value == NULL)
-            return (cmd_error(manager, 6, NULL));
+            return (cmd_error(manager, NULL, 0));
     }
     return (0);
 }

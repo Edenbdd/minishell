@@ -1,14 +1,14 @@
-#******************************************************************************#
+# **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: smolines <smolines@student.42.fr>          +#+  +:+       +#+         #
+#    By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/15 09:42:50 by smolines          #+#    #+#              #
-#    Updated: 2024/12/20 11:27:04 by smolines         ###   ########.fr        #
+#    Updated: 2024/12/27 12:38:52 by aubertra         ###   ########.fr        #
 #                                                                              #
-#******************************************************************************#
+# **************************************************************************** #
 
 NAME			= minishell
 
@@ -33,14 +33,17 @@ SRCS 			= 	main.c\
 					error.c\
 					exec.c\
 					exec_child.c\
+					exec_heredoc_line.c\
 					expand.c\
 					expand_cut.c\
+					expand_heredoc.c\
 					expand_replace.c\
 					fill_cmd.c\
 					fill_cmd_expand.c\
 					fill_cmd_args.c\
-					free_manager.c\
+					free_struct.c\
 					free.c\
+					handle_heredoc_files.c\
 					handle_files.c\
 					oplist_cmd.c\
 					oplist_env.c\
@@ -48,7 +51,8 @@ SRCS 			= 	main.c\
 					oplist_token.c\
 					parsing_dir.c\
 					parsing_heredoc.c\
-					parsing_space_operator.c\
+					parsing_operators.c\
+					parsing_spaces_symbols.c\
 					parsing_utils.c\
 					parsing_utils2.c\
 					parsing.c\
