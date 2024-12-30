@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/30 10:56:32 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/30 14:22:34 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ int process_token(t_manager *manager, char *line, int i)
         return (regular_word(manager, line, i));
 }
 
+// A RECOUPER
 // Fonction principale de parsing
 int parsing(t_manager *manager, char *line) 
 {
@@ -67,18 +68,20 @@ int parsing(t_manager *manager, char *line)
         i = skip_spaces(line, i, &prec_space);
         i = verif_operator(manager, line, i, &(manager->type));
         if (i == -1)
-	    {
 			return (-1);
-		}
         i = process_token(manager, line, i);
         if (i == -1)
-	    	return (free(manager->word), -1);
+	    {	return (free(manager->word), -1);}
+		if (manager->type == 0)
+			check_builtin(manager, manager->word);
         token_add_back(&(manager->token_first), token_new(prec_space, manager));
         free(manager->word);
 		manager->word = NULL;
     }
     return (0);
 }
+
+
 /*token_error utils*/
 int		check_redir(t_token *token_tour, t_manager *manager)
 {

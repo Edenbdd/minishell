@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/30 11:29:12 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/30 14:25:48 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,14 @@ typedef enum e_token_type
     REDIR_APPEND, // For '>>'
     REDIR_HEREDOC, // For '<<'
     ENV_VAR, // For environment variables start with $
-	EXIT_STAT, // for $?
+	EXIT_STAT, // for $? EST CE UTILISE ?
 	DIREC, //if /
-	ECHO,
+	ECHO, // !!! ATTENTION, ne rien ajouter entre ECHO et EXIT
 	CD,
 	PWD,
 	EXPORT,
 	UNSET,
-	ENV,
+	ENV, //built in env cmd
 	EXIT,
 }   t_token_type;
 
@@ -78,6 +78,7 @@ struct s_cmd
 	int		heredoc_quotes;
 	char	*outfile;
 	int		append;
+	int		is_builtin; //flag 1 if builtin, 0 otherwise
 	int		pfd[2];
 	t_cmd	*next;
 	t_cmd	*prev;
@@ -115,7 +116,21 @@ typedef struct s_manager
 	t_env		*env_first;
 } t_manager;
 
+//BUILT IN
+//parsing_builtin
+void    check_builtin(t_manager *manager, char *to_test);
+int 	is_builtin(int type);
+int		builtin_exec_path(t_manager *manager, t_cmd *cmd, int *previous_fd);
 
+//env built in
+
+//export
+
+
+//unset
+
+
+//CORE
 //cmd_path
 char		*get_path(t_env *s_env);
 char		*find_path(char *cmd, t_env *s_env, t_manager *manager);

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/29 18:32:20 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/30 14:13:51 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 				break;
 			if (parse_lim(current_token, cmd, manager) == -1)
 				return (-1);	
-			cmd->heredoc_count++; //maybe this should be commented ??
+			cmd->heredoc_count++;
 			if (cmd->heredoc_count > 1 && manager->heredoc_line 
 				&& current_token->type == REDIR_HEREDOC)
 				break;
@@ -79,7 +79,8 @@ t_token	*cmd_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
 	{
 		if (current_token->type == CMD_ARG
 			|| current_token->type == DOUBLE_QUOTE
-			|| current_token->type == SIMPLE_QUOTE)
+			|| current_token->type == SIMPLE_QUOTE
+			|| is_builtin(current_token->type))
 				current_token = fill_args(current_token, cmd, manager);
 		if (!current_token || current_token->type == PIPE
 			|| (cmd->heredoc_count > 1 && manager->heredoc_line == 0))
@@ -106,16 +107,16 @@ int	fill_cmd(t_manager *manager, t_env *s_env)
 	cmd_node_count = 0;
 	while (current_token)
 	{
-		printf("start of the loop current is %s\n", current_token->value);
 		if (expand_loop(current_token, s_env, manager) == -1)
 			return (-1);
 		cmd = cmd_new();
 		if (redir_loop(current_token, cmd, manager) == -1)
 			return (-1);
-		printf("after redir loop current is %s\n", current_token->value);
+		if (is_builtin(current_token->type))
+			cmd->is_builtin = 1;
 		current_token = cmd_loop(current_token, cmd, manager);
 		create_cmd_list(cmd, cmd_node_count, manager);
-		cmd_node_count++; //moved here
+		cmd_node_count++;
 		if (current_token && (current_token->type == PIPE 
 			|| (current_token->type == REDIR_HEREDOC
 			&& current_token->cmd_done == 1)))
@@ -123,43 +124,3 @@ int	fill_cmd(t_manager *manager, t_env *s_env)
 	}
 	return (0);
 }
-
-/*Original redir loop (a ete coupee)*/
-// int	redir_loop(t_token *current_token, t_cmd *cmd, t_manager *manager)
-// {
-// 	while (current_token && current_token->type != PIPE
-// 			&& !(cmd->heredoc_count > 0 && current_token->type == REDIR_HEREDOC))
-// 	{
-// 		if (current_token->type == REDIR_APPEND)
-// 		{
-// 			cmd->append = 1;
-// 			if (check_outfile(current_token->value, manager) == -1)
-// 				return (-1);
-// 			cmd->outfile = ft_strdup(current_token->value);
-// 		}
-// 		else if (current_token->type == REDIR_OUT)
-// 		{
-// 			cmd->append = 0;
-// 			if (check_outfile(current_token->value, manager) == -1)
-// 				return (-1);
-// 			cmd->outfile = ft_strdup(current_token->value);
-// 		}
-// 		else if (current_token->type == REDIR_IN)
-// 		{
-// 			cmd->heredoc_count = 0;
-// 			if (check_infile(current_token->value, manager) == -1)
-// 				return (-1);
-// 			cmd->infile = ft_strdup(current_token->value);
-// 		}
-// 		else if (current_token->type == REDIR_HEREDOC)
-// 		{
-// 			if (cmd->heredoc_count > 1)
-// 				break;
-// 			if (parse_lim(current_token, cmd, manager) == -1)
-// 				return (-1);	
-// 			cmd->heredoc_count++;
-// 		}
-// 		current_token = current_token->next;
-// 	}
-// 	return (0);
-// }

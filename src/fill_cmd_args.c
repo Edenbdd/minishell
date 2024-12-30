@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:12:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/29 18:25:51 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/30 13:56:06 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ int count_args(t_token *current)
     while (current && (current->type == CMD_ARG
                 || current->type == DOUBLE_QUOTE
                 || current->type == SIMPLE_QUOTE
-                || current->type == DIREC)) 
+                || current->type == DIREC
+                || is_builtin(current->type))) 
     {
         cmd_count++;
         current = current->next;
