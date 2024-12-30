@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:19 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/27 10:02:17 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/30 14:28:51 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	cmd_display(t_cmd *cmd)
 		return ;
 	while (cmd)
 	{
-		printf("arg[0]: [%s]-- infile: [%s]-- lim: [%s] -- append: [%d]-- outfile:[%s]\n",cmd->args[0], cmd->infile,  cmd->lim, cmd->append, cmd->outfile);
+		printf("arg[0]: [%s]-- infile: [%s]-- lim: [%s] -- append: [%d]-- outfile:[%s]-- builtin ? [%d]\n",cmd->args[0], cmd->infile,  cmd->lim, cmd->append, cmd->outfile, cmd->is_builtin);
 		cmd = cmd->next;
 	}
 }

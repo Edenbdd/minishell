@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 22:30:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/30 10:36:03 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/30 14:13:02 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ t_cmd	*cmd_new(void)
 	new_cmd->append = -1;	
 	new_cmd->pfd[0]	= -1;
 	new_cmd->pfd[1]	= -1;
+	new_cmd->is_builtin = 0;
 	new_cmd->next = NULL;
 	new_cmd->prev = NULL;
 	return (new_cmd);
