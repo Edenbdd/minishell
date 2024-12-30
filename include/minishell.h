@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/30 14:25:48 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/30 15:46:41 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,14 +118,15 @@ typedef struct s_manager
 
 //BUILT IN
 //parsing_builtin
-void    check_builtin(t_manager *manager, char *to_test);
+int    check_builtin(t_manager *manager, char *to_test);
 int 	is_builtin(int type);
 int		builtin_exec_path(t_manager *manager, t_cmd *cmd, int *previous_fd);
 
 //env built in
+int    handle_builtin_env(t_manager *manager, t_cmd *cmd);
+
 
 //export
-
 
 //unset
 

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/29 15:22:21 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/30 16:30:11 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int access_error(t_manager *manager, int code, char *str)
 	}
 	return (-1);
 }
-
+//virer le manager qu on a jamais utilise
 int system_function_error(t_manager *manager, int code)
 {
 	(void)manager; // see if we need it later

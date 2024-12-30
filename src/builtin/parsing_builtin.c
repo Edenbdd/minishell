@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 13:27:41 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/30 14:26:18 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/30 16:27:13 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,24 @@
 
 /*From manager->word that is of a type CMD, this function will identify
 if it is a builtin cmd, else it will do nothing*/
-void    check_builtin(t_manager *manager, char *to_test)
+int    check_builtin(t_manager *manager, char *to_test)
 {
+    (void)manager; //supp ca plus tard si pas besoin
     if (!strcmp(to_test, "echo"))
-        manager->type = ECHO;
+       return (ECHO);
     else if (!strcmp(to_test, "cd"))
-        manager->type = CD;
+       return (CD);
     else if (!strcmp(to_test, "pwd"))
-        manager->type = PWD;
+       return (PWD);
     else if (!strcmp(to_test, "export"))
-        manager->type = EXPORT;
+       return (EXPORT);
     else if (!strcmp(to_test, "unset"))
-        manager->type = UNSET;
+       return (UNSET);
     else if (!strcmp(to_test, "env"))
-        manager->type = ENV;
+       return (ENV);
     else if (!strcmp(to_test, "exit"))
-        manager->type = EXIT;
-    return;
+       return (EXIT);
+    return (CMD_ARG);
 }
 /*Function to check if the type is one of the builtin to avoid repetitive
 long conditions in parsing and exec functions*/
@@ -46,8 +47,9 @@ int is_builtin(int type)
 
 int		builtin_exec_path(t_manager *manager, t_cmd *cmd, int *previous_fd)
 {
-    (void)previous_fd; //voir si necessaire pour la gestion d erreur !
-    check_builtin(manager, cmd->args[0]);
+    (void)previous_fd; //voir si necessaire pour la gestion d erreur !, je pense que je peux le virer mais a voir
+    printf("cmd args is %s\n", cmd->args[0]);
+    manager->type = check_builtin(manager, cmd->args[0]);
     printf("type is %d\n", manager->type);
     if (manager->type == ECHO)
         printf("built in a coder\n");
@@ -60,9 +62,9 @@ int		builtin_exec_path(t_manager *manager, t_cmd *cmd, int *previous_fd)
     else if (manager->type == UNSET)
         printf("built in a coder\n");
     else if (manager->type == ENV)
-        printf("built in a coder\n");
+        return (handle_builtin_env(manager, cmd));
     else if (manager->type == EXIT)
         printf("built in a coder\n");
-    return (0);    
+    return (0); // a changer en -1 quand toutes les fonctions seront en place et retournerons 0 si ok et -1 si pb
 }
 

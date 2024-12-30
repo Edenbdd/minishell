@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/30 14:18:19 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/30 15:55:10 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ int execution(t_manager *manager, t_env *s_env)
     int 	id;
     int 	previous_fd;
     struct stat buf;
+    int     check_child;
 
 	previous_fd = -1;
     current_cmd = manager->cmd_first;
@@ -99,7 +100,13 @@ int execution(t_manager *manager, t_env *s_env)
         if (id == -1)
             return (-1);
         if (id == 0 )
-            return (child_process(current_cmd, &previous_fd, manager, NULL));
+        {
+            check_child = child_process(current_cmd, &previous_fd, manager, NULL);
+            if (check_child == -1)
+                return (-1);
+            else if (check_child == 1)
+                continue;
+        }
         if (close_fds(current_cmd, &previous_fd, manager, id) == -1)
             return (system_function_error(manager, 1));
         current_cmd = current_cmd->next;

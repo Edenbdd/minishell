@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/30 14:29:42 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/30 16:03:46 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ int child_process(t_cmd *cmd, int *previous_fd, t_manager *manager, char **to_ex
 {
     char *path;
     char **env_arr;
-    int builtin_flag;
     
     path = NULL;
     if (cmd->infile || cmd->index != 0 || cmd->heredoc_count || manager->heredoc_line)
@@ -77,13 +76,7 @@ int child_process(t_cmd *cmd, int *previous_fd, t_manager *manager, char **to_ex
     if (close_fds(cmd, previous_fd, manager, 0) == -1)
         return (system_function_error(manager, 1));
     if (cmd->is_builtin == 1)
-    {
-        printf("Tutu bene, I come in the builtin execution path !\n");
-        builtin_flag = builtin_exec_path(manager, cmd, previous_fd);
-        if (builtin_flag == -1)
-            return (cmd_error(manager, cmd->args[0], 1));
-        return (0);
-    }
+        return (builtin_exec_path(manager, cmd, previous_fd));
     if (to_execute &&
             path_execution_heredocline(manager, to_execute) == -1)
         return (system_function_error(manager, 2));

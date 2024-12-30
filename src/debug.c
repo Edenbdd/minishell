@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:19 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/30 14:28:51 by aubertra         ###   ########.fr       */
+/*   Updated: 2024/12/30 15:49:02 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "minishell.h"
 #include "libft.h"
 
-void		print_env(char **env_arr)
+void		print_env(char **env_arr) //rename car utile pour tous les char **
 {
  	int	i;
 
