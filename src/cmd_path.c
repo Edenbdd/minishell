@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:19 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/27 10:29:38 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/02 10:54:51 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	*get_path(t_env *s_env)
 	return (current->content);
 }
 
-char	*find_path(char *cmd, t_env *s_env, t_manager *manager)
+char	*find_path(char *cmd, t_env *s_env, t_manager *manager, int env_flag)
 {
 	char	**paths;
 	char	*right_path;
@@ -38,7 +38,12 @@ char	*find_path(char *cmd, t_env *s_env, t_manager *manager)
 	if (!cmd || !cmd[0]) 
 		return (NULL);
 	if (!s_env || cmd[0] == '.' || cmd[0] == '/')
-		return (absolute_path(cmd, manager));
+	{
+		if (env_flag)
+			return (absolute_path(cmd, manager, 1));
+		else
+			return (absolute_path(cmd, manager, 0));
+	}
 	paths = ft_split(get_path(s_env), ':');
 	if (!paths) 
 		return (NULL);
@@ -72,7 +77,7 @@ char	*join_path(char *path, char *cmd, t_manager *manager, char **paths)
 }
 
 
-char	*absolute_path(char *cmd, t_manager *manager)
+char	*absolute_path(char *cmd, t_manager *manager, int env_flag)
 {
 	if (access(cmd, F_OK) == 0)
 	{
@@ -80,7 +85,8 @@ char	*absolute_path(char *cmd, t_manager *manager)
 			return (cmd);
 		else
 		{
-			access_error(manager, 5, cmd);
+			if (!env_flag)
+				access_error(manager, 5, cmd);
 			return (NULL);
 		}
 	}

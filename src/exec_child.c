@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/30 16:03:46 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/02 10:52:01 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int path_execution_heredocline(t_manager *manager, char **to_execute)
     char *path;
     char **env_arr;  
 
-    path = find_path(to_execute[0], manager->env_first, manager);
+    path = find_path(to_execute[0], manager->env_first, manager, 0);
     if (!path)
     {
         cmd_error(manager, to_execute[0], 0);
@@ -60,6 +60,7 @@ int path_execution_heredocline(t_manager *manager, char **to_execute)
 }
 
 //A RECOUPER
+//changer les return en exit !
 int child_process(t_cmd *cmd, int *previous_fd, t_manager *manager, char **to_execute)
 {
     char *path;
@@ -81,7 +82,7 @@ int child_process(t_cmd *cmd, int *previous_fd, t_manager *manager, char **to_ex
             path_execution_heredocline(manager, to_execute) == -1)
         return (system_function_error(manager, 2));
     if (cmd->args && cmd->args[0])
-        path = find_path(cmd->args[0], manager->env_first, manager);
+        path = find_path(cmd->args[0], manager->env_first, manager, 0);
     if (path == NULL && cmd->args && cmd->args[0])
         return (cmd_error(manager, cmd->args[0], 1));
     if (path == NULL)

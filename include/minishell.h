@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/30 15:46:41 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/02 10:52:58 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,8 +122,16 @@ int    check_builtin(t_manager *manager, char *to_test);
 int 	is_builtin(int type);
 int		builtin_exec_path(t_manager *manager, t_cmd *cmd, int *previous_fd);
 
-//env built in
-int    handle_builtin_env(t_manager *manager, t_cmd *cmd);
+//env_builtin
+int		handle_builtin_env(t_manager *manager, t_cmd *cmd);
+int		new_exec(t_manager *manager, t_cmd *cmd, int i);
+int 	access_error_env(t_manager *manager, int code, char *str);
+void	env_display_builtin(t_env *env);
+
+//env_builtin_args
+char 	**fill_new_args(char **old_args, int i, int count);
+int 	count_args_env(char **old_args, int i);
+char    **copy_args(char **old_args, int i);
 
 
 //export
@@ -134,9 +142,9 @@ int    handle_builtin_env(t_manager *manager, t_cmd *cmd);
 //CORE
 //cmd_path
 char		*get_path(t_env *s_env);
-char		*find_path(char *cmd, t_env *s_env, t_manager *manager);
+char		*find_path(char *cmd, t_env *s_env, t_manager *manager, int env_flag);
 char		*join_path(char *path, char *cmd, t_manager *manager, char **paths);
-char		*absolute_path(char *cmd, t_manager *manager);
+char		*absolute_path(char *cmd, t_manager *manager, int env_flag);
 
 //cmd_test_path
 char		*create_and_check_path(char *path, char *cmd, t_manager *manager, char **paths);

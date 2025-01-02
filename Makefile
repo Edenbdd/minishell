@@ -6,7 +6,7 @@
 #    By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/15 09:42:50 by smolines          #+#    #+#              #
-#    Updated: 2024/12/30 14:50:04 by aubertra         ###   ########.fr        #
+#    Updated: 2025/01/02 10:32:28 by aubertra         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,6 +58,7 @@ SRCS 			= 	main.c\
 					parsing.c\
 					builtin/parsing_builtin.c\
 					builtin/env_builtin.c\
+					builtin/env_builtin_args.c\
 
 SRCS_ALL 		= $(addprefix $(SRC_PATH), $(SRCS))
 
