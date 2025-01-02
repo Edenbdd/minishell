@@ -38,6 +38,7 @@ t_token	*token_new(int prec_space, t_manager *manager)
 	new_token->space = prec_space;
 	new_token->next = NULL;
 	new_token->prev = NULL;
+	new_token->nb = 0;
 	return (new_token);
 }
 
@@ -53,6 +54,8 @@ void	token_add_back(t_token **token, t_token *new_token)
 		lastposition = token_last(*token);
 		lastposition->next = new_token;
 		new_token->prev = lastposition;
+
+		new_token->nb = new_token->prev->nb + 1;
 	}
 	else
 		*token = new_token;	

@@ -62,6 +62,8 @@ struct s_token
 	int		space; //1 if precedant char is space, 0 otherwise
 	t_token	*next;
 	t_token	*prev;
+// a suppr apres debug
+	int		nb;
 };
 
 struct s_cmd
@@ -111,6 +113,11 @@ typedef struct s_manager
 	t_env		*env_first;
 } t_manager;
 
+
+
+//test
+int	is_operators_wo_expand(t_manager *manager, char *line, int i);
+int	regular_word_expand(t_manager *manager, char *line, int i);
 
 //cmd_path
 char		*get_path(t_env *s_env);

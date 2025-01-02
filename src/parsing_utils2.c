@@ -161,6 +161,7 @@ int handle_env_pars(t_manager *manager, char *line, int i)
 	// //i = i + 1;
 	//  }
 	// else 
-		i = regular_word(manager, line, i);
+/////////////// ici test
+		i = regular_word_expand(manager, line, i);
 	return (i);
 }

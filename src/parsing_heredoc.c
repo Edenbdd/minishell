@@ -105,7 +105,7 @@ int	parse_lim(t_token *current_token, t_cmd *cmd, t_manager *manager)
 	if (!cmd->lim)
 		return (-1);
 	free(limiter);
-    printf("at the end of parse_lim, cmd->lim is [%s]\n", cmd->lim);
+//    printf("at the end of parse_lim, cmd->lim is [%s]\n", cmd->lim);
 	return (0);
 }
 
@@ -115,13 +115,13 @@ int	heredoc_quotes(char *line, int i, t_manager *manager)
 	char	*limiter;
 
 	j = 0;
-	printf("starting char is [%c]\n", line[i + j]);
+//	printf("starting char is [%c]\n", line[i + j]);
 	while (line[i + j] && !ft_is_space(line[i + j]))
 		j++;
 	limiter = (char *)malloc(sizeof(char) * (j + 1));
 	if (!limiter)
 		return (-1);
-	printf("j is %d\n", j);
+//	printf("j is %d\n", j);
 	j = 0;
 	while (line[i + j] && !ft_is_space(line[i + j]))
 	{	
@@ -130,6 +130,6 @@ int	heredoc_quotes(char *line, int i, t_manager *manager)
 	}
 	limiter[j] = '\0';
 	manager->word = limiter;
-    printf("at the end of heredoc quotes, word is [%s]\n", manager->word);
+//    printf("at the end of heredoc quotes, word is [%s]\n", manager->word);
 	return (i + j + 1);
 }

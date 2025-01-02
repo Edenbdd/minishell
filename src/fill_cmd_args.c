@@ -89,6 +89,7 @@ t_token *fill_args(t_token *current, t_cmd *cmd, t_manager *manager)
 {
     int cmd_count;
 
+printf("je suis dans fill args\n");
     (void)manager; // Voir si utile pour gestion d'erreur
     cmd_count = count_args(current);
     cmd->args = allocate_args(cmd_count);

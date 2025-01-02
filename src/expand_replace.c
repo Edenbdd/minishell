@@ -94,6 +94,8 @@ void replexpand_copy(char *str, char *result, int pos, char *expansion)
     int k = 0;
     int l = 0;
 
+    printf("replace expand copy \n");
+
     while (str[j])
     {
         if (j == pos)
@@ -113,6 +115,8 @@ char *replace_expand(char *str, int pos, char *expansion)
 {
     char *result;
     int new_length;
+
+    printf("replace expand \n");
 
     // Calculer la nouvelle longueur
     new_length = replexpand_length(str, pos, expansion);

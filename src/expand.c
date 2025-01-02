@@ -22,12 +22,13 @@ int	expand(t_manager *manager, t_token *token, t_env *s_env)
 
 	found_something = 0;
 	current = s_env;
-//	printf("\033[34mAU DEBUT dans expand - expand\033[0m\n");
+	printf("\033[34mAU DEBUT dans expand - expand -- le type est : %d -- la value est : %s\033[0m\n", token->type, token->value);
+	
 	while (current)
 	{
 		if (*(token)->value == '?')	
 		{
-//			printf("\033[34mdans expand - expand\033[0m\n");
+			printf("\033[34mdans expand - expand je repere $? -- le type est : %d -- la value est : %s\033[0m\n", token->type, token->value);
 			if (expand_errno(manager, token->value) == NULL)
 				return (open_close_error(manager, 8));
 			free(token->value);
@@ -37,6 +38,7 @@ int	expand(t_manager *manager, t_token *token, t_env *s_env)
 		
 		if (!ft_strcmp(token->value, current->field))
 		{
+printf("\033[34mdans expand - expand je repere un champ -- le type est : %d -- la value est : %s\033[0m\n", token->type, token->value);
 			free(token->value);
 			token->value = ft_strdup(current->content);
 			found_something = 1;
@@ -50,6 +52,8 @@ char	*get_toexpand(char *str, int i)
 {
 	int	j;
 	char *to_expand;
+
+    printf("get to expand \n");
 
 	j = 0;
 	while (str[i + j] && !ft_is_space(str[i + j]))
@@ -71,6 +75,8 @@ char	*expand_exists(char *to_expand, t_env *s_env)
 {
 	t_env	*current;
 
+    printf("expand exists \n");
+
 	current = s_env;
 	while (current)
 	{
@@ -88,6 +94,8 @@ void	expand_dquote(t_token *current_token, t_env *s_env)
 	int		i;
 	char	*to_expand;
 	char	*expansion;
+
+    printf("expand dquote \n");
 
 	str = current_token->value;
 	i = 0;

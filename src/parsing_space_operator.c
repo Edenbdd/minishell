@@ -67,6 +67,30 @@ int	is_operators(t_manager *manager, char *line, int i)
 		return (DIR);
 	return (CMD_ARG); // is 0
 }
+//recuperer un token "operator" a l'exception de env var pour pouvoir gerer les doubles expands
+int	is_operators_wo_expand(t_manager *manager, char *line, int i)
+{
+	if (line[i] == '<' && line[i + 1] == '<')
+		return (REDIR_HEREDOC);
+	if (line[i] == '>' && line[i + 1] == '>')
+		return (REDIR_APPEND);
+	if (check_operator_err(manager, line, i) == -1)
+		return (-1);
+	if (line[i] == '<')
+		return (REDIR_IN);
+	if (line[i] == '>')
+		return (REDIR_OUT);
+	if (line[i] == '"')
+		return (DOUBLE_QUOTE);
+	if (line[i] == '\'')
+		return (SIMPLE_QUOTE);
+	if (line[i] == '|')
+		return (PIPE);
+	if (is_a_dir(line, i))
+		return (DIR);
+	return (CMD_ARG); // is 0
+}
+
 
 //checker les operateurs non geres
 int check_operator_err(t_manager *manager, char *line, int i)

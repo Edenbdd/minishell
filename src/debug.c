@@ -34,7 +34,7 @@ void	token_display(t_token *token)
 		return ;
 	while (token)
 	{
-		printf("token value :[%s] -- type : [%d]\n", token->value, token->type);
+		printf("token number / [%d] -- token value :[%s] -- type : [%d]\n", token->nb, token->value, token->type);
 		//if (token->prev)
 		//	printf("        prev_value : [%s]\n", token->prev->value);
 		//else
@@ -50,6 +50,9 @@ void	cmd_display(t_cmd *cmd)
 	{
 		printf("is the bug here \n");
 		printf("arg[0]: [%s]-- infile: [%s]-- lim: [%s] -- append: [%d]-- outfile:[%s]\n",cmd->args[0], cmd->infile,  cmd->lim, cmd->append, cmd->outfile);
+		if (cmd->args[1])
+		printf("arg[1]: [%s]\n",cmd->args[1]);
+		
 		cmd = cmd->next;
 	}
 }

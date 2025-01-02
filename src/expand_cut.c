@@ -90,6 +90,7 @@ void copy_without_expand(char *str, char *result, int pos)
     int i = 0;
     int j = 0;
 
+    printf("copy without expand \n");
     while (str[j])
     {
         if (j == pos)
@@ -107,6 +108,9 @@ char *cut_expand(char *str, int pos)
 {
     char *result;
     int new_length;
+
+    printf("cut expand \n");
+
     new_length = get_cut_length(str, pos);
     if (new_length == -1)
         return (NULL);

@@ -44,6 +44,34 @@ int	handle_quote(char *line, int i, t_manager *manager)
 	return (i + 1);
 }
 
+
+//recuperer un token "mot"
+int	regular_word_expand(t_manager *manager, char *line, int i)
+{
+	int	j;
+
+	j = 0;
+	i = i - 1;
+	while (line[i + j] && !ft_is_space(line[i]) 
+			&& (!is_operators_wo_expand(manager, line, i)
+			|| is_operators_wo_expand(manager, line, i) == DIR))
+		j++;
+	manager->word = (char *)malloc(sizeof(char) * (j + 1));
+	if (!manager->word)
+		return (-1);
+	j = 0;
+	while (line[i] && !ft_is_space(line[i]) 
+			&& (!is_operators_wo_expand(manager, line, i)
+			|| is_operators_wo_expand(manager, line, i) == DIR))
+	{
+		manager->word[j] = line[i];
+		j++;
+		i++;
+	}
+	manager->word[j] = '\0';
+	return (i);
+}
+
 //recuperer un token "mot"
 int	regular_word(t_manager *manager, char *line, int i)
 {

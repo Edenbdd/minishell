@@ -73,6 +73,7 @@ int	errno_len(int errnb)
 char *expand_errno(t_manager *manager, char *expand_word)
 {
 	int 	len_errno;
+(void)len_errno;
 
 	if ((manager->exit_status < 0) || (manager->exit_status > 128))
 		return (NULL);
