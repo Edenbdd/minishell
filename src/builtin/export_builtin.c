@@ -1,54 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   export_builtin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/29 12:00:56 by smolines          #+#    #+#             */
-/*   Updated: 2025/01/02 14:39:12 by aubertra         ###   ########.fr       */
+/*   Created: 2025/01/02 15:06:24 by aubertra          #+#    #+#             */
+/*   Updated: 2025/01/02 15:19:55 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-//fonctions pour free les differentes struct
 
 #include "minishell.h"
 #include "libft.h"
 
-void	free_path(char **paths)
+int handle_builtin_export(t_manager *manager, t_cmd *cmd)
 {
-	int	i;
-
-	i = 0;
-	while (paths[i])
-	{
-		free(paths[i]);
-		i++;
-	}
-	free(paths);
+    if (!ft_strcmp(cmd->args[0], "export") && !cmd->args[1])
+        export_display(manager->export_first);
+    return (0);
 }
-
-int	unlink_heredoc(t_manager *manager)
-{
-	(void)manager;
-	if (!access("heredoc_tmp", F_OK))
-	{
-		if (unlink("heredoc_tmp") == -1)
-			return (-1);
-	}
-	return (0);
-}
-
-void	free_cmd_args(char **args)
-{
-	int	i;
-	
-	i = 0;
-	while (args[i])
-	{
-		free(args[i]);
-		i++;
-	}
-	free(args);
-}
-

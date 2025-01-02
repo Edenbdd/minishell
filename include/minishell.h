@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2025/01/02 10:52:58 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/02 15:22:54 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,8 +133,15 @@ char 	**fill_new_args(char **old_args, int i, int count);
 int 	count_args_env(char **old_args, int i);
 char    **copy_args(char **old_args, int i);
 
+//oplist_export
+void		export_display(t_export *export);
+t_export	*export_last(t_export *export);
+void		export_add_back(t_export *first_export, t_env *current_env);
+t_export	*export_new(t_env *current_env);
+t_export    *env_to_export(t_env *first_env);
 
-//export
+//export_builtin
+int			handle_builtin_export(t_manager *manager, t_cmd *cmd);
 
 //unset
 
@@ -263,7 +270,7 @@ int			create_doc_loop(int *previous_fd, t_manager *manager,
 						t_cmd *current_cmd, t_env *s_env);
 
 //oplist_manager
-t_manager	*init_manager(t_manager *manager, t_env *first_env, int exitcode);
+t_manager	*init_manager(t_manager *manager, t_env *first_env, int exitcode, t_export *first_export);
 
 //Operations sur liste token
 void		*token_add_new(t_token *new_token, t_token **token);

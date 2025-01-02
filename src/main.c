@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 13:19:49 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/29 15:48:00 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/02 15:23:12 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,21 @@ int	main(int argc, char **argv, char **env)
 	char		*line;
 	t_manager	manager;
 	t_env		*first_env;
+	t_export	*first_export;
 	int			exitcode;
 
 	(void)argc;
 	(void)argv;
 	first_env = handle_env(env);
+	first_export = env_to_export(first_env);
 	exitcode = 0;
 	line = NULL;
 	while (1)
 	{
 		if (line)
 			free(line);
-		init_manager(&manager, first_env, exitcode);
-		line = readline("$>"); //bug ??
+		init_manager(&manager, first_env, exitcode, first_export);
+		line = readline("$>");
 		//ajouter protection + signaux plus tard
 		if (!line)
 			break;
@@ -76,6 +78,8 @@ int	main(int argc, char **argv, char **env)
 			continue;
 		}
 		exitcode = manager.exit_status;
+		first_env = manager.env_first;
+		first_export = manager.export_first;
 		free_manager(&manager);
 		// break;
 	}

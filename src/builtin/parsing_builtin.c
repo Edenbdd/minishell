@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 13:27:41 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/30 16:27:13 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/02 15:10:44 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int		builtin_exec_path(t_manager *manager, t_cmd *cmd, int *previous_fd)
     else if (manager->type == PWD)
         printf("built in a coder\n");
     else if (manager->type == EXPORT)
-        printf("built in a coder\n");
+        return (handle_builtin_export(manager, cmd));
     else if (manager->type == UNSET)
         printf("built in a coder\n");
     else if (manager->type == ENV)
