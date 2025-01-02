@@ -6,9 +6,11 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 14:35:01 by aubertra          #+#    #+#             */
-/*   Updated: 2025/01/02 15:21:33 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/02 18:31:16 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/*Handling the copy of env to export*/
 
 #include "minishell.h"
 #include "libft.h"
@@ -70,14 +72,4 @@ t_export	*export_last(t_export *export)
 	while (export->next)
 		export = export->next;
 	return (export);
-}
-void	export_display(t_export *export)
-{
-	if (!export)
-		return ;
-	while (export)
-	{
-		printf("export %s=\"%s\"\n", export->field, export->content);
-		export = export->next;
-	}
 }

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2025/01/02 15:22:54 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/02 17:22:14 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,16 @@ t_export    *env_to_export(t_env *first_env);
 
 //export_builtin
 int			handle_builtin_export(t_manager *manager, t_cmd *cmd);
+void    	sort_exp(t_export *first_export);
+void		export_display(t_export *first_export);
+
+//export_add_var
+int			export_var(char *str, t_manager *manager);
+int 		space_presence(char *str);
+int 		parsing_export_var(char *str);
+t_export 	*new_var_export(char *str);
+int 		add_to_export(char *str, t_manager *manager);
+
 
 //unset
 

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 12:00:56 by smolines          #+#    #+#             */
-/*   Updated: 2025/01/02 14:39:19 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/02 18:33:41 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,6 @@ void	free_manager(t_manager *manager)
 		free_token(manager->token_first); 
 	if (manager->cmd_first)
 		free_cmd(manager->cmd_first);
-	if (manager->export_first)
-		free_export(manager->export_first);
 	manager = NULL;
 }
 

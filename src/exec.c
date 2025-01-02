@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:27:13 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/30 15:55:10 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/02 17:00:04 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int close_fds(t_cmd *current_cmd, int *previous_fd, t_manager *manager, int id)
             return (system_function_error(manager, 1));
 	}
     *previous_fd = current_cmd->pfd[0];
-    i = 3;
+    i = 2;
     while (i <= 1000)
     {
         if (id == 0)

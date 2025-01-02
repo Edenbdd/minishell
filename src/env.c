@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:36 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/29 13:29:43 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/02 18:36:57 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,8 @@ char	*get_content(char *str)
 	while(str[i] && str[i] != '=')
 		i++;
 	i++;
+	if (i >= ft_strlen(str))
+		return (NULL);
 	while(str[i + len_content])
 		len_content++;
 	content = (char *)malloc(sizeof(char) * len_content + 1);
