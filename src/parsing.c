@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/30 14:22:34 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:33:39 by smolines         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minishell.h"
 #include "libft.h"
@@ -99,6 +99,16 @@ int		check_redir(t_token *token_tour, t_manager *manager)
 	}
 	return (0);
 }
+//////////////////////////////////////////////
+// parsing condition for the built ins
+
+/*
+int token_error_builtin(t_manager *manager)
+{
+	if 
+	return (0);
+}
+*/
 
 //parsing_condition
 int token_error(t_manager *manager)
