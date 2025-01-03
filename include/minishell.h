@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2025/01/03 17:29:57 by smolines         ###   ########.fr       */
+/*   Updated: 2025/01/02 11:32:04 by smolines         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -145,6 +145,12 @@ int			handle_exit(t_manager *manager, t_cmd *cmd);
 
 // builtin_utils.c 
 int			count_cmd_args(t_cmd *cmd);
+
+//erro_builtin
+int builtin_error(t_manager *manager, int code, char *who);
+
+//pwd builtin
+int     handle_pwd(t_manager *manager, t_cmd *cmd);
 
 //env built in
 

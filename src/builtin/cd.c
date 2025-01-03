@@ -1,4 +1,5 @@
-/* ************************************************************************** */
+
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
@@ -14,6 +15,29 @@
 
 #include "minishell.h"
 #include "libft.h"
+
+int handle_cd(t_manager *manager, t_cmd *cmd)
+{
+    
+   //aller au repertoire home
+if (!(cmd->args[1])) || (ft_strcmp(cmd->args[1], "~"))
+{
+ 
+}
+
+   //aller au repertoire precedant
+if (ft_strcmp(cmd->args[1], "-"))
+{
+ 
+}
+
+//changer de repertoire
+if (chdir(cmd->args[1]) != 0) {
+    return (builtin_error(manager, 2, "cd"));
+
+
+    return (0);
+}
 
 /// en cours de travaux/////
 //attention avec cd - le OLDPWD doit etre affiche a l'ecran
@@ -134,7 +158,3 @@ char	*update_env(char *to_expand, t_env *s_env)
 		}
 	return (NULL);
 }
-
-
-
-
