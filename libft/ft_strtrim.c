@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:06:46 by aubertra          #+#    #+#             */
-/*   Updated: 2024/03/07 11:48:03 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/03 13:28:39 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	is_set(char c, char const *set)
 	return (0);
 }
 
-static char	*ft_strndup(const char *str, int index, int n)
+static char	*ft_strnduptrim(const char *str, int index, int n)
 {
 	int		i;
 	char	*tab;
@@ -59,7 +59,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 		len--;
 	if ((len - i) <= 0)
 		return (ft_strdup(""));
-	return (ft_strndup(s1, i, len));
+	return (ft_strnduptrim(s1, i, len));
 }
 
 // int	main(void)

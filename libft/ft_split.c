@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:08:27 by aubertra          #+#    #+#             */
-/*   Updated: 2024/03/07 14:02:00 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/03 13:27:59 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static int	count_char(const char *str, char c, int index)
 	return (count);
 }
 
-static char	*ft_strndup(const char *str, int index, int n)
+static char	*ft_strndupsplit(const char *str, int index, int n)
 {
 	int		i;
 	char	*tab;
@@ -94,7 +94,7 @@ char	**ft_split(const char *str, char c)
 	{
 		if (str[i] != c)
 		{
-			splitter[j++] = ft_strndup(str, i, count_char(str, c, i));
+			splitter[j++] = ft_strndupsplit(str, i, count_char(str, c, i));
 			if (!splitter[j - 1])
 				return (free_all(splitter), NULL);
 			while (str[i] && str[i] != c)

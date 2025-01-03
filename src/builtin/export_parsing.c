@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 10:02:56 by aubertra          #+#    #+#             */
-/*   Updated: 2025/01/03 13:19:05 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/03 13:44:37 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,13 @@
 
 int export_add(char *str, char *name, t_manager *manager, t_export *current)
 {
+    printf("i come to export add\n");
     char    *new_content;
     t_env   *current_env;
     //updating the export
     new_content = ft_strjoin(current->content, get_content(str));
     free(current->content);
-    current->content = new_content;
+    current->content = ft_strdup(new_content);
     //updating the env
     current_env = manager->env_first;
     while (current_env)
@@ -28,11 +29,12 @@ int export_add(char *str, char *name, t_manager *manager, t_export *current)
         if (!ft_strcmp(current_env->field, name))
         {
             free(current_env->content);
-            current->content = new_content;
+            current_env->content = ft_strdup(new_content);
             break;
         }
         current_env = current_env->next;
     }
+    free(new_content);
     return (1);
 }
 
@@ -83,11 +85,11 @@ int existing_export(char *str, t_manager *manager)
         current = current->next;
     }
     if (!found)
-        return (0); 
+        return (0);
     if (export_replace(str, var_name, manager, current))
         return (1);
     else
-        export_add(str, var_name, manager, current);
+        return (export_add(str, var_name, manager, current));
     return (0);
 }
 
