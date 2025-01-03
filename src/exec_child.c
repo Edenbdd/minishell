@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2025/01/02 10:52:01 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/03 09:07:34 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int path_execution_heredocline(t_manager *manager, char **to_execute)
     path = find_path(to_execute[0], manager->env_first, manager, 0);
     if (!path)
     {
-        cmd_error(manager, to_execute[0], 0);
+        cmd_error(manager, to_execute[0], 0, "bash");
         free_cmd_args(to_execute);
         return (-1);
     }
@@ -84,9 +84,9 @@ int child_process(t_cmd *cmd, int *previous_fd, t_manager *manager, char **to_ex
     if (cmd->args && cmd->args[0])
         path = find_path(cmd->args[0], manager->env_first, manager, 0);
     if (path == NULL && cmd->args && cmd->args[0])
-        return (cmd_error(manager, cmd->args[0], 1));
+        return (cmd_error(manager, cmd->args[0], 1, "bash"));
     if (path == NULL)
-        return (cmd_error(manager, NULL, 1));
+        return (cmd_error(manager, NULL, 1, "bash"));
     env_arr = convert_env(manager->env_first);
     if (execve(path, cmd->args, env_arr) == -1)
         return (system_function_error(manager, 2));

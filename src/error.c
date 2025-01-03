@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/30 16:30:11 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/03 10:28:37 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,28 +39,40 @@ int	parsing_error_op(t_manager *manager, int code, char operator, char dble_op)
 }
 	
 
-int parsing_error(t_manager *manager, int code)
+int parsing_error(t_manager *manager, int code, char *process, char *str)
 {
+	ft_putstr_fd(process, 2);
+	write(2, ": ", 2);
 	if (code == 2)
-	{
-			write(2, "bash: ",6);
-			write (2, "syntax error near unexpected token `newline'\n",45);
-
+	{	
+		write (2, "syntax error near unexpected token `newline'\n",45);
 		manager->exit_status = 2;
-		return (-1);
 	}
-
-	if (code == 3)
+	if (code == 3) //voir si utiliser ou pas ??
 	{
-		manager->exit_status = 127;			
-		return (-1);
+		ft_putstr_fd(str, 2);
+		manager->exit_status = 127;
 	}
-return (-1);
+	if (code == 4)
+	{
+		write(2, "\'", 1);
+		ft_putstr_fd(str, 2);
+		write(2, "\': not a valid identifier\n", 26);
+	}
+	if (code == 5)
+	{
+		write(2, "\'", 1);
+		ft_putstr_fd(str, 2);
+		free(str);
+		write(2, "\': invalid option\n", 18);
+	}
+	return (-1);
 }
 
-int access_error(t_manager *manager, int code, char *str)
+int access_error(t_manager *manager, int code, char *str, char *process)
 {
-	write(2, "bash: ",6);
+	ft_putstr_fd(process, 2);
+	write(2, ": ", 2);
 	ft_putstr_fd(str, 2);
 	if (code == 5)
 	{
@@ -104,11 +116,12 @@ int system_function_error(t_manager *manager, int code)
 	return (-1);
 }
 
-int cmd_error(t_manager *manager, char *cmd, int exec_flag)
+int cmd_error(t_manager *manager, char *cmd, int exec_flag, char *process)
 {
 	if (exec_flag == 0)
 	{
-		write(2, "bash: ",6);
+		ft_putstr_fd(process, 2);
+		write(2, ": ", 2);
 		ft_putstr_fd(cmd, 2);
 		write (2, ": command not found\n", 20);
 		manager->exit_status = 127;

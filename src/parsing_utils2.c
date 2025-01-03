@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 13:58:50 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/30 11:29:40 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/03 09:10:07 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,11 @@ int handle_redir(t_manager *manager, char *line, int i)
 
     manager->sec_type = 0;
     if (manager->type == REDIR_IN && line[i] == '>')
-        return (parsing_error(manager, 2));
+        return (parsing_error(manager, 2, "bash", "")); //error a recheck
     else if (manager->type == REDIR_OUT && line[i] == '<')
         return (parsing_error_op(manager, 4, '<', 0));
 	else if (manager->type == REDIR_HEREDOC && only_space(&line[i]))
-		return (parsing_error(manager, 2));
+		return (parsing_error(manager, 2, "bash", "")); //error a recheck
     while (line[i] && ft_is_space(line[i]))
         i++;
     i = verif_operator(manager, line, i, &(manager->sec_type));

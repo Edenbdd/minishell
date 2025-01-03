@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 14:57:20 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/11 18:11:03 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/03 10:20:59 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ char		*ft_strtrim(char const *s1, char const *set);
 char		*ft_itoa(int n);
 char		*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char		*ft_strdup(const char *s);
+char	    *ft_strndup(const char *s, int n);
 char		*get_next_line(int fd);
 char		**ft_split(char const *s, char c);
 

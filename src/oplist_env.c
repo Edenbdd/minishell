@@ -6,21 +6,21 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 22:30:11 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/23 13:42:57 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/03 13:21:15 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 
-t_env	*env_new(char *str)
+t_env	*env_new(char *str, int export_flag)
 {
 	t_env	*new_env;
 
 	new_env = (t_env *)malloc(sizeof(t_env));
 	if (!new_env)
 		return (NULL);
-	new_env->field = get_name(str);
+	new_env->field = get_name(str, export_flag);
 	new_env->content = get_content(str);
 	new_env->next = NULL;
 	new_env->prev = NULL;
@@ -28,12 +28,12 @@ t_env	*env_new(char *str)
 }
 
 //Add a new env node at the end of env linked list
-void	env_add_back(t_env *first_env, char *str)
+void	env_add_back(t_env *first_env, char *str, int export_flag)
 {
 	t_env	*lastposition;
 	t_env	*new;
 
-	new = env_new(str);
+	new = env_new(str, export_flag);
 	if (!first_env)
 		return ;
 	lastposition = env_last(first_env);

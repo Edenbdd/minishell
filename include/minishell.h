@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2025/01/02 17:22:14 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/03 13:22:29 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,6 @@ int		builtin_exec_path(t_manager *manager, t_cmd *cmd, int *previous_fd);
 //env_builtin
 int		handle_builtin_env(t_manager *manager, t_cmd *cmd);
 int		new_exec(t_manager *manager, t_cmd *cmd, int i);
-int 	access_error_env(t_manager *manager, int code, char *str);
 void	env_display_builtin(t_env *env);
 
 //env_builtin_args
@@ -147,11 +146,17 @@ void		export_display(t_export *first_export);
 
 //export_add_var
 int			export_var(char *str, t_manager *manager);
-int 		space_presence(char *str);
-int 		parsing_export_var(char *str);
 t_export 	*new_var_export(char *str);
 int 		add_to_export(char *str, t_manager *manager);
 
+//export_parsing
+int 		export_add(char *str, char *name, t_manager *manager,
+						t_export *current);
+int 		export_replace(char *str, char *name, t_manager *manager,
+							t_export *current);
+int			existing_export(char *str, t_manager *manager);
+int			equal_presence(char *str);
+int			parsing_export_var(char *str, t_manager *manager);
 
 //unset
 
@@ -174,7 +179,7 @@ void		token_display(t_token *token);
 void		cmd_display(t_cmd *cmd);
 
 //env
-char		*get_name(char *str);
+char		*get_name(char *str, int export_flag);
 char		**convert_env(t_env *s_env);
 char		*get_content(char *str);
 t_env		*handle_env(char **env);
@@ -186,10 +191,10 @@ char		*errno_inorder(char* err_str, int i);
 int			expand_errno(t_manager *manager, int i);
 
 //error
-int			parsing_error(t_manager *manager, int code);
+int 		parsing_error(t_manager *manager, int code, char *process, char *str);
 int			parsing_error_op(t_manager *manager, int code, char operator, char dble_op);
-int			access_error(t_manager *manager, int code, char *str);
-int			cmd_error(t_manager *manager, char *cmd, int exec_flag);
+int 		access_error(t_manager *manager, int code, char *str, char *process);
+int 		cmd_error(t_manager *manager, char *cmd, int exec_flag, char *process);
 int 		system_function_error(t_manager *manager, int code);
 
 
@@ -230,14 +235,14 @@ void		replexpand_copy(char *str, char *result, int pos, char *expansion);
 char		*replace_expand(char *str, int pos, char *expansion);
 
 //expand
-int		expand(t_token *token, t_env *s_env);
-char	*get_toexpand(char *str, int i);
-char	*expand_exists(char *to_expand, t_env *s_env);
-void	expand_dquote(t_token *current_token, t_env *s_env);
+int			expand(t_token *token, t_env *s_env);
+char		*get_toexpand(char *str, int i);
+char		*expand_exists(char *to_expand, t_env *s_env);
+void		expand_dquote(t_token *current_token, t_env *s_env);
 
 //expand heredoc
-char    *expand_line(char *current_line, int *i, t_env  *s_env);
-char	*expand_heredoc(char *current_line, t_env *s_env);
+char   	 	*expand_line(char *current_line, int *i, t_env  *s_env);
+char		*expand_heredoc(char *current_line, t_env *s_env);
 
 //fill_cmd_args
 int			count_args(t_token *current);
@@ -289,8 +294,8 @@ void		token_add_back(t_token **token, t_token *new_token);
 t_token		*token_last(t_token *token);
 
 //oplist_env
-t_env		*env_new(char *str);
-void		env_add_back(t_env *first_env, char *str);
+t_env		*env_new(char *str, int export_flag);
+void		env_add_back(t_env *first_env, char *str, int export_flag);
 t_env		*env_last(t_env *env);
 void		env_display(t_env *env);
 

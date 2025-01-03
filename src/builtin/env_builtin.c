@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 14:40:26 by aubertra          #+#    #+#             */
-/*   Updated: 2025/01/02 10:55:56 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/03 09:14:08 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,30 +26,6 @@ void	env_display_builtin(t_env *env)
 	}
 }
 
-int access_error_env(t_manager *manager, int code, char *str)
-{
-	write(2, "env: ",6);
-    write(2, "'", 1);
-	ft_putstr_fd(str, 2);
-    write(2, "'", 1);
-	if (code == 5)
-	{
-		write (2, ": Permission denied\n", 20);
-		manager->exit_status = 1;
-	}
-	else if (code == 6)
-	{
-		write(2, ": No such file or directory\n", 28);
-		manager->exit_status = 127;			
-	}
-	else if (code == 7)
-	{
-		write(2, ": Is a directory\n", 17);
-		manager->exit_status = 126;			
-	}
-	return (-1);
-}
-
 int    new_exec(t_manager *manager, t_cmd *cmd, int i)
 {
     char    **new_args;
@@ -59,9 +35,9 @@ int    new_exec(t_manager *manager, t_cmd *cmd, int i)
     if (!path)
     {
         if (access(cmd->args[i], F_OK) == -1)
-            return (access_error_env(manager, 6, cmd->args[i]));
+            return (access_error(manager, 6, cmd->args[i], "env"));
         if (access(cmd->args[i], X_OK) == -1)
-            return (access_error_env(manager, 5, cmd->args[i]));
+            return (access_error(manager, 5, cmd->args[i], "env"));
     }
     new_args = copy_args(cmd->args, i);
     free_cmd_args(cmd->args);

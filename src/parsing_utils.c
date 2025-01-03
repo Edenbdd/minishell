@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 09:47:46 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/29 15:20:27 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/03 09:08:46 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	handle_quote(char *line, int i, t_manager *manager)
 	while (line[i + j] && line[i] != separator)
 		j++;
 	if (j == 0)
-		return (cmd_error(manager, NULL, 0));
+		return (cmd_error(manager, NULL, 0, "bash"));
 	manager->word = (char *)malloc(sizeof(char) * (j + 1));
 	if (!manager->word)
 		return (-1);

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:36 by aubertra          #+#    #+#             */
-/*   Updated: 2025/01/02 18:36:57 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/03 13:23:08 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,24 @@
 #include "minishell.h"
 #include "libft.h"
 
-char		*get_name(char *str)
+//cut at least one line
+char		*get_name(char *str, int export_flag)
 {
 	int		len_name;
 	char	*name;
 	int		i;
 
 	len_name = 0;
-	while(str[len_name] && str[len_name] != '=')
-		len_name++;
+	if (export_flag)
+	{
+		while(str[len_name] && str[len_name] != '=' && str[len_name] != '+')
+			len_name++;
+	}
+	else
+	{
+		while(str[len_name] && str[len_name] != '=')
+			len_name++;
+	}
 	name = (char *)malloc(sizeof(char) * len_name + 1);
 	if (!name)
 		return(NULL);
@@ -34,7 +43,7 @@ char		*get_name(char *str)
 		i++;
 	}
 	name[i] = '\0';
-	return (name);	
+	return (name);
 }
 
 t_env	*handle_env(char **env)
@@ -51,9 +60,9 @@ t_env	*handle_env(char **env)
 	while (env[i])
 	{
 		if (i == 0)
-			first_env = env_new(env[i]);
+			first_env = env_new(env[i], 0);
 		else
-			env_add_back(first_env, env[i]);
+			env_add_back(first_env, env[i], 0);
 		i++;
 	}
 	return (first_env);

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 12:16:47 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/29 18:12:52 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/03 09:08:24 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	handle_redir_path(t_manager *manager, char *path, t_cmd *cmd)
 	getcwd(cwd, sizeof(cwd));
 	cut_path = get_cut_path(path);
 	if (access(cut_path, F_OK) == -1)
-		return (access_error(manager, 6, path));
+		return (access_error(manager, 6, path, "bash"));
     return (0);
 }
 int	check_infile(char *infile, t_manager *manager)
@@ -59,9 +59,9 @@ int	check_infile(char *infile, t_manager *manager)
 	if (infile)
 	{
 		if (access(infile, F_OK) == -1)
-			return (access_error(manager, 6, infile)); //pb gestion d erreur ici !
+			return (access_error(manager, 6, infile, "bash")); //pb gestion d erreur ici !
 		if (access(infile, R_OK) == -1)
-			return (access_error(manager, 5, infile));
+			return (access_error(manager, 5, infile, "bash"));
 	}
 	return (0);
 }
@@ -75,7 +75,7 @@ int	check_outfile(char *outfile, t_manager *manager, t_cmd *cmd, int flag_exec)
 		verif_operator(manager, outfile, 0, &is_path);
 		if (outfile && !access(outfile, F_OK) //exist mais pemission denied
 			&& access(outfile, W_OK) == -1)
-				return (access_error(manager, 5, outfile));
+				return (access_error(manager, 5, outfile, "bash"));
 		if (outfile && access(outfile, F_OK ) && is_path == DIREC) //doesnt exist et path
 		{
 			if (handle_redir_path(manager, outfile, cmd) == -1)

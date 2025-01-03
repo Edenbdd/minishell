@@ -6,7 +6,7 @@
 #    By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/15 09:42:50 by smolines          #+#    #+#              #
-#    Updated: 2025/01/02 16:47:13 by aubertra         ###   ########.fr        #
+#    Updated: 2025/01/03 10:03:27 by aubertra         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,6 +62,7 @@ SRCS 			= 	main.c\
 					builtin/oplist_export.c\
 					builtin/export_builtin.c\
 					builtin/export_add_var.c\
+					builtin/export_parsing.c\
 
 SRCS_ALL 		= $(addprefix $(SRC_PATH), $(SRCS))
 

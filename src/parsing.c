@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/30 15:44:49 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/03 09:12:07 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 int handle_parsing_errors(t_manager *manager, char *line) 
 {
     if (line[0] == '\0')
-        return (parsing_error(manager, 3));
+        return (parsing_error(manager, 3, "bash", NULL));
     if (only_space_symbols(line))
         return (-1);
     if ((count_quotes(manager, line, 34, 39) == -1) 
@@ -95,7 +95,7 @@ int		check_redir(t_token *token_tour, t_manager *manager)
 			|| (token_tour->prev && token_tour->prev->type == PIPE))
 			return (parsing_error_op(manager, 4, '|', 0));
 		else 
-			return (parsing_error(manager, 2));
+			return (parsing_error(manager, 2, "bash", ""));
 	}
 	return (0);
 }
@@ -132,6 +132,6 @@ int token_error(t_manager *manager)
 		token_tour = token_tour->next;
 	}
 	if (only_dir == count)
-		return (access_error(manager, 7, manager->token_first->value));
+		return (access_error(manager, 7, manager->token_first->value, "bash"));
 	return (0);
 }

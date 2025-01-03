@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:19 by aubertra          #+#    #+#             */
-/*   Updated: 2025/01/02 10:54:51 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/03 09:06:59 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ char	*absolute_path(char *cmd, t_manager *manager, int env_flag)
 		else
 		{
 			if (!env_flag)
-				access_error(manager, 5, cmd);
+				access_error(manager, 5, cmd, "bash");
 			return (NULL);
 		}
 	}

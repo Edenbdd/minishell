@@ -6,37 +6,16 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:44:15 by aubertra          #+#    #+#             */
-/*   Updated: 2025/01/02 18:35:17 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/03 13:23:59 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*Functions to handle parsing the new variable and adding it to the export and env 
-linked list and updating the manager accordingly*/
+/*Functions to handle adding the new variable to the export and env 
+linked list or update and updating the manager accordingly, ! parsing of the var is in a 
+separate file*/
 
 #include "minishell.h"
 #include "libft.h"
-
-int space_presence(char *str)
-{
-    int i;
-
-    i = 0;
-    while (str[i])
-    {
-        if (str[i] == '=')
-            return (1);
-        i++;
-    }
-    return (0);
-}
-
-int parsing_export_var(char *str)
-{
-    if (space_presence(str))
-        return (1);
-    else
-        return (0);
-}
 
 t_export *new_var_export(char *str)
 {
@@ -45,7 +24,7 @@ t_export *new_var_export(char *str)
 	new_export = (t_export *)malloc(sizeof(t_export));
 	if (!new_export)
 		return (NULL);
-	new_export->field = get_name(str);
+	new_export->field = get_name(str, 1);
 	new_export->content = get_content(str);
 	new_export->next = NULL;
 	new_export->prev = NULL;
@@ -70,15 +49,19 @@ int add_to_export(char *str, t_manager *manager)
 int export_var(char *str, t_manager *manager)
 {
     int parse_check;
-    
-    parse_check = parsing_export_var(str);
+    int existing_var;
+
+    existing_var = existing_export(str, manager);
+    if (existing_var)
+        return (existing_var);
+    parse_check = parsing_export_var(str, manager);
     if (parse_check == -1)
         return (-1);
     else if (parse_check == 1)
     {
         if (add_to_export(str, manager))
             return (-1);
-        env_add_back(manager->env_first, str);
+        env_add_back(manager->env_first, str, 1);
     }
     else if (parse_check == 0)
     {

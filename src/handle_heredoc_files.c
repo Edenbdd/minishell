@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:06:55 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/27 12:40:43 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/03 09:07:54 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	check_heredoc(t_manager *manager)
 	if (!access("heredoc_tmp", F_OK))
 	{
 		if (access("heredoc_tmp", R_OK | W_OK))
-			return (access_error(manager, 5, "heredoc"));
+			return (access_error(manager, 5, "heredoc", "bash"));
 	}
 	return (0);
 }
