@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 10:02:56 by aubertra          #+#    #+#             */
-/*   Updated: 2025/01/03 13:44:37 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/03 16:39:36 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@ int export_add(char *str, char *name, t_manager *manager, t_export *current)
     printf("i come to export add\n");
     char    *new_content;
     t_env   *current_env;
+
     //updating the export
-    new_content = ft_strjoin(current->content, get_content(str));
+    new_content = ft_strjoin(current->content, get_content(str, equal_presence(str)));
     free(current->content);
     current->content = ft_strdup(new_content);
     //updating the env
@@ -51,14 +52,14 @@ int export_replace(char *str, char *name, t_manager *manager, t_export *current)
     if (str[i] && str[i -1] && str[i - 1] == '+')
         return (0);
     free(current->content); //updating the export
-    current->content = get_content(str);
+    current->content = get_content(str, equal_presence(str));
     current_env = manager->env_first; //updating the env
     while (current_env)
     {
         if (!ft_strcmp(current_env->field, name))
         {
             free(current_env->content);
-            current_env->content = get_content(str);
+            current_env->content = get_content(str, equal_presence(str));
             break;
         }
         current_env = current_env->next;

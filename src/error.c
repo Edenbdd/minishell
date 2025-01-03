@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 13:22:35 by smolines          #+#    #+#             */
-/*   Updated: 2025/01/03 10:28:37 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/03 16:55:47 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ int cmd_error(t_manager *manager, char *cmd, int exec_flag, char *process)
 	if (exec_flag == 1)
 	{
 		free_env(manager->env_first);
+		free_export(manager->export_first);
 		free_manager(manager);
 		exit(127);
 	}

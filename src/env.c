@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:36 by aubertra          #+#    #+#             */
-/*   Updated: 2025/01/03 13:23:08 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/03 16:40:22 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ char	**convert_env(t_env *s_env)
 	return (env_arr);
 }
 
-char	*get_content(char *str) 
+char	*get_content(char *str, int equal_present) 
 {
 	int		len_content;
 	char	*content;
@@ -116,9 +116,11 @@ char	*get_content(char *str)
 	while(str[i] && str[i] != '=')
 		i++;
 	i++;
-	if (i >= ft_strlen(str))
+	if (i >= ft_strlen(str) && !equal_present)
 		return (NULL);
-	while(str[i + len_content])
+	else if (i >= ft_strlen(str) && equal_present)
+		content = ft_strdup(" ");
+	while (str[i + len_content])
 		len_content++;
 	content = (char *)malloc(sizeof(char) * len_content + 1);
 	if (!content)

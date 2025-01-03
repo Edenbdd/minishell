@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 11:02:11 by smolines          #+#    #+#             */
-/*   Updated: 2025/01/03 13:22:29 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/03 16:38:12 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ typedef struct s_manager
 
 //BUILT IN
 //parsing_builtin
-int    check_builtin(t_manager *manager, char *to_test);
+int		check_builtin(t_manager *manager, char *to_test);
 int 	is_builtin(int type);
 int		builtin_exec_path(t_manager *manager, t_cmd *cmd, int *previous_fd);
 
@@ -181,7 +181,7 @@ void		cmd_display(t_cmd *cmd);
 //env
 char		*get_name(char *str, int export_flag);
 char		**convert_env(t_env *s_env);
-char		*get_content(char *str);
+char		*get_content(char *str, int equal_present);
 t_env		*handle_env(char **env);
 int			envsize(t_env *lst);
 
@@ -270,7 +270,6 @@ void		free_manager(t_manager *manager);
 void		free_env(t_env *env);
 
 //free
-// int			closing(t_cmd *cmd, int *previous_fd, t_manager *manager);
 void		free_path(char **paths);
 int			unlink_heredoc(t_manager *manager);
 void		free_cmd_args(char **args);

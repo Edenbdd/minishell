@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 14:46:36 by smolines          #+#    #+#             */
-/*   Updated: 2024/12/30 13:33:42 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/03 16:55:09 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ int check_operator_err(t_manager *manager, char *line, int i)
 		|| (line[i] == ';') 
 		|| (line[i] == '#') 
 		|| (line[i] == '\\')
-		)
+		|| (line[i] == '(')
+		|| (line[i] == ')'))
 		return (parsing_error_op(manager, 4, line[i], 0));
 	if ((line[i] == '<' && line[i + 1] == '<' && line[i + 2] == '<')
 		|| (line[i] == '>' && line[i + 1] == '>' && line[i + 2] == '>'))

@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:44:15 by aubertra          #+#    #+#             */
-/*   Updated: 2025/01/03 13:23:59 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/03 16:37:17 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_export *new_var_export(char *str)
 	if (!new_export)
 		return (NULL);
 	new_export->field = get_name(str, 1);
-	new_export->content = get_content(str);
+	new_export->content = get_content(str, equal_presence(str));
 	new_export->next = NULL;
 	new_export->prev = NULL;
 	return (new_export);
