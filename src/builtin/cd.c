@@ -6,7 +6,7 @@
 /*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 10:48:19 by smolines          #+#    #+#             */
-/*   Updated: 2025/01/03 12:36:05 by smolines         ###   ########.fr       */
+/*   Updated: 2025/01/03 18:14:34 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,16 @@
 #include "minishell.h"
 #include "libft.h"
 
+/// en cours de travaux/////
+//attention avec cd - le OLDPWD doit etre affiche a l'ecran
+// autres cd : pas d'affichage\
 
 //recuperer le contenu d'un champ de EN le le passer a chdir
-int cd_get_env((t_manager *manager, char *field))
+int cd_get_env(t_manager *manager, char *field)
 {
 	char	*expansion;
 		
-	expansion = expand_exists(field, manager->env_first);
+	expansion = expand_exists(field,`	 manager->env_first);
 	if (expansion)
 		{
 		if (chdir(expansion) != 0)
@@ -41,7 +44,7 @@ int	handle_cd(t_manager *manager, t_cmd *cmd)
 
 //aller au repertoire home
 	if (!(cmd->args[1])) || (ft_strcmp(cmd->args[1], "~"))
-		cd_get_env(manager, "HOME");
+		return (cd_get_env(manager, "HOME"));
 
 //aller au repertoire precedant
 	if (ft_strcmp(cmd->args[1], "-"))
@@ -49,6 +52,8 @@ int	handle_cd(t_manager *manager, t_cmd *cmd)
 		// recuperer contenu de OLDPWD et le passer en argument a chdir
 		if (cd_get_env(manager, "OLDPWD") != 0)
 			return (new_builtin_error(manager, "cd", "OLDPWD not define", NULL));
+		
+		ft_putstr_fd()
 	}
 
 //changer de repertoire
