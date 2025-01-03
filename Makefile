@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+         #
+#    By: smolines <smolines@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/15 09:42:50 by smolines          #+#    #+#              #
-#    Updated: 2024/12/30 13:50:25 by aubertra         ###   ########.fr        #
+#    Updated: 2025/01/03 12:41:53 by smolines         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,7 +56,12 @@ SRCS 			= 	main.c\
 					parsing_utils.c\
 					parsing_utils2.c\
 					parsing.c\
+					builtin/builtin_utils.c\
+					builtin/echo.c\
+					builtin/error_builtin.c\
+					builtin/exit.c\
 					builtin/parsing_builtin.c\
+					builtin/pwd.c\
 
 SRCS_ALL 		= $(addprefix $(SRC_PATH), $(SRCS))
 

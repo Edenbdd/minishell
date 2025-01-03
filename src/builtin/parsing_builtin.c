@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 13:27:41 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/30 14:26:18 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/02 19:46:52 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,11 @@ int		builtin_exec_path(t_manager *manager, t_cmd *cmd, int *previous_fd)
     check_builtin(manager, cmd->args[0]);
     printf("type is %d\n", manager->type);
     if (manager->type == ECHO)
-        printf("built in a coder\n");
+        handle_echo(manager, cmd);
     else if (manager->type == CD)
         printf("built in a coder\n");
     else if (manager->type == PWD)
-        printf("built in a coder\n");
+        handle_pwd(manager, cmd);
     else if (manager->type == EXPORT)
         printf("built in a coder\n");
     else if (manager->type == UNSET)
@@ -62,7 +62,7 @@ int		builtin_exec_path(t_manager *manager, t_cmd *cmd, int *previous_fd)
     else if (manager->type == ENV)
         printf("built in a coder\n");
     else if (manager->type == EXIT)
-        printf("built in a coder\n");
+        handle_exit(manager, cmd);
     return (0);    
 }
 
