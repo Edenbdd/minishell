@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: smolines <smolines@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:19 by aubertra          #+#    #+#             */
-/*   Updated: 2024/12/30 14:28:51 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/02 19:48:28 by smolines         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,19 @@ void	cmd_display(t_cmd *cmd)
 		cmd = cmd->next;
 	}
 }
+
+void	cmd_args_display(t_cmd *cmd)
+{
+	int i;
+
+	i = 0;
+	if (!cmd)
+		return ;
+	while (cmd->args[i])
+	{
+		printf("arg[%d]: [%s]\n",i, cmd->args[i]);
+		i++;
+	}
+}
+
 

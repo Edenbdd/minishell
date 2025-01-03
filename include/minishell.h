@@ -119,9 +119,32 @@ typedef struct s_manager
 //BUILT IN
 
 //parsing_builtin
-void    check_builtin(t_manager *manager, char *to_test);
-int 	is_builtin(int type);
-int		builtin_exec_path(t_manager *manager, t_cmd *cmd, int *previous_fd);
+void    	check_builtin(t_manager *manager, char *to_test);
+int 		is_builtin(int type);
+int			builtin_exec_path(t_manager *manager, t_cmd *cmd, int *previous_fd);
+
+//error_builtin
+int			builtin_error(t_manager *manager, int code, char *who);
+int			new_builtin_error(t_manager *manager, char *who, char *message, char *dir);
+
+//pwd builtin
+int     	handle_pwd(t_manager *manager, t_cmd *cmd);
+
+//echo builtin
+
+int	isthere_only_n(char *str, char c);
+int echo_isthere_n(t_cmd *cmd);
+int skip_n(t_cmd *cmd);
+int handle_echo(t_manager *manager, t_cmd *cmd);
+
+//exit builtin
+int			exit_and_free_all(t_manager *manager, t_cmd *cmd);
+int			is_arg_a_nb(char *cmd);
+long long	almost_atoll(const char *nptr, int *error);
+int			handle_exit(t_manager *manager, t_cmd *cmd);
+
+// builtin_utils.c 
+int			count_cmd_args(t_cmd *cmd);
 
 //erro_builtin
 int builtin_error(t_manager *manager, int code, char *who);
@@ -132,7 +155,6 @@ int     handle_pwd(t_manager *manager, t_cmd *cmd);
 //env built in
 
 //export
-
 
 //unset
 
@@ -153,6 +175,7 @@ char		*test_path(char **paths, char *cmd, t_manager *manager);
 void		print_env(char **env_arr);
 void		token_display(t_token *token);
 void		cmd_display(t_cmd *cmd);
+void		cmd_args_display(t_cmd *cmd);
 
 //env
 char		*get_name(char *str);

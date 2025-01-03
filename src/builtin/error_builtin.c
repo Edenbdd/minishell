@@ -1,3 +1,4 @@
+
 /******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -9,6 +10,7 @@
 /*   Updated: 2025/01/02 14:56:28 by smolines         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
+
 
 //built-in for pwd
 
@@ -22,7 +24,7 @@ int builtin_error(t_manager *manager, int code, char *who)
 	if (code == 1)
 	{
 		ft_putstr_fd(who, 2);
-		write (2, ": no option possible for pwd\n", 29);
+		write (2, ": no option possible\n", 29);
 	}
     
 	if (code == 2)
@@ -31,7 +33,36 @@ int builtin_error(t_manager *manager, int code, char *who)
 		write (2, ": error /n", 9);
 	}
 	
+	if (code == 3)
+	{
+		ft_putstr_fd(who, 2);
+		write (2, ": too many arguments\n", 21);
+	}
+
+	if (code == 4)
+	{
+		ft_putstr_fd(who, 2);
+		write (2, ": argument error\n", 17);
+	}
+
+
 	/////////////// a confirmer
+	manager->exit_status = 127;
+	return (-1);
+}
+
+int new_builtin_error(t_manager *manager, char *who, char *message, char *dir)
+{
+	write (2, "bash :", 6);
+	ft_putstr_fd(who, 2);
+	write (2, ": ", 2);
+	ft_putstr_fd(message, 2);
+	if (dir)
+	{
+		write (2, ": ", 2);
+		ft_putstr_fd(dir, 2);
+	}
+	write (2, "\n", 1);
 	manager->exit_status = 127;
 	return (-1);
 }

@@ -50,7 +50,7 @@ int		builtin_exec_path(t_manager *manager, t_cmd *cmd, int *previous_fd)
     check_builtin(manager, cmd->args[0]);
     printf("type is %d\n", manager->type);
     if (manager->type == ECHO)
-        printf("built in a coder\n");
+        handle_echo(manager, cmd);
     else if (manager->type == CD)
         printf("built in a coder\n");
     else if (manager->type == PWD)
@@ -62,7 +62,7 @@ int		builtin_exec_path(t_manager *manager, t_cmd *cmd, int *previous_fd)
     else if (manager->type == ENV)
         printf("built in a coder\n");
     else if (manager->type == EXIT)
-        printf("built in a coder\n");
+        handle_exit(manager, cmd);
     return (0);    
 }
 

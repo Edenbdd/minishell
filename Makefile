@@ -56,6 +56,10 @@ SRCS 			= 	main.c\
 					parsing_utils.c\
 					parsing_utils2.c\
 					parsing.c\
+					builtin/builtin_utils.c\
+					builtin/echo.c\
+					builtin/error_builtin.c\
+					builtin/exit.c\
 					builtin/parsing_builtin.c\
 					builtin/error_builtin.c\
 					builtin/pwd.c\
