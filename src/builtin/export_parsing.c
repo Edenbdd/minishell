@@ -6,7 +6,7 @@
 /*   By: aubertra <aubertra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 10:02:56 by aubertra          #+#    #+#             */
-/*   Updated: 2025/01/03 16:39:36 by aubertra         ###   ########.fr       */
+/*   Updated: 2025/01/03 18:58:47 by aubertra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,24 +98,20 @@ int equal_presence(char *str)
 {
     int i;
     int one_equal;
-    int plus_count;
 
     i = 0;
     one_equal = 0;
-    plus_count = 0;
     while (str[i])
     {
         if (str[i] == '=')
            one_equal++;
         if (str[i] == '+' && str[i + 1] && str[i + 1] != '=')
             return (-1);
-        if ((str[i] == '+' && str[i + 1] && str[i + 1] == '='))
-            plus_count++;
         i++;
     }
-    if (plus_count > 1)
-        return (plus_count);
-    return (one_equal);
+    if (one_equal >= 1)
+        return (1);
+    return (0);
 }
 
 int parsing_export_var(char *str, t_manager *manager)
@@ -131,16 +127,17 @@ int parsing_export_var(char *str, t_manager *manager)
     if (!ft_isalpha(str[0]) && str[0] != '_')
         return (parsing_error(manager, 4, "bash: export", str));
     i = 1;
-    while (str[i])
+    while (str[i] && str[i] != '=')
     {
-        if (!ft_isalnum(str[i]) && str[i] != '_' && str[i] != '='
+        if (str[i] && !ft_isalnum(str[i]) && str[i] != '_' && str[i] != '='
             && str[i] != '+')
             return (parsing_error(manager, 4, "bash: export", str));
         i++;
     }
-    if (equal_presence(str) > 1 || equal_presence(str) == -1)
+    //see if on doit rajouter du parsing pour le content
+    if (equal_presence(str) == -1)
         return (parsing_error(manager, 4, "bash: export", str));
-    else if (equal_presence(str) == 1)
+    else if (equal_presence(str) >= 1)
         return (1);
     else
         return (0);
